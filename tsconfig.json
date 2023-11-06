@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "esnext", // 使用最新的 ECMAScript 版本
+    "module": "ES2022",
+    "lib": [
+      "ES2022",
+      "dom",
+      "es6"
+    ],
+    "rootDir": "./", /* Specify the root folder within your source files. */
+    "strict": false /* Enable all strict type-checking options. */,
+    "noImplicitThis": false,
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+    "esModuleInterop": true, // important!
+  },
+  "outDir": "dist",
+  "exclude": [
+    "*/node_modules"
+  ]
+}

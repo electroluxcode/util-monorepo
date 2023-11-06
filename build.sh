@@ -1,0 +1,1 @@
+tsc --outDir ./dist  --project ./ --watch

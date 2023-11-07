@@ -111,13 +111,13 @@ class ScreenScale {
       }
 
       const rectification = this.currScale === 1 ? 1 : this.currScale * Number(level);
-      console.log("rect222:",rectification);
+      // console.log("rect222:",rectification);
       (item as any).style.width = `${(item as any).originalWidth * rectification}px`;
       (item as any).style.height = `${(item as any).originalHeight * rectification}px`;
       (item as any).style.transform = `scale(${1 / this.currScale}) `;
       (item as any).style.transformOrigin = `0 0`;
   
-      this.IsMapElement = true;
+      // this.IsMapElement = true;
     }
 
     /**

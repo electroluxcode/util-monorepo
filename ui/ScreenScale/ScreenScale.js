@@ -84,12 +84,12 @@ class ScreenScale {
             item.originalHeight = item.clientHeight;
         }
         const rectification = this.currScale === 1 ? 1 : this.currScale * Number(level);
-        console.log("rect222:", rectification);
+        // console.log("rect222:",rectification);
         item.style.width = `${item.originalWidth * rectification}px`;
         item.style.height = `${item.originalHeight * rectification}px`;
         item.style.transform = `scale(${1 / this.currScale}) `;
         item.style.transformOrigin = `0 0`;
-        this.IsMapElement = true;
+        // this.IsMapElement = true;
     }
     /**
      * @des 调整大小

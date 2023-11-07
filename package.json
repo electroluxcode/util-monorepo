@@ -3,15 +3,21 @@
   "version": "0.0.1",
   "description": "```shell\r npm install pnpm -g\r # 然后创造一个 新文件夹，在这个新文件夹中\r pnpm init\r ```",
   "main": "index.js",
+  "repository": {
+    "url": "https://github.com/yilaikesi/util-monorepo"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsc   --project ./ --watch",
-    "build":"tsc --outDir ./dist  --project ./ --watch"
+    "build": "tsc --outDir ./dist  --project ./ --watch",
+    "build:webpack": "node ./config/webpack.build.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "ts-loader": "8.4",
+    "webpack": "^5.89.0"
   },
   "devDependencies": {
     "typescript": "^5.2.2"

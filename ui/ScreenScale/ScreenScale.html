@@ -53,8 +53,8 @@
   <script type="module">
     import {ScreenScale} from "./ScreenScale.js"
     const options = {
-      dw: 1920, // 设定宽度
-      dh: 937,  // 设定高度
+      dw: 1536, // 设定宽度
+        dh: 707,  // 设定高度
       el: document.querySelector("#app"),  // 要自动适配的元素选择器
       resize: true, // 是否监听窗口大小变化
     //   ignore: [document.querySelector(".item")],  // 要忽略的元素选择器
@@ -65,7 +65,7 @@
     // 初始化 ScreenScale
     const ScreenScaleInstance = new ScreenScale();
     ScreenScaleInstance.init(options);
-    ScreenScaleInstance.FixMap(document.querySelector(".item"))
+    // ScreenScaleInstance.FixMap(document.querySelector(".item"))
     // 关闭 ScreenScale
     // ScreenScaleInstance.off();
   </script>

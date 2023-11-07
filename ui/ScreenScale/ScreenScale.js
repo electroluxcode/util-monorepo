@@ -83,6 +83,7 @@ class ScreenScale {
             item.originalWidth = item.clientWidth;
             item.originalHeight = item.clientHeight;
         }
+        // 得到变化尺寸
         const rectification = this.currScale === 1 ? 1 : this.currScale * Number(level);
         // console.log("rect222:",rectification);
         item.style.width = `${item.originalWidth * rectification}px`;

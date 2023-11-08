@@ -101,13 +101,25 @@ node VersionUpdate.js && npm publish -access public
 
 ## 3.产物
 
+主要是 `libraryTarget` 的对比
+
+### es6(浏览器)
+
+- libraryTarget:“window” | “global” | “this” 意思就是在 libraryTarget上面 注册一个 在 `webpack` 的 `output` 定义的 `library` 同名的 
 
 
 
+### node
+
+- libraryTarget:“commonjs”，在export对象上定义library设置的变量
+- libraryTarget:“commonjs2”，直接用module.export导出export
+- libraryTarget:“amd”，在define方法上定义library设置的变量，不能用script直接引用，必须通过第三方模块RequireJS来时用
 
 
 
+### umd原理
 
+webpackUniversalModuleDefinition 模块会对环境进行判断
 
 
 

@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsc   --project ./ --watch",
-    "build": "tsc --outDir ./dist  --project ./ --watch",
+    "build:typescript": "tsc --outDir ./dist  --project ./ --watch",
     "build:webpack": "node ./config/webpack.build.js"
   },
   "author": "",

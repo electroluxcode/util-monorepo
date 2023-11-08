@@ -4,9 +4,9 @@
  * @eg
  */
 class Cache {
-    cacheData;
+    #cacheData;
     constructor() {
-        this.cacheData = {};
+        this.#cacheData = {};
     }
     /**
      * @des 存单个数据进去
@@ -14,7 +14,10 @@ class Cache {
      * @param item
      */
     setData(name, item) {
-        this.cacheData[name] = item;
+        if (item instanceof Cache) {
+            throw new Error("存储数据可能导致循环引用,请校验");
+        }
+        this.#cacheData[name] = item;
     }
     /**
      * @des 获取某一个 key
@@ -22,7 +25,7 @@ class Cache {
      * @returns
      */
     getData(name) {
-        const res = this.cacheData[name];
+        const res = this.#cacheData[name];
         return res;
     }
     /**
@@ -30,16 +33,17 @@ class Cache {
      * @param name
      */
     deleteData(name) {
-        this.cacheData[name] = [];
+        this.#cacheData[name] = [];
     }
     addData(name, data) {
-        if (this.cacheData[name].length) {
-            this.cacheData[name].push(data);
+        if (this.#cacheData[name]?.length) {
+            this.#cacheData[name].push(data);
         }
         else {
-            this.cacheData[name] = [];
-            this.cacheData[name].push(data);
+            this.#cacheData[name] = [];
+            this.#cacheData[name].push(data);
         }
     }
 }
-export default new Cache();
+let test = new Cache();
+export { test as Cache };

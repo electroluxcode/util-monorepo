@@ -7,13 +7,13 @@
     <title>Document</title>
 </head>
 <body>
-    <script src="./LoadingPlugin.min.js">
-
-    </script>
-
     <script type="module">
-        import a from "./LoadingPlugin.umd.min.js"
-        console.log(a)
+
+        import {Cache} from "./Cache.js"
+        
+        Cache.setData("baseData",'Cache["#cacheData"]')
+        console.log(Cache.getData("baseData"))
+        // c
     </script>
 </body>
 </html>

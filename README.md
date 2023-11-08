@@ -2,7 +2,7 @@
 
 
 
-## 技术选型
+## 1.技术选型
 
 ### webpack or ts 
 
@@ -12,7 +12,7 @@
 
 
 
-## 开发规范
+## 2.开发规范
 
 
 
@@ -81,17 +81,29 @@ node VersionUpdate.js && npm publish -access public
 
   
 
+#### 锁定版本
 
 
 
 
-#### 发布到指定的地方
+
+#### 指定发布
 
 ```shell
 "publishConfig": {
     "registry": "http://registry.npm.xxx.com/"
  }
 ```
+
+
+
+
+
+## 3.产物
+
+
+
+
 
 
 

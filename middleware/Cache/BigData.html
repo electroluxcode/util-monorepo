@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    大数据释放测试
+    <button id="AddData">点我增加数组里的数据</button>
+    <button id="Closure">点我测试内存泄漏</button>
+    <script type="module">
+        import { TestData } from "./BigData.js"
+        // console.log(TestData)
+        let arr = []
+        document.querySelector("#AddData").addEventListener("click", () => {
+            // console.log("这里是adddata")
+            arr.push(TestData)
+        })
+        function a() {
+            // let temp = arr
+            return ()=>{
+                // let b = temp
+            }
+        }
+        // document.querySelector("#Closure").addEventListener("click", () => {
+        //     a()()
+        // })
+    </script>
+</body>
+
+</html>

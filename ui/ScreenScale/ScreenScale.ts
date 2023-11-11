@@ -11,7 +11,7 @@ class ScreenScale {
     private CurrelFixMap: HTMLElement = document.querySelector("#app");
     private CurrelFixMapLevel: string = '';
     private resizeListener: (() => void) | null = null;
-    private timer: NodeJS.Timeout | null = null;
+    private timer: any = null;
     private currScale: number = 1;
     private isScreenScaleRunning: boolean = false;
     private IsMapElement: boolean = false;

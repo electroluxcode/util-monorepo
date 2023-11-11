@@ -1,7 +1,7 @@
-import { Matrix3 } from '../math/Matrix3'
-import { Vector2 } from '../math/Vector2'
-import { Img } from '../objects/Img'
-import { crtPath, crtPathByMatrix } from '../objects/ObjectUtils'
+import { Matrix3 } from '../math/Matrix3.js'
+import { Vector2 } from '../math/Vector2.js'
+import { Img } from '../objects/Img.js'
+import { crtPath, crtPathByMatrix } from '../objects/ObjectUtils.js'
 
 const pi2 = Math.PI * 2
 

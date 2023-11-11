@@ -1,8 +1,8 @@
-import { Vector2 } from '../math/Vector2'
-import { Group } from './Group'
-import { Scene } from '../core/Scene'
-import { EventDispatcher } from '../core/EventDispatcher'
-import { Matrix3 } from '../math/Matrix3'
+import { Vector2 } from '../math/Vector2.js'
+import { Group } from './Group.js'
+import { Scene } from '../core/Scene.js'
+import { EventDispatcher } from '../core/EventDispatcher.js'
+import { Matrix3 } from '../math/Matrix3.js'
 import { generateUUID } from '../math/MathUtils.js'
 
 export type Object2DType = {

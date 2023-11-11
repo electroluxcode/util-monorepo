@@ -1,4 +1,4 @@
-import { Matrix3 } from './Matrix3'
+import { Matrix3 } from './Matrix3.js'
 
 class Vector2 {
 	x = 0

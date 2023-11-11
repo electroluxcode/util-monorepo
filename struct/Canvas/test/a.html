@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Jost:wght@100;300;400;700&display=swap');
+
+            body {
+                text-align: center;
+                font-family: 'Jost', sans-serif;
+                background-color: #f0f5ff;
+            }
+
+            h1 {
+                font-size: 48px;
+                color: #232c3d;
+            }
+        </style>
+        
+        <style>
+
+            .wrapper {
+                width: 590px;
+                margin: auto;
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0px 5px 15px rgba(0, 0, 0, .1);
+            }
+    
+            .button-wrapper {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+    
+            button {
+                letter-spacing: 3px;
+                border: none;
+                padding: 10px;
+                background-color: #bccbe9;
+                color: #232c3d;
+                font-size: 18px;
+                cursor: pointer;
+                transition: 0.5s;
+            }
+    
+            button:hover {
+                background-color: #d5e3ff;
+            }
+    
+            button.active {
+                background-color: white;
+            }
+    
+            .active {
+                background-color: white;
+            }
+    
+            p {
+                text-align: left;
+                padding: 10px;
+            }
+    
+            .tab-content {
+                display: none;
+                padding: 10px 20px;
+            }
+    
+            .tab-content.active {
+                display: block;
+            }
+    
+        </style>
+    </head>
+<body>
+    <template>
+            <div class="button-wrapper">
+                <slot name="tab-button"></slot>
+            </div>
+            <div class="content-wrapper">            
+                <slot name="tab-content"></slot>
+            </div>
+    </template>
+    
+    <tab-container id="tab-container" class="wrapper">
+        <button slot="tab-button" class="tab-button active" style="border-top-left-radius: 10px;" data-id="home">Home</button>
+        <button slot="tab-button" class="tab-button" data-id="about">About</button>
+        <button slot="tab-button" class="tab-button" style="border-top-right-radius: 10px;" data-id="contact">Contact</button>
+        <p slot="tab-content" class="tab-content active" id="home">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam iste doloribus unde ullam doloremque eos autem ad nulla accusamus? Modi at minima numquam accusamus repudiandae perspiciatis nostrum architecto voluptatem quasi?
+          amet consectetur adipisicing elit. Tenetur, quasi porro dolorum deleniti velit fuga perspiciatis veniam minus perferendis facere sit doloribus aliquid illum adipisci. Quam quasi maxime perferendis dolorem.
+          </p>
+          <p slot="tab-content" class="tab-content" id="about">
+            Loretur adipisicing elit. Corporis maxime itaque veritatis iste soluta placeat obcaecati laudantium repellat corrupti! Eius sunt rerum inventore magnam? Perspiciatis facere error suscipit quisquam quibusdam.
+            Lorem ipsr sit amet, consectetur adipisicing elit. Enim sapiente officia vel consequuntur, hic at quis? Illo repellendus dolores totam facilis sunt sequi qui hic, nulla ratione harum porro perspiciatis.
+          </p>
+          <p slot="tab-content" class="tab-content" id="contact">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sit incidunt nostrum? Magni, quam vero, magnam odio similique ipsam minima et repellat rerum cupiditate totam in repudiandae. Sed, dicta corrupti?
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, dolore quas quis earum incidunt voluptas! Ducimus quod libero aliquid consequatur et modi porro officia, quibusdam quas commodi placeat maxime qui?
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ab ea debitis eligendi accusamus deleniti maxime pariatur. Assumenda, facere placeat eius quam magni accusantium aut quae minima iure atque incidunt illum.
+          </p>
+    </tab-container>
+
+    <script>
+        document.querySelector().addEventListener
+        customElements.define("tab-container", 
+        class extends HTMLDivElement {
+            constructor () {
+                super()
+                const template = document.getElementById("tab-container").content
+
+                const tabs = template.querySelector(".wrapper")
+                const tabButton = template.querySelectorAll(".tab-button")
+                const contents = template.querySelectorAll(".tab-content")
+                tabs.addEventListener("click", e => {
+                    const id = e.target.dataset.id
+                    if (id) {
+                        tabButton.forEach(btn => {
+                            btn.classList.remove("active")
+                        })
+                        e.target.classList.add("active")
+
+                        contents.forEach(content => {
+                            content.classList.remove("active")
+                        })
+                        const element = document.getElementById(id)
+                        element.classList.add("active")
+                    }
+                })
+
+                this.attachShadow({ mode: "open" }).appendChild(template.cloneNode(true))
+            }
+        },
+       )
+
+    </script>
+</body>
+</html>

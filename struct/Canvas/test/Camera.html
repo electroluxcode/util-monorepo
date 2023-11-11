@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script type="module">
+        import { Camera } from '../core/Camera.js'
+
+        let size = {
+            width:300,
+            height:300
+        }
+        // 对应 x y 距离  距离越短越大
+        // 原理是 逆向操作
+        const camera = new Camera(0, 0, 1)
+
+        function matrixTest(ctx) {
+	ctx.save()
+	camera.transformInvert(ctx)
+	ctx.fillRect(0, 0, 200, 100)
+	ctx.restore()
+}
+
+
+        const canvas =  document.querySelector("canvas")
+        canvas.width = size.width
+        canvas.height = size.height
+
+
+        const ctx = canvas?.getContext('2d')
+        ctx && matrixTest(ctx)
+
+        // 注意 如果先绘制就有大问题 。因为fillreact 是最后呈现出来的结果 ctx?.fillRect(100, 100, 200, 100)
+
+    </script>
+</body>
+
+</html>

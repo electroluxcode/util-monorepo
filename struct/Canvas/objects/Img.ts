@@ -1,8 +1,8 @@
-import { Matrix3 } from '../math/Matrix3'
-import { Vector2 } from '../math/Vector2'
-import { BasicStyle, BasicStyleType } from '../style/BasicStyle'
-import { Object2D, Object2DType } from './Object2D'
-import { crtPathByMatrix } from './ObjectUtils'
+import { Matrix3 } from '../math/Matrix3.js'
+import { Vector2 } from '../math/Vector2.js'
+import { BasicStyle, BasicStyleType } from '../style/BasicStyle.js'
+import { Object2D, Object2DType } from './Object2D.js'
+import { crtPathByMatrix } from './ObjectUtils.js'
 
 type ImgType = Object2DType & {
 	image?: CanvasImageSource

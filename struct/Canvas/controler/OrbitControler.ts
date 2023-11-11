@@ -1,6 +1,6 @@
-import { Vector2 } from '../math/Vector2'
-import { EventDispatcher } from '../core/EventDispatcher'
-import { Camera } from '../core/Camera'
+import { Vector2 } from '../math/Vector2.js'
+import { EventDispatcher } from '../core/EventDispatcher.js'
+import { Camera } from '../core/Camera.js'
 
 /* 暂存数据类型 */
 type Stage = {

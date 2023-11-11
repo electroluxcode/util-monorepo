@@ -1,14 +1,15 @@
-let sleep1 = function (timeout) {
-    console.log("sleep:", this);
-    return new Promise((resolve, reject) => {
-        console.log(timeout);
-        setTimeout(() => {
-            resolve(timeout);
-        }, timeout);
-    });
-};
-let temp = Object.getPrototypeOf(sleep1(2500));
-console.log(temp);
+class a {
+    a;
+    constructor() {
+        this.a = 23;
+    }
+}
+class b extends a {
+    constructor() {
+        super();
+    }
+}
+new b();
 // .constructor(500).then((e)=>{
 //     console.log("???")
 // })

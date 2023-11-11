@@ -1,6 +1,6 @@
-import { State } from './Frame'
-import { Vector2 } from '../math/Vector2'
-import { crtPath } from '../objects/ObjectUtils'
+import { State } from './Frame.js'
+import { Vector2 } from '../math/Vector2.js'
+import { crtPath } from '../objects/ObjectUtils.js'
 
 type MouseShapeType = {
 	fillStyle?: string

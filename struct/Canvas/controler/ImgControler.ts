@@ -1,11 +1,11 @@
-import { Vector2 } from '../math/Vector2'
-import { Object2D, Object2DType } from '../objects/Object2D'
-import { Img } from '../objects/Img'
-import { Matrix3 } from '../math/Matrix3'
-import { Scene } from '../core/Scene'
-import { Frame, State } from './Frame'
-import { MouseShape } from './MouseShape'
-import { ImgTransformer, ImgData } from './ImgTransformer'
+import { Vector2 } from '../math/Vector2.js'
+import { Object2D, Object2DType } from '../objects/Object2D.js'
+import { Img } from '../objects/Img.js'
+import { Matrix3 } from '../math/Matrix3.js'
+import { Scene } from '../core/Scene.js'
+import { Frame, State } from './Frame.js'
+import { MouseShape } from './MouseShape.js'
+import { ImgTransformer, ImgData } from './ImgTransformer.js'
 
 const _changeEvent = { type: 'change' }
 

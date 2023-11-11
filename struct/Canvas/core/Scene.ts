@@ -1,8 +1,8 @@
-import { Camera } from './Camera'
-import { Group } from '../objects/Group'
-import { Object2D } from '../objects/Object2D'
-import { Vector2 } from '../math/Vector2'
-import { Matrix3 } from '../math/Matrix3'
+import { Camera } from './Camera.js'
+import { Group } from '../objects/Group.js'
+import { Object2D } from '../objects/Object2D.js'
+import { Vector2 } from '../math/Vector2.js'
+import { Matrix3 } from '../math/Matrix3.js'
 
 type SceneType = {
 	canvas?: HTMLCanvasElement

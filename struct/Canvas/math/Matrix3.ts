@@ -1,4 +1,4 @@
-import { Vector2 } from './Vector2'
+import { Vector2 } from './Vector2.js'
 
 class Matrix3 {
 	elements: number[] = [1, 0, 0, 0, 1, 0, 0, 0, 1]

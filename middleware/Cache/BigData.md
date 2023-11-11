@@ -27,13 +27,31 @@
 
 
 
-## Shallow size | Retained size  | Distance
+
+
+
+
+## Summary分析 | memory 面板
+
+
+
+
+
+
+
+### Shallow size | Retained size  | Distance
 
 这些指标都是 memory 里面 输出的 table 表单
 
 - Shallow size: 这是对象自身占用内存的大小
 - Retain size：删除这个对象后释放的大小
 - Distance：与root的距离。距离越大，处理和加载这个对象的时间就越长
+
+
+
+
+
+
 
 
 

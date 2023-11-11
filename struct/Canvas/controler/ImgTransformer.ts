@@ -1,5 +1,5 @@
-import { Vector2 } from '../math/Vector2'
-import { Img } from '../objects/Img'
+import { Vector2 } from '../math/Vector2.js'
+import { Img } from '../objects/Img.js'
 
 /* PI*2 */
 const pi2 = Math.PI * 2

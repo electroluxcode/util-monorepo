@@ -1,4 +1,4 @@
-import { Object2D } from './Object2D'
+import { Object2D ,Object2DType} from './Object2D.js'
 
 class Group extends Object2D {
 	// 子集

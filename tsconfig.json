@@ -7,6 +7,7 @@
       "dom",
       "es6"
     ],
+    "moduleResolution": "node",
     // "rootDir": "./", /* Specify the root folder within your source files. */
     "strict": false /* Enable all strict type-checking options. */,
     "noImplicitThis": false,

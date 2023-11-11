@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script type="module">
+        import { Matrix3 } from '../math/Matrix3.js'
+
+        let size = {
+            width:300,
+            height:300
+        }
+        const m = new Matrix3()
+        m.elements = [
+            2, 0, 0,
+            0, 2, 0,
+            2, 2, 1,
+        ]
+        console.log(m.determinant())
+        console.log(m.invert().determinant())
+
+        const canvas =  document.querySelector("canvas")
+        canvas.width = size.width
+        canvas.height = size.height
+
+        
+        const ctx = canvas?.getContext('2d')
+        ctx?.fillRect(100, 100, 200, 100)
+
+    </script>
+</body>
+
+</html>

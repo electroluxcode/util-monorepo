@@ -1,5 +1,5 @@
-import { Matrix3 } from '../math/Matrix3'
-import { Vector2 } from '../math/Vector2'
+import { Matrix3 } from '../math/Matrix3.js'
+import { Vector2 } from '../math/Vector2.js'
 
 class Camera {
 	position: Vector2
@@ -9,7 +9,7 @@ class Camera {
 		this.position = new Vector2(x, y)
 		this.zoom = zoom
 	}
-	/* 视图投影矩阵：先逆向缩放，再逆向位置 */
+	/* 视图投影矩阵(行列式)：先逆向缩放，再逆向位置 */
 	get pvMatrix() {
 		const {
 			position: { x, y },

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    //POST上传请求
+<button>点击</button>
+
+<script>
+   var btn = document.querySelector('button')
+   btn.onclick = function(){
+       fetch('http://localhost:8088/api/post',{ //请求的服务器地址
+        //    body:"name=mumu&&age=20",  //请求的数据
+           // body:{name:"mumu",age:20}, //第二种请求数据的方法json
+           method:"POST", //请求方法
+           headers:{  //请求头信息
+            //    'Content-Type':'application/x-www-form-urlencoded' //用url编码形式处理数据
+               // 'Content-Type':'application/json' //第二种请求头编写方式json
+           }
+       })
+       .then(res=>res.text()) //请求得到的数据转换为text
+       .then(res=>{
+           console.log(res)   //打印输出
+       })
+       .catch(err=>{    //错误打印
+           console.log(err)
+       })
+   }
+</script>
+
+</body>
+</html>

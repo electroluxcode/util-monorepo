@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    AbortRequest测试
+    <script type="module">
+        import AbortRequest from "./AbortRequest.js"
+        const abortRequest = new AbortRequest();
+
+        const fetchData = (key, url) => {
+            const controllerSignal = abortRequest.create(key);
+
+            return new Promise(async (resolve, reject) => {
+                try {
+                    const response = await fetch(url, { signal: controllerSignal });
+                    const data = await response.json();
+                    abortRequest.remove(key);
+                    resolve(data);
+                } catch (error) {
+                    
+                }
+            });
+        };
+
+        // 使用示例
+        const key = 'example-key';
+        const url = 'http://localho/api/post';
+
+        const promise = fetchData(key, url);
+
+        // 在需要的时候中断 Promise
+        abortRequest.create(key); // 调用这行代码来中断请求
+
+        promise
+            .then((data) => console.log('Response:', data))
+            .catch((error) => console.error('Error:', error.message));
+
+    </script>
+</body>
+
+</html>

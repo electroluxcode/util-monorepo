@@ -45,10 +45,40 @@ app.get('/api/get', function(req, res) {
     let data = JSON.parse(JSON.stringify(req.query))
     console.log(data)
   }
-  res.send({
-    code:200,
-    msg:Math.random(),
-  });
+ 
+  setTimeout(()=>{
+    res.send({
+      code:200,
+      msg:Math.random()+`
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      `,
+    });
+  },1000)
+  
 });
 
 //post 接收参数测试 application/json 的有效 {id:56}
@@ -61,7 +91,7 @@ app.all('/api/post', function(req, res) {
   });
 });
 
-app.get("/sse", function(req, res) {
+app.get("/api/sse", function(req, res) {
   // json 的才有效
   res.setHeader('Content-Type', 'text/event-stream')
   // res.setHeader('Transfer-Encoding', 'chunked')
@@ -82,6 +112,26 @@ app.get("/sse", function(req, res) {
     }
   }, 5000);
 })
+const uploadsPath = path.resolve(__dirname, './public');
+const storage = multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, uploadsPath);
+  },
+  filename: function (req, file, callback) {
+    const filename = req.headers['x-file-name'];
+    callback(null, `${Date.now()}.jpg}`);
+    return;
+  }
+})
+const upload = multer({ storage });
+app.post("/api/file", upload.single('file'), (req, res) => {
+  console.log('req', req.file);
+  res.json({ url: `http://localhost:8088/public/${req.file.filename}` })
+})
+
+
+
+
 
 
 //get 发送短信 

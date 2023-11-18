@@ -1,3 +1,11 @@
+
+
+由于fetch 请求 返回的400 和 500都不会报错，这个hook 不支持自动重试。
+
+支持自动重连
+
+支持get/post/stream/文件上传，详情请看对应html
+
 ## 2.1.基础
 
 fetch 的 第一个参数 是 url
@@ -154,6 +162,96 @@ Math.random().toString(16).slice(-8)
 
 这里经过实操，只能 用静态资源。并且 用 [https://www.srihash.org/](https://link.zhihu.com/?target=https%3A//www.srihash.org/)   生成资源才行
 
+
+
+
+
+### 2.2.8  标准sse 格式
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format
+
+
+
+#### 2.2.8.1 关于event 
+
+如果服务器发送的消息中没有 [`event`](https://developer.mozilla.org/zh-CN/docs/Web/API/Server-sent_events/Using_server-sent_events#event) 字段，则这些消息会被视为 `message` 事件。为了接收这些 message 事件，需要为 [`message`](https://developer.mozilla.org/zh-CN/docs/Web/API/EventSource/message_event) 事件附加一个事件处理程序 
+
+```ts
+const evtSource = new EventSource("xxx", {
+  withCredentials: true,
+});
+evtSource.onmessage = function (event) {
+ 	console.log("event:",event)
+  	
+};
+```
+
+如果服务器发送的消息中定义了 `event` 字段，就会以 `event` 中给定的名称作为事件接收。例如
+
+```ts
+const evtSource = new EventSource("xxx", {
+  withCredentials: true,
+});
+evtSource.addEventListener("ping", (event) => {
+  console.log("ping:",event)
+});
+```
+
+这个时候服务器是这样的
+
+```ts
+var express = require('express');
+var app = express();
+// 跨域
+app.all('*',function(req,res,next){
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+  next();
+})
+app.get("/api/sse", function(req, res) {
+  res.setHeader('Content-Type', 'text/event-stream')
+  res.setHeader( 'Access-Control-Allow-Origin', '*')
+  res.setHeader("Cache-Control", "max-age=10")
+  res.setHeader("Connection", "keep-alive");
+  res.write("event: ping\n")
+  const interval = setInterval(() => {
+    res.write(`data: {"message":"你好ddd"}\n`);
+  }, 1000);
+
+  // 3秒后停止输出
+  setTimeout(() => {
+    if (res.writableEnded) {
+    } else {
+      clearInterval(interval);
+      res.end('data: [DONE]\n\n'); // 结束响应，断开连接
+    }
+  }, 3000);
+})
+```
+
+最后来举例一下 一些特殊情况
+
+- res.write("event:pin\n") : 正常接收到 pin 事件
+- res.write(`event:     pin \n`): 正常接收到 pin 事件: 空格问题
+  - 但是有一个问题就是 前端 addeventlistener监听不到：只有event 后面的 pin 前面0-1个空格和 后方 没有空格的时候前端 事件才拿得到
+- res.write("Event:pin\n") : 事件变成 message事件 : 大小写
+- res.write("event:pin\n\n") : 事件变成 message事件 ： 多了 \n
+- res.write("event :pin\n") : 事件变成 message事件 : event 和 ： 中间多了空格
+
+
+
+#### 2.2.8.2 关于data
+
+我们在上面的代码中 有一行 `data: {"message":"你好ddd"}\n` ，前面的data 和 最后的 \n 是 什么个情况可以自定义吗
+
+- res.write("data:4Data chunk\n\n") : 正常接收
+- res.write("data:4Data chunk\n\n"): 全部挤到一起来了：少了 \n
+- res.write("Data:4Data chunk\n\n"): 不输出了:大小写问题
+
+
+
+
+
 ## 2.3 处理返回
 
 ```ts
@@ -170,7 +268,35 @@ Math.random().toString(16).slice(-8)
 
 
 
+## 2.4 封装 fetch
 
+### 2.4.1 拦截器
+
+控制执行顺序就可以了
+
+### 2.4.2 超时功能
+
+直接把 AbortSignal.timeout 传递给 目标的 param
+
+### 2.4.3 取消请求
+
+AbortController 的相关应用
+
+
+
+### 2.4.4 get |  post  | 文件上传
+
+- get 请求 的 content-type 会触发跨域
+- 文件上传是 post 。formdata 不用 设置 content-type 是 form-data。因为有bounary
+- post 请求 里面 需要把字符串变成 stringify
+
+
+
+### 2.4.5 event-stream
+
+
+
+#### 2.4.5.1 主逻辑
 
 
 

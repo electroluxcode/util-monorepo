@@ -46,38 +46,14 @@ app.get('/api/get', function(req, res) {
     console.log(data)
   }
  
-  setTimeout(()=>{
+  setTimeout(() => {
     res.send({
       code:200,
       msg:Math.random()+`
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-      dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+      ddddddddddddddddd
       `,
     });
-  },1000)
+  }, 1000);
   
 });
 
@@ -94,24 +70,27 @@ app.all('/api/post', function(req, res) {
 app.get("/api/sse", function(req, res) {
   // json 的才有效
   res.setHeader('Content-Type', 'text/event-stream')
-  // res.setHeader('Transfer-Encoding', 'chunked')
-  res.setHeader(  'Access-Control-Allow-Origin', '*')
+  res.setHeader( 'Access-Control-Allow-Origin', '*')
   res.setHeader("Cache-Control", "max-age=10")
-  res.setHeader("Connection", "keep-alive")
+  res.setHeader("Connection", "keep-alive");
+
   const interval = setInterval(() => {
-    res.write('data: Data chunk\n\n');
+    res.write(`event:pin\n`)
+    res.write('data:{id:4Data chunk}\n\n');
   }, 1000);
 
-  // 5秒后停止输出
+  // 3秒后停止输出
   setTimeout(() => {
     if (res.writableEnded) {
-   
     } else {
       clearInterval(interval);
       res.write('data: Data end\n\n');
     }
-  }, 5000);
+  }, 3000);
 })
+
+
+
 const uploadsPath = path.resolve(__dirname, './public');
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
@@ -119,14 +98,14 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, callback) {
     const filename = req.headers['x-file-name'];
-    callback(null, `${Date.now()}.jpg}`);
+    callback(null, `${Date.now()}.jpg`);
     return;
   }
 })
 const upload = multer({ storage });
 app.post("/api/file", upload.single('file'), (req, res) => {
   console.log('req', req.file);
-  res.json({ url: `http://localhost:8088/public/${req.file.filename}` })
+  res.json({ url: `http://localhost:8088/public/` })
 })
 
 

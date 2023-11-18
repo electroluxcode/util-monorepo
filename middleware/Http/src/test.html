@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="module">
+
+
+    // const source = new EventSource('http://localhost:8088/api/sse');
+        // source.onmessage = (event) => {
+        //     console.log(event);
+        // };
+        // source.addEventListener("message",(event) => {
+        //     console.log(event);
+        // }) 
+        // source.addEventListener("pin",(event) => {
+        //     console.log("pin:",event);
+        // }) 
+        // source.onerror = (event) => {
+        //     console.log(event);
+        //     // source.close()
+        // };
+
+        import { fetchEventSource } from './index.js';
+
+        await fetchEventSource('http://localhost:8088/api/sse', {
+            onmessage(ev) {
+                console.log("onmessage:",ev);
+            },
+            async onopen(response) {
+                console.log("onopen:",response)
+                // if (response.ok && response.headers.get('content-type') === EventStreamContentType) {
+                //     return; // 似乎不能return
+                // } else if (response.status >= 400 && response.status < 500 && response.status !== 429) {
+                //     // client-side errors are usually non-retriable:
+                //     console.log("终究报错了")
+                // } else {
+                //     console.log("终究报错了")
+                // }
+            },
+          
+            onclose() {
+                console.log("onclose")
+                // if the server closes the connection unexpectedly, retry:
+               
+            },
+            onerror(err) {
+                console.log("onerror")
+              
+            }
+        });
+    </script>
+</body>
+
+</html>

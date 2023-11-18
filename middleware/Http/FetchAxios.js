@@ -15,14 +15,15 @@ class FetchAxios {
     BaseConfig = {};
     interceptors = { request: {}, response: {} };
     constructor() {
-        let that = this;
-        this.interceptors.request.use = (BeforeRequest, ErrorRequest) => {
-            that.BaseConfig.BeforeRequest = BeforeRequest,
-                that.BaseConfig.ErrorRequest = ErrorRequest;
+        this.BaseConfig = {
+            "Mode": "common",
+            "TimeOut": 10000,
+            "Retry": 3,
+            "MaxConcurrent": 1,
+            "NowConcurrentNumber": 0
         };
-        this.interceptors.response.use = (BeforeResponse, ErrorResponse) => {
-            that.BaseConfig.BeforeResponse = BeforeResponse,
-                that.BaseConfig.ErrorResponse = ErrorResponse;
+        this.BaseConfig.BeforeRequest = (config) => {
+            return config;
         };
     }
     /**
@@ -30,60 +31,108 @@ class FetchAxios {
      * @param BaseConfig
      */
     create(BaseConfig) {
-        this.BaseConfig.BaseUrl = BaseConfig.BaseUrl;
-        this.BaseConfig.Timeout = BaseConfig.Timeout;
+        this.BaseConfig = Object.assign(this.BaseConfig, BaseConfig);
     }
     /**
-     * @des 2.发出请求
-     * @param BaseRequest
+     * @des step2:基本数据处理
+     * @param param0
      * @returns
      */
-    request(BaseRequest) {
-        // 2.1初始化 初始化拦截器
+    common({ method, mode, cache, headers, data, signal, url }) {
         let init;
-        if (this.BaseConfig.BeforeRequest) {
-            let BaseRequestBefore = this.BaseConfig.BeforeRequest(BaseRequest);
-            init = {
-                method: BaseRequestBefore.method,
-                mode: BaseRequestBefore.mode,
-                cache: BaseRequestBefore.cache,
-                headers: BaseRequestBefore.headers,
-                body: BaseRequestBefore.data,
-                signal: BaseRequestBefore.signal
-            };
-        }
-        else {
-            init = {
-                method: BaseRequest.method,
-                mode: BaseRequest.mode,
-                cache: BaseRequest.cache,
-                headers: BaseRequest.headers,
-                body: BaseRequest.data,
-                signal: BaseRequest.signal
-            };
-        }
-        // init["integrity"] ="sha"+Math.random().toString(16).slice(-8)
+        let BaseRequestBefore = this.BaseConfig.BeforeRequest({
+            method, mode, cache, headers, data, signal, url
+        });
+        init = {
+            url: BaseRequestBefore.url,
+            method: BaseRequestBefore.method,
+            mode: BaseRequestBefore.mode,
+            cache: BaseRequestBefore.cache,
+            headers: BaseRequestBefore.headers,
+            body: BaseRequestBefore.data,
+            signal: BaseRequestBefore.signal
+        };
         // 2.2 get post 不同请求
-        if (BaseRequest.method == "GET") {
-            if (BaseRequest.data && Object.prototype.toString.call(BaseRequest.data) !== "[object Object]") {
+        if (init.method == "GET") {
+            if (init.data && Object.prototype.toString.call(init.data) !== "[object Object]") {
                 console.error("传参需要json,链路中断");
                 return;
             }
-            BaseRequest.url = BaseRequest.url + "?" + QsString(BaseRequest.data);
+            init.url = init.url + "?" + QsString(init.data);
             Reflect.deleteProperty(init, "body");
         }
-        else if (BaseRequest.method == "POST") {
-            if (Object.prototype.toString.call(BaseRequest.data) == '[object FormData]') {
+        else if (init.method == "POST") {
+            if (Object.prototype.toString.call(init.data) == '[object FormData]') {
             }
             else {
-                // post中区分文件
-                init.body = JSON.stringify(BaseRequest.data);
+                // post中区分文件 和 普通data
+                init.body = JSON.stringify(init.data);
             }
         }
-        // 2.3 
-        BaseRequest.url = this.BaseConfig.BaseUrl + BaseRequest.url;
-        console.log("上传", BaseRequest.url, init);
-        return fetch(BaseRequest.url, init);
+        // 2.3 超时功能 | sse 不需要超时功能
+        if (this.BaseConfig.TimeOut && !init.signal) {
+            init.signal = AbortSignal.timeout(this.BaseConfig.TimeOut);
+        }
+        // 2.6 全局基础配置
+        init.url = this.BaseConfig.BaseUrl + init.url;
+        return init;
+    }
+    async pauseIfNeeded() {
+        // console.log(this.BaseConfig.NowConcurrentNumber,",this.BaseConfig.MaxConcurrent",this.BaseConfig.NowConcurrentNumber>=this.BaseConfig.MaxConcurrent)
+        while (this.BaseConfig.NowConcurrentNumber > this.BaseConfig.MaxConcurrent) { // 当暂停状态为 true 时，等待恢复
+            //   console.log("暂停中")
+            // console.log(this.BaseConfig.NowConcurrentNumber,this.BaseConfig.MaxConcurrent)
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+    }
+    /**
+     * @des 3.发出请求
+     * @param BaseRequest
+     * @returns
+     */
+    request({ method, mode, cache, headers, data, signal, url }, { onclose, onmessage, onopen, onerror } = {}) {
+        let that = this;
+        // 3.1 一般模式
+        let init = this.common({ method, mode, cache, headers, data, signal, url });
+        // 3.2 hook 初始化 
+        let res;
+        let retryTimer = null;
+        let curRequestController;
+        return new Promise((resolve, reject) => {
+            // 3.2 主文件
+            async function main(retry) {
+                if (retry <= 0) {
+                    throw new Error("到达最大重试次数");
+                }
+                // 3.2.1 普通模式
+                if (that.BaseConfig.Mode == "common") {
+                    try {
+                        while (that.BaseConfig.NowConcurrentNumber >= that.BaseConfig.MaxConcurrent) { // 当暂停状态为 true 时，等待恢复
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                        }
+                        that.BaseConfig.NowConcurrentNumber++;
+                        let result = await fetch(init.url, init);
+                        // 错误重试机制
+                        if (result.status > 300) {
+                            retry--;
+                            that.BaseConfig.NowConcurrentNumber--;
+                            main(retry);
+                            reject();
+                        }
+                        that.BaseConfig.NowConcurrentNumber--;
+                        await that.pauseIfNeeded();
+                        resolve(result);
+                    }
+                    catch {
+                        that.BaseConfig.NowConcurrentNumber--;
+                        main(retry--);
+                    }
+                }
+                // 3.2.2
+            }
+            main(that.BaseConfig.Retry);
+            // resolve("")
+        });
     }
 }
 let CaseFetchAxios = new FetchAxios();

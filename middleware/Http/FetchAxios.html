@@ -21,7 +21,7 @@
 
 
         // --------------------1.post 测试--------------------
-        CaseFetchAxios.create({ BaseUrl: "http://localhost:8088" })
+        CaseFetchAxios.create({ BaseUrl: "http://localhost:8088",TimeOut:10000 })
         // CaseFetchAxios.BaseConfig.BeforeRequest = (config)=>{
         //     console.log("config:",config)
         //     return config
@@ -45,23 +45,22 @@
 
         // --------------------2.get 测试 --------------------
         // get 中 加上 Content-Type 也会被视为是 复杂请求触发 option 跨域
-        // CaseFetchAxios.request({
-        //     url:"/api/get",
-        //     data:{
-        //         id:5656588888
-        //     },
-        //     method:"GET",
-        //     headers:{
-        //         // "Content-Type":"application/json",
-        //     },
-        // }).then((e)=>{
-        //     console.log("e:",e)
-        //     return e.json()
-        // }).then((e)=>{
-        //     console.log("最终结果:",e)
-        // })
-
-
+        CaseFetchAxios.request({
+            url:"/api/g22et",
+            data:{
+                id:5656588888
+            },
+            method:"GET",
+            headers:{
+                // "Content-Type":"application/json",
+            },
+        }).then((e)=>{
+            console.log("e:",e)
+            return e.json()
+        }).then((e)=>{
+            console.log("最终结果:",e)
+        })
+     
         // --------------------3.文件上传测试--------------------
         // let fileDom = document.querySelector("#file")
         // fileDom.addEventListener("change",async(e)=>{
@@ -130,35 +129,85 @@
         // }, 3500);
 
         // ---------------------5. sse 测试-------------------- 
-        CaseFetchAxios.request({
-            url: "/api/sse",
-            data: {
-                id: 5656588888
-            },
-            method: "GET",
-            headers: {
-                // "Content-Type":"application/json",
-            },
-            mode: 'cors'
-        }).then(async (e) => {
-            console.log("e:", e)
-            const reader = e.body.getReader();
+        // CaseFetchAxios.request({
+        //     url: "/api/sse",
+        //     data: {
+        //         id: 5656588888
+        //     },
+        //     method: "GET",
+        //     headers: {
+        //         // "Content-Type":"application/json",
+        //     },
+        //     mode: 'cors'
+        // }).then(async (e) => {
+        //     console.log("e:", e)
+        //     const reader = e.body.getReader();
 
-            while (true) {
-                const { done, value } = await reader.read();
-                console.log(`Received  bytes`, done, value)
-                if (done) {
-                    break;
-                }
-            }
-        }).then((e) => {
-            console.log("最终结果:", e)
-        })
-
-
+        //     while (true) {
+        //         const { done, value } = await reader.read();
+        //         console.log(`Received  bytes`, done, value)
+        //         if (done) {
+        //             break;
+        //         }
+        //     }
+        // }).then((e) => {
+        //     console.log("最终结果:", e)
+        // })
 
 
+            // CaseFetchAxios.request({
+        //     url: "/api/sse",
+        //     data: {
+        //         id: 5656588888
+        //     },
+        //     method: "GET",
+        //     headers: {
+        //         // "Content-Type":"application/json",
+        //     },
+        //     mode: 'cors'
+        // }).then(async (e) => {
+        //     console.log("e:", e)
+        //     const reader = e.body.getReader();
 
+        //     while (true) {
+        //         const { done, value } = await reader.read();
+        //         console.log(`Received  bytes`, done, value)
+        //         if (done) {
+        //             break;
+        //         }
+        //     }
+        // }).then((e) => {
+        //     console.log("最终结果:", e)
+        // })
+//         CaseFetchAxios.create({ BaseUrl: "https://dashscope.aliyuncs.com" })
+//              CaseFetchAxios.request({
+//             url: "/api/v1/services/aigc/text-generation/generation",
+//             data: {
+//     "model": "qwen-turbo",
+//     "input": {
+//         "messages": [
+//             {
+//                 "role": "system",
+//                 "content": "You are a helpful assistant."
+//             },
+//             {
+//                 "role": "user",
+//                 "content": "你好，哪个公园距离我最近？"
+//             }
+//         ]
+//     },
+// },
+//             method: "POST",
+//             headers: {
+//                 "Authorization":"sk-9c9c0e52316647869f37dd97dc65669f",
+//                 "Content-Type":"application/json"
+//             },
+//             mode: 'cors'
+//         }).then(async (e) => {
+//             return e.json()
+//         }).then((e) => {
+//             console.log("最终结果:", e)
+//         })
     </script>
 </body>
 

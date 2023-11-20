@@ -10,10 +10,6 @@ var SendMail = require('./config/email');
 const multer = require('multer')
 
 var app = express();
-var nodemailer = require('nodemailer');
-
-
-
 const bodyParser = require('body-parser');
 
 // view engine setup

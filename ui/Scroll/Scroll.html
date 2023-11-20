@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+            font-size: 15px;
+        }
+
+      
+
+        .container_layer {
+            max-height: 100px;
+            /* overflow: scroll; */
+            /* height: 100%; */
+            position: relative;
+            overflow: auto
+            /* position: ; */
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="container">
+        <div class="container_layer">
+            <p>0</p>
+            <p>1</p>
+            <p>2</p>
+            <p>3</p>
+            <p>4</p>
+            <p>5</p>
+            <p>6</p>
+            <p>7</p>
+            <p>8</p>
+            <p>9</p>
+            <p>10</p>
+            <p>11</p>
+            <p>12</p>
+            <p>13</p>
+            <p>14</p>
+            <p>15</p>
+        </div>
+
+
+    </div>
+    <!-- <script src="scroll.js"></script> -->
+    <script type="module">
+
+        import {Scroll} from "./Scroll.js"
+
+let de = Scroll(document.querySelector(".container_layer"),1,10)
+
+    </script>
+</body>
+
+</html>

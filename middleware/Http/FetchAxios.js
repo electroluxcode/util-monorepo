@@ -1,4 +1,5 @@
-// 暂时不做响应器 的 统一封装，因为这玩意是可以基于流式的
+// 响应器 如果 不处理默认是返回 JSON 格式的
+///<reference path = "FetchAxios.d.ts" />
 /**
  * 变成 & 链接
  * @param ob
@@ -13,17 +14,19 @@ function QsString(ob) {
 }
 class FetchAxios {
     BaseConfig = {};
-    interceptors = { request: {}, response: {} };
     constructor() {
         this.BaseConfig = {
             "Mode": "common",
             "TimeOut": 10000,
-            "Retry": 3,
+            "Retry": 1,
             "MaxConcurrent": 1,
             "NowConcurrentNumber": 0
         };
         this.BaseConfig.BeforeRequest = (config) => {
             return config;
+        };
+        this.BaseConfig.BeforeResponse = (config) => {
+            return config.json();
         };
     }
     /**
@@ -121,11 +124,14 @@ class FetchAxios {
                         }
                         that.BaseConfig.NowConcurrentNumber--;
                         await that.pauseIfNeeded();
-                        resolve(result);
+                        let output = that.BaseConfig.BeforeResponse(result);
+                        resolve(output);
                     }
                     catch {
+                        // console.error("未知报错,停止")
                         that.BaseConfig.NowConcurrentNumber--;
-                        main(retry--);
+                        retry--;
+                        main(retry);
                     }
                 }
                 // 3.2.2

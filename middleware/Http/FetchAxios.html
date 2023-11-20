@@ -19,9 +19,35 @@
         import AbortRequest from "../AbortRequest/AbortRequest.js"
         const abortRequest = new AbortRequest();
 
+        // --------------------0.基础配置示例--------------------
+        CaseFetchAxios.create({
+            BaseUrl: "http://localhost:8088",
+            TimeOut: 10000,
+            Retry: 4,
+            MaxConcurrent: 2
+        })
+        CaseFetchAxios.create({
+            BaseUrl: "http://localhost:8088",
+            TimeOut: 10000,
+            Retry: 1,
+            MaxConcurrent: 1,
+            BeforeRequest: (config) => {
+                console.log("BeforeRequest配置:")
+                console.log(config)
+                return config
+            },
+            BeforeResponse: (config) => {
+                console.log("BeforeResponse配置:")
+                console.log(config)
+                return config
+            }
+        })
+
+
+
+
 
         // --------------------1.post 测试--------------------
-        CaseFetchAxios.create({ BaseUrl: "http://localhost:8088",TimeOut:10000 })
         // CaseFetchAxios.BaseConfig.BeforeRequest = (config)=>{
         //     console.log("config:",config)
         //     return config
@@ -46,21 +72,18 @@
         // --------------------2.get 测试 --------------------
         // get 中 加上 Content-Type 也会被视为是 复杂请求触发 option 跨域
         CaseFetchAxios.request({
-            url:"/api/g22et",
-            data:{
-                id:5656588888
+            url: "/api/g4et",
+            data: {
+                id: 5656588888
             },
-            method:"GET",
-            headers:{
+            method: "GET",
+            headers: {
                 // "Content-Type":"application/json",
             },
-        }).then((e)=>{
-            console.log("e:",e)
-            return e.json()
-        }).then((e)=>{
-            console.log("最终结果:",e)
+        }).then((e) => {
+            console.log("最终结果:", e)
         })
-     
+
         // --------------------3.文件上传测试--------------------
         // let fileDom = document.querySelector("#file")
         // fileDom.addEventListener("change",async(e)=>{
@@ -128,7 +151,7 @@
         //     })
         // }, 3500);
 
-        // ---------------------5. sse 测试-------------------- 
+        // ---------------------5. sse 测试--------------------
         // CaseFetchAxios.request({
         //     url: "/api/sse",
         //     data: {

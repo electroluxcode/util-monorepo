@@ -8,7 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var SendMail = require('./config/email');
 const multer = require('multer')
-
+const schedule = require("node-schedule");
 var app = express();
 const bodyParser = require('body-parser');
 
@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-//跨域
+// 跨域
 app.all('*',function(req,res,next){
   res.header('Access-Control-Allow-Origin', '*');//的允许所有域名的端口请求（跨域解决）
   res.header("Access-Control-Allow-Headers", "content-type,Token,X-Requested-With,Content-Type");
@@ -35,13 +35,56 @@ app.all('*',function(req,res,next){
   next();
 })
 app.use(bodyParser.text());
+
+
+
+// 自动签到脚本 
+const JueJinSignIn = require("./signin/juejin")
+
+const Sign = async() =>{
+  let log = {
+    today:"今天要有一个好心情哦",
+    juejin:"无数据",
+
+  }
+  // 1.juejin
+  try{
+    log["juejin"] = await JueJinSignIn()
+  }catch{
+    log["juejin"] = await JueJinSignIn()
+  }
+  
+  let text = ``
+  // 组装
+  for(let i in log){
+    text += `<li>${i}:${log[i]}</li>`
+  }
+  let ResText = `<ul>${text}</ul>`
+  let ResTitle = `我的日志`
+  SendMail(ResTitle,"electroluxcode@gmail.com",ResText)
+}
+// 秒、分、时、日、月、周几 
+// '*'表示通配符，匹配任意，当秒是'*'时，表示任意秒数都触发，其它类推
+schedule.scheduleJob("0 24 06 * * *", () => {
+  setTimeout(() => {
+    Sign(); //签到函数
+  }, Math.random() * 10 * 60 * 1000)
+  
+})
+
+
+Sign()
+
+
+
+
+
 //get 接受参数测试
 app.get('/api/get', function(req, res) {
   if(req.query){
     let data = JSON.parse(JSON.stringify(req.query))
     console.log(data)
   }
- 
   setTimeout(() => {
     res.send({
       code:200,
@@ -104,18 +147,13 @@ app.post("/api/file", upload.single('file'), (req, res) => {
   res.json({ url: `http://localhost:8088/public/` })
 })
 
-
-
-
-
-
-//get 发送短信 
+// get 发送短信 
 // http://localhost:8088/api/email?subject=测试&to=electroluxcode@gmail.com&text=你好
 app.get('/api/email', function(req, res) {
   if(req.query){
     let data = JSON.parse(JSON.stringify(req.query))
     console.log(data)
-    let {subject="默认标题",to="electroluxcode@gmail.com",text="默认内容"} = data
+    let {subject="默认标题",to="electroluxcode@gmail.com",text=`默认内容`} = data
     SendMail(subject,to,text,res)
   }
   // res.send({
@@ -146,9 +184,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
-
 
 
 module.exports = app;

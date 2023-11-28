@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Handle = void 0;
 ///<reference path = "Handle.d.ts" />
 class Handle {
     operations;
@@ -184,5 +187,4 @@ class Handle {
         return result;
     }
 }
-//
-export { Handle };
+exports.Handle = Handle;

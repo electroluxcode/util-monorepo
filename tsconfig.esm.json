@@ -13,9 +13,10 @@
     "noImplicitThis": false,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "esModuleInterop": true, // important!
-    "types": []
+    "types": ["node"]
   },
   "outDir": "dist",
+  
   "exclude": [
     "*/node_modules"
   ]

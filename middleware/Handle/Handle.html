@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    handle
+    <script type="module">
+        import{ Handle} from "./handle.js"
+       
+        // 1.排序示例(测试完成)
+        let data = [{id:1,children:{id:14}},{id:2,children:{id:19}},{id:1,children:{id:3}}]
+        // let instance1 = new Handle(data).sortBy({key:"id",method:"asc"}).execute()
+        // console.log("sortByInstance:",instance1)
+
+        // // 2.筛选示例
+        // let fliterUtil =(item) => {
+        //     return item.id>1;
+        // }
+        // let fliterInstance = new Handle(data).where({callback:fliterUtil}).execute()
+        // console.log("fliterInstance:",fliterInstance)
+
+        // 分组示例
+        // let instance3 = new Handle(data).groupBy({key:"children.id"}).execute()
+        // console.log("groupByInstance:",instance3)
+
+
+// // 属性转化示例
+let instance4 = new Handle(data).transformBy({originKey:["children.id"],targetKey:["te3.img"]}).execute()
+console.log(instance4,)
+
+
+
+// let data = [{
+//     "type": "Feature",
+//     "geometry": {
+//         "type": "Point",
+//         "coordinates": [
+//             9.921309617,
+//             57.0517658,
+//             79.99999999999999
+//         ]
+//     },
+//     "properties": {
+//         "name": "Aalborg, Denmark",
+//         "styleUrl": "#defaultballoon",
+//         "styleHash": "-7ed08019",
+//         "description": "<table width='320'><tr><td align='middle'>< img src='http://www.cleancruising.com.au/images/ports/DKAAL.jpg' height='240' width='320' border='0'></td></tr><tr><td>Aalborg is located in the north of Jutland. The local tourist board calls it the \"little Paris of the North\". Although this may seem a bit far fetched, the location by the Limfjord is truly superb, and the town is well worth a visit. From Aalborg, it is not far to the white beaches of the North Sea, to the forest of Rold, the lovely Rebild Hills or the slopes of the Jutlandic Ridge.<br></td></tr><tr><td><br><br></tr></td></table>"
+//     }
+// }]
+// let instance4 = new Handle(data).transformBy(
+//     {originKey:["properties.name","properties.name"],targetKey:["test","mt"]}).execute()
+    </script>
+
+
+<script>
+
+    // function getProperty(obj, path) {
+    //     return path.split('.').reduce((prev, curr) => {
+    //         return prev ? prev[curr] : undefined;
+    //     }, obj);
+    // }
+    // var obj = {
+    //     id:3,
+    //     name:"xiaoming",
+    //     obj:{
+    //         id:2
+    //     }
+    // }
+    // console.log("obj:",getProperty(obj,"obj.id"))
+
+</script>
+</body>
+</html>

@@ -26,7 +26,7 @@ fetch 的 第一个参数 是 url
 
 
 
-## 2.2.辨析
+## 2.2.sse 关键属性辨析
 
 ### 2.2.1 mode | no-cors | cors  | same-origin
 

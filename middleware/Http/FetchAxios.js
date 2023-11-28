@@ -143,3 +143,4 @@ class FetchAxios {
 }
 let CaseFetchAxios = new FetchAxios();
 export { CaseFetchAxios };
+export default CaseFetchAxios;

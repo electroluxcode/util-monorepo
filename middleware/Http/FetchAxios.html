@@ -16,30 +16,26 @@
     <script type="module">
 
         import { CaseFetchAxios } from "./FetchAxios.js"
-        import AbortRequest from "../AbortRequest/AbortRequest.js"
-        const abortRequest = new AbortRequest();
+        // import AbortRequest from "../AbortRequest/AbortRequest.js"
+        // const abortRequest = new AbortRequest();
 
         // --------------------0.基础配置示例--------------------
+   
         CaseFetchAxios.create({
             BaseUrl: "http://localhost:8088",
             TimeOut: 10000,
-            Retry: 4,
-            MaxConcurrent: 2
-        })
-        CaseFetchAxios.create({
-            BaseUrl: "http://localhost:8088",
-            TimeOut: 10000,
-            Retry: 1,
+            Retry: 2,
             MaxConcurrent: 1,
             BeforeRequest: (config) => {
                 console.log("BeforeRequest配置:")
                 console.log(config)
                 return config
             },
+            // 默认是json，但是自定义配置会取代掉他
             BeforeResponse: (config) => {
                 console.log("BeforeResponse配置:")
                 console.log(config)
-                return config
+                return config.json()
             }
         })
 
@@ -72,16 +68,17 @@
         // --------------------2.get 测试 --------------------
         // get 中 加上 Content-Type 也会被视为是 复杂请求触发 option 跨域
         CaseFetchAxios.request({
-            url: "/api/g4et",
+            url: "/api/get",
             data: {
                 id: 5656588888
             },
             method: "GET",
             headers: {
-                // "Content-Type":"application/json",
+                "Content-Type":"application/json",
             },
         }).then((e) => {
             console.log("最终结果:", e)
+    
         })
 
         // --------------------3.文件上传测试--------------------

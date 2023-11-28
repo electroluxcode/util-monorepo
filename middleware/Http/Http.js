@@ -1,5 +1,5 @@
 // 响应器 如果 不处理默认是返回 JSON 格式的
-///<reference path = "FetchAxios.d.ts" />
+///<reference path = "Http.d.ts" />
 /**
  * 变成 & 链接
  * @param ob
@@ -12,21 +12,21 @@ function QsString(ob) {
     res = res.substring(0, res.length - 1);
     return res;
 }
-class FetchAxios {
-    BaseConfig = {};
+class HttpClass {
+    BaseConfig;
     constructor() {
         this.BaseConfig = {
             "Mode": "common",
             "TimeOut": 10000,
             "Retry": 1,
             "MaxConcurrent": 1,
-            "NowConcurrentNumber": 0
-        };
-        this.BaseConfig.BeforeRequest = (config) => {
-            return config;
-        };
-        this.BaseConfig.BeforeResponse = (config) => {
-            return config.json();
+            "NowConcurrentNumber": 0,
+            "BeforeRequest": (config) => {
+                return config;
+            },
+            "BeforeResponse": (config) => {
+                return config.json();
+            }
         };
     }
     /**
@@ -38,7 +38,8 @@ class FetchAxios {
     }
     /**
      * @des step2:基本数据处理
-     * @param param0
+     * 对于 get post 分别进行处理 和 对url进行拼接
+     * @param
      * @returns
      */
     common({ method, mode, cache, headers, data, signal, url }) {
@@ -58,10 +59,9 @@ class FetchAxios {
         // 2.2 get post 不同请求
         if (init.method == "GET") {
             if (init.data && Object.prototype.toString.call(init.data) !== "[object Object]") {
-                console.error("传参需要json,链路中断");
-                return;
+                console.error("传参需要json,注意");
             }
-            init.url = init.url + "?" + QsString(init.data);
+            init.url = QsString(init.data) ? init.url + "?" + QsString(init.data) : init.url;
             Reflect.deleteProperty(init, "body");
         }
         else if (init.method == "POST") {
@@ -74,7 +74,9 @@ class FetchAxios {
         }
         // 2.3 超时功能 | sse 不需要超时功能
         if (this.BaseConfig.TimeOut && !init.signal) {
-            init.signal = AbortSignal.timeout(this.BaseConfig.TimeOut);
+            if (globalThis.AbortSignal && AbortSignal.timeout) {
+                init.signal = AbortSignal.timeout(this.BaseConfig.TimeOut);
+            }
         }
         // 2.6 全局基础配置
         init.url = this.BaseConfig.BaseUrl + init.url;
@@ -95,7 +97,7 @@ class FetchAxios {
      */
     request({ method, mode, cache, headers, data, signal, url }, { onclose, onmessage, onopen, onerror } = {}) {
         let that = this;
-        // 3.1 一般模式
+        // 3.1 一般模式。初始化基本参数
         let init = this.common({ method, mode, cache, headers, data, signal, url });
         // 3.2 hook 初始化 
         let res;
@@ -105,7 +107,8 @@ class FetchAxios {
             // 3.2 主文件
             async function main(retry) {
                 if (retry <= 0) {
-                    throw new Error("到达最大重试次数");
+                    reject({ code: 404, config: init, data: "到达最大重试次数" });
+                    return;
                 }
                 // 3.2.1 普通模式
                 if (that.BaseConfig.Mode == "common") {
@@ -120,12 +123,12 @@ class FetchAxios {
                             retry--;
                             that.BaseConfig.NowConcurrentNumber--;
                             main(retry);
-                            reject();
                         }
                         that.BaseConfig.NowConcurrentNumber--;
                         await that.pauseIfNeeded();
-                        let output = that.BaseConfig.BeforeResponse(result);
-                        resolve(output);
+                        let output = await that.BaseConfig.BeforeResponse(result);
+                        // console.log(JSON.stringify(output))
+                        resolve({ code: 200, config: init, data: output });
                     }
                     catch {
                         // console.error("未知报错,停止")
@@ -141,6 +144,6 @@ class FetchAxios {
         });
     }
 }
-let CaseFetchAxios = new FetchAxios();
-export { CaseFetchAxios };
-export default CaseFetchAxios;
+let Http = new HttpClass();
+export { Http };
+export default Http;

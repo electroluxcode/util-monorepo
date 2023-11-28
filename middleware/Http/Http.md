@@ -300,3 +300,55 @@ AbortController 的相关应用
 
 
 
+
+
+
+
+
+
+## 2.5 难点
+
+### 2.5.1  promise 容易混淆
+
+- promise.resolve 里面如果是一个 promise方法 那么会等待结果返回，但是如果是 object 里面有一个 属性的value是 promise那么会直接 返回 这个 object并不会等待
+
+  ```ts
+  let sleep=()=>{
+      return new Promise((resolve)=>{
+      setTimeout(() => {
+          resolve(1000)
+          }, 2000);
+      })
+  }
+  // 不会等待
+  new Promise((resolve)=>{
+      resolve({sleep:sleep()})
+      }).then((e)=>{
+      console.log("见鬼:",e)
+  })
+  // 会等待
+  new Promise((resolve)=>{
+      resolve(sleep())
+      }).then((e)=>{
+      console.log("见鬼:",e)
+  })
+  ```
+
+- .then ：返回一个新promise。会把任务 都推进queueMicrotask 里面进行判断
+
+- 微任务队列 ：
+
+  - 判断状态，pending的时候不动
+  - 查找微任务并且放到`queueMicrotask`里面
+
+  - 判断.then 的参数是不是字符串或者数字，是的话判断状态看看resolve还是reject			
+  - 判断.then 返回值，是 promise。queueMicrotask再一次包装  promise.then 里面塞进去
+  -  最后不管`queueMicrotask` 有没有执行完直接shift
+
+### 2.5.2 引入
+
+- es6 的 export 基本数据类型在另外一个地方 import 之后就不能修改，除非在内部进行使用function
+- cjs 基本数据类型在另外一个地方 import 之后可以修改。神奇
+
+
+

@@ -3,21 +3,21 @@ type BaseConfigType = {
     // 基础api
     BaseUrl?: string,
     // 最大超时时间
-    TimeOut?: number,
+    TimeOut: number,
     // 最大重试次数
-    Retry?: number
+    Retry: number
     // 最大并发
-    MaxConcurrent?: number
+    MaxConcurrent: number
     // 目前的并发数
-    NowConcurrentNumber?: number
+    NowConcurrentNumber: number
     // 给用户两种模式。
     // hook模式是可以自己定义 BaseEventType 里面的回调(sse)
     // common 模式是跟 axios 一样，导出一个实例然后挂载url(get post)
     Mode?: "hook" | "common",
 
-    BeforeRequest?: <t>(param: t) => t,
+    BeforeRequest: <t>(param: t) => t,
     ErrorRequest?: (...param: any) => any,
-    BeforeResponse?: (...param: any) => any,
+    BeforeResponse: (...param: any) => any,
     ErrorResponse?: (...param: any) => any,
 }
 

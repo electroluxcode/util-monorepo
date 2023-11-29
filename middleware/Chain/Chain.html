@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="module">
+        import { Chain } from "./Chain.js"
+
+        // function FirstStep() {
+        //     console.log('数据校验:');
+        //     if (!this.ChainData.init!=="error") {
+        //         this.emit("error", "使用者触发error事件")
+        //         return
+        //     }
+        //     return 'ChainNext';
+        // }
+        // function SecondStep() {
+        //     return 'ChainNext';
+        // }
+        // const ChainFirstStep = new Chain(FirstStep);
+        // const ChainSecondStep = new Chain(SecondStep);
+        // ChainFirstStep.nodeSet(ChainSecondStep);
+
+        // ChainFirstStep.dataSet({
+            //// 使用者可以在这里定义东西
+        //     init: "helloworld",
+        //     eventBus: {
+        //         error: [(e) => { console.log(e);  }],
+        //     }
+        // })
+        // ChainFirstStep.passRequest();
+
+
+        //-------检查异步逻辑 | 只有ChainData会传递 | ---------
+        const sleep = () => {
+            return new Promise((resolve) => { setTimeout(() => { resolve({ code: "成功" }); }, 1000); });
+        };
+         async function FirstStep() {
+            let that = this
+            sleep().then((e)=>{
+               
+                that.asyncNext()
+            })
+        }
+        function SecondStep() {
+            console.log()
+            this.ChainData.id = "ddddd"
+            this.emit("finish","结束")
+        }
+        const ChainFirstStep = new Chain(FirstStep);
+        const ChainSecondStep = new Chain(SecondStep);
+        ChainFirstStep.nodeSet(ChainSecondStep);
+
+        ChainFirstStep.dataSet({
+            init: "helloworld",
+            eventBus: {
+                finish: [(e) => {  console.log(ChainFirstStep.ChainData) }],
+            }
+        })
+        ChainFirstStep.passRequest();
+
+    </script>
+</body>
+
+</html>

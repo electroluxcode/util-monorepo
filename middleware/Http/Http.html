@@ -64,7 +64,7 @@
         // --------------------2.get 测试 --------------------
         // get 中 加上 Content-Type 也会被视为是 复杂请求触发 option 跨域
         Http.request({
-            url: "/api/get",
+            url: "/api/get23",
             data: {
                 id: 5656588888
             },
@@ -72,10 +72,8 @@
             headers: {
                 // "Content-Type":"application/json",
             },
-        }).then((e) => {
-            console.log("最终结果:", e)
         }).catch((e)=>{
-            console.log("e",e.data)
+            console.log("e23434",e)
         })
        
         // --------------------3.文件上传测试--------------------

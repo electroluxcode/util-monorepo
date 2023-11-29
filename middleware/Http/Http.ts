@@ -118,10 +118,9 @@ class HttpClass {
             // 3.2 主文件
             async function main(retry: number) {
                 if (retry <= 0) {
-                    reject({ code: 404, config: init, data: "到达最大重试次数" })
+                    reject({code: 404, config: init,data:"到达最大重试次数"} )
                     return
                 }
-
                 // 3.2.1 普通模式
                 if (that.BaseConfig.Mode == "common") {
                     try {
@@ -130,7 +129,7 @@ class HttpClass {
                         }
                         that.BaseConfig.NowConcurrentNumber++
                         let result = await fetch(init.url!, init)
-                        
+                      
                         // 错误重试机制
                         if (result.status > 300) {
                             retry--

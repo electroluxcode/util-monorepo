@@ -5,14 +5,10 @@ Http.create({
     Retry: 2,
     MaxConcurrent: 1,
     BeforeRequest: (config) => {
-        console.log("BeforeRequest配置:")
-        console.log(config)
         return config
     },
     // 默认是json，但是自定义配置会取代掉他
     BeforeResponse: (config) => {
-        console.log("BeforeResponse配置:")
-        console.log(config)
         return config.json()
     }
 })
@@ -24,24 +20,19 @@ describe('Http', () => {
 
     // f1: baseurl 拼接
     test('Http/BaseConfig', () => {
-        try{
-            Http.request({
-                url: "/api/get3",
-                data: {
-                    id: 5656588888
-                },
-                method: "GET",
-                headers: {
-                    // "Content-Type":"application/json",
-                },
-            }).catch((e)=>{
-                Http.url == ""
-                expect(true).toBe(true);
-            })
-        }catch(e){
-            console.log("报错");
-            expect(true).toBe(true);
-        }
+        Http.request({
+            url: "/api/get34",
+            data: {
+                id: 5656588888
+            },
+            method: "GET",
+            headers: {
+                // "Content-Type":"application/json",
+            },
+        }).catch((e)=>{
+            let flag = e.config.url=="http://localhost:8088/api/get34"
+            expect(flag).toBe(true);
+        })
         // let flag = compare(transformInstance,expectData)
         
     });  

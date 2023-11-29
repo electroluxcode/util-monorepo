@@ -10,6 +10,7 @@ module.exports = {
     testMatch: [
       "**/*.spec.js",
     ],
+    testTimeout: 1000 * 10,
     transform: {} 
 };
   

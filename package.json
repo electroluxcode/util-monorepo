@@ -11,10 +11,12 @@
     "reportTitle": "测试报告"
   },
   "scripts": {
-    "test": " jest --reporters default jest-stare   ",
-    "start": "tsc   --p ./tsconfig.esm.json --watch && tsc --p ./tsconfig.common.json --watch",
+    "test": "concurrently \"node behind\\other\\app.js \" \"jest --reporters default jest-stare\"   ",
+    "te":"jest --reporters default jest-stare",
+    "start": "concurrently \"npm run dev:es \" \"npm run dev:cjs\"   ",
+    "dev": "concurrently \"npm run dev:es \" \"npm run dev:cjs\"   ",
     "dev:es": "tsc   --p ./tsconfig.esm.json --watch ",
-    "dev:cjs":"tsc --p ./tsconfig.common.json --watch ",
+    "dev:cjs": "tsc --p ./tsconfig.common.json --watch ",
     "build:typescript": "tsc --outDir ./dist  --project ./ --watch",
     "build:webpack": "node ./config/webpack.build.js"
   },
@@ -30,6 +32,7 @@
   "devDependencies": {
     "@types/node": "^20.9.2",
     "babel-jest": "^29.7.0",
+    "concurrently": "^8.2.2",
     "jest": "^29.7.0",
     "jest-stare": "^2.5.1",
     "typescript": "^5.2.2"

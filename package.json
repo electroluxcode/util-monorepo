@@ -11,8 +11,8 @@
     "reportTitle": "测试报告"
   },
   "scripts": {
-    "test": "concurrently \"node behind\\other\\app.js \" \"jest --reporters default jest-stare\"   ",
-    "te":"jest --reporters default jest-stare",
+    
+    "test":"jest --reporters default jest-stare",
     "start": "concurrently \"npm run dev:es \" \"npm run dev:cjs\"   ",
     "dev": "concurrently \"npm run dev:es \" \"npm run dev:cjs\"   ",
     "dev:es": "tsc   --p ./tsconfig.esm.json --watch ",

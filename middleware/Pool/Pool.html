@@ -24,9 +24,9 @@
         let res
         let temp = {
             eventBus: {
-                finish: [(e) => {
+                finish: (e) => {
                     console.log("触发finish方法:", e);
-                }]
+                }
             },
             // 最大重试次数
             MaxRetryCount: 1,
@@ -34,11 +34,14 @@
             MaxConcurrentCount: 2,
             // 异步数组
             PromiseArr: [async() => { 
-                res.pa
                 return sleepFn(0) 
-            }, () => { return sleepFn(1000) }, () => {
-                return sleepFn(3000)
-            }, () => { return sleepFn(10) }],
+            }, () => { return sleepFn(0) },],
+            ConcurrentFn:()=>{
+                console.log("触发了并发")
+            },
+            RetryFn:(data)=>{
+                console.log("触发了重试",data)
+            }
             // 参数列表数组
         };
         res = new Pool(temp);

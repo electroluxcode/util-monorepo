@@ -1,72 +1,75 @@
-let {Chain} = require("../../commonjs_build/middleware/Chain/Chain.js")
+let {Pool} = require("../../commonjs_build/middleware/Pool/Pool.js")
 
 
-function compare(a,b){
-    return JSON.stringify(a)==JSON.stringify(b)
-}
-
-const sleep = () => {
-    return new Promise((resolve) => { setTimeout(() => { resolve({ code: "成功" }); }, 1000); });
+let sleepFn = (e, rejectBoolean = false) => {
+    return new Promise((resolve,reject) => {
+        setTimeout((e) => {
+            if (rejectBoolean) {reject(e) };
+            resolve(e);
+        }, e,e);
+    });
 };
 
+describe('Pool', () => {
 
-function FirstStep() {
-    if (!this.ChainData.init!=="error") {
-        this.emit("error", "使用者触发error事件")
-        return
-    }
-    return 'ChainNext';
-}
-async function FirstAsyncStep() {
-    let that = this;
-    this.ChainData.id = "async数据"
-    sleep().then((e)=>{
-        that.asyncNext()
-    })
-}
-function SecondStep() {
-    this.emit("finish","结束")
-    return 'ChainNext';
-}
-
-describe('Chain', () => {
-
-    // f1: 测试error事件 
-    test('Chain/error', async() => {
+    let temp = {
+        eventBus: {
+            finish: []
+        },
+        // 最大重试次数
+        MaxRetryCount: 1,
+        // 最大并发数
+        MaxConcurrentCount: 2,
+        // 异步数组
+        PromiseArr: [async() => { 
+            return sleepFn(0) 
+        }],
+        // 参数列表数组
+    };
+    // f1: 测试事件 
+    test('Pool/event', async() => {
         expect.assertions(1)
         return new Promise((resolve)=>{
-            const ChainFirstStep = new Chain(FirstStep);
-            const ChainSecondStep = new Chain(SecondStep);
-            ChainFirstStep.nodeSet(ChainSecondStep);
-            ChainFirstStep.dataSet({
-                init: "helloworld",
-                eventBus: {
-                    error: [(e) => {  setTimeout(() => {
-                        resolve()
-                        expect(e).toBe("使用者触发error事件");       
-                    }, 10) }],
-                    finish:[]
-                }
-            })
-            ChainFirstStep.passRequest();
+           temp.eventBus.finish =(e)=>{
+                resolve()
+                expect(e).toBe("utilmorepo默认提示:并发池完成");
+            }
+            res = new Pool(temp);
+           
         })  
     });  
 
-    // f2: 测试异步 和 赋值逻辑
-    test('Chain/value/async', async() => {
+    // f2 测试并发
+    test('Pool/Concurrent', async() => {
         expect.assertions(1)
         return new Promise((resolve)=>{
-            const ChainFirstStep = new Chain(FirstAsyncStep);
-            const ChainSecondStep = new Chain(SecondStep);
-            ChainFirstStep.nodeSet(ChainSecondStep);
-            ChainFirstStep.dataSet({
-                init: "helloworld",
-                eventBus: {
-                    finish: [() => { resolve();expect(ChainFirstStep.ChainData.id).toBe("async数据");  }],
-                }
-            })
-            ChainFirstStep.passRequest();
+           temp.eventBus.finish = null
+           temp.MaxConcurrentCount=1
+           temp.PromiseArr= [async() => { return sleepFn(0) }, () => { return sleepFn(0) },]
+           temp.ConcurrentFn=()=>{
+                resolve()
+                expect(true).toBe(true);
+            }
+            res = new Pool(temp);
         })  
     }); 
+    // f3:测试错误重试
+    test('Pool/Retry', async() => {
+        expect.assertions(1)
+        return new Promise((resolve)=>{
+           temp.eventBus.finish = null
+           temp.MaxRetryCount=2
+           temp.PromiseArr= [async() => { return sleepFn(0,true) }, () => { return sleepFn(0) },]
+           temp.ConcurrentFn=()=>{
+            }
+            temp.RetryFn=()=>{
+                resolve()
+                expect(true).toBe(true);
+            }
+            res = new Pool(temp);
+        })  
+    });
+    // f3: 测试异步 和 赋值逻辑
+   
 })
   

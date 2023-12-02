@@ -10,10 +10,16 @@ class Pool {
             MaxRetryCount: 1,
             // 分组数量
             SplitNumber: 20,
-            FailTask: []
+            FailTask: [],
+            ConcurrentFn: () => {
+                console.log("utilmorepo默认提示:并发中");
+            },
+            RetryFn: (data) => {
+                console.log("utilmorepo默认提示:重试次数-", data.Retry);
+            }
         };
         this.config = Object.assign({}, BaseConfig, param);
-        this.execute(this.config.PromiseArr, this.config.MaxConcurrentCount);
+        this.execute(this.config.PromiseArr, this.config.MaxConcurrentCount, this.config.MaxRetryCount);
         this.paused = false;
     }
     /**
@@ -21,7 +27,6 @@ class Pool {
      */
     async pauseIfNeeded() {
         while (this.paused) { // 当暂停状态为 true 时，等待恢复
-            console.log("暂停中");
             await new Promise(resolve => setTimeout(resolve, 1000));
         }
     }
@@ -34,9 +39,9 @@ class Pool {
      * @param ParamArr 参数数组
      * @param Retry 重试次数
      */
-    async execute(PromiseArr, Retry) {
+    async execute(PromiseArr, Concurrent, Retry) {
         if (!Retry && PromiseArr.length) {
-            throw new Error("重试次数达到上限.停止重试");
+            throw new Error("utilmorepo默认提示:重试次数达到上限.停止重试");
         }
         let that = this;
         //完成的数量
@@ -61,21 +66,21 @@ class Pool {
                 //所有请求都请求完成
                 if (finish === PromiseArr.length) {
                     if (FailPromiselList.length) {
-                        console.log("重试剩余次数:", Retry);
-                        that.execute(FailPromiselList, Retry - 1);
+                        that.config.RetryFn({ Retry });
+                        that.execute(FailPromiselList, Concurrent, Retry - 1);
                     }
-                    that.emit("finish", "并发池完成");
+                    that.emit("finish", "utilmorepo默认提示:并发池完成");
                 }
             });
             pool.push(task);
-            if (pool.length === this.config.MaxConcurrentCount) {
+            if (pool.length === Concurrent) {
                 // 用Promise.race 实现并发
                 try {
-                    console.log("并发阻塞中");
+                    that.config.ConcurrentFn({ Pool: pool });
                     await Promise.race(pool);
                 }
                 catch {
-                    console.log("报错");
+                    console.log("utilmorepo默认提示:报错");
                 }
             }
         }
@@ -88,12 +93,10 @@ class Pool {
     emit = (name, data) => {
         if (this.config.eventBus) {
             if (this.config.eventBus[name]) {
-                this.config.eventBus[name].forEach((element) => {
-                    element(data);
-                });
+                this.config.eventBus[name](data);
             }
             else {
-                throw new Error('没有这个事件');
+                console.warn('utilmorepo默认提示:没有这个事件');
             }
         }
     };

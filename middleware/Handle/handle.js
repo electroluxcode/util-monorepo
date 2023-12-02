@@ -6,16 +6,36 @@ class Handle {
         this.data = data;
         this.operations = [];
     }
+    getProperty(obj, path) {
+        let temp = obj;
+        path.split('.').forEach((element, curr) => {
+            temp[element] ? temp = temp[element] : undefined;
+        });
+        return temp;
+    }
+    setProperty(obj, path, value) {
+        let temp = obj;
+        let pathArr = path.split('.');
+        pathArr.forEach((element, curr) => {
+            if (curr == pathArr.length - 1) {
+                temp[element] = value;
+            }
+            else {
+                temp[element] ?? (temp[element] = {});
+                temp = temp[element];
+            }
+        });
+    }
     /**
      * @des feature1:数据筛选
-     * @param callback_function
+     * @param key_function
      * @returns this
      */
     where(data) {
         this.operations.push({
             type: 'where',
             data: {
-                callback: data.callback,
+                key: data.key,
             }
         });
         return this;
@@ -30,7 +50,6 @@ class Handle {
             type: 'sort',
             data: {
                 key: data.key,
-                method: data.method,
             }
         });
         return this;
@@ -54,109 +73,37 @@ class Handle {
         this.operations.push({
             type: 'transform',
             data: {
-                key: data
+                key: data.key
             }
         });
         return this;
     }
-    getProperty(obj, path) {
-        let temp = obj;
-        path.split('.').forEach((element, curr) => {
-            temp[element] ? temp = temp[element] : undefined;
-        });
-        return temp;
-    }
-    setProperty(obj, path, value) {
-        let temp = obj;
-        let pathArr = path.split('.');
-        pathArr.forEach((element, curr) => {
-            if (curr == pathArr.length - 1) {
-                temp[element] = value;
-            }
-            else {
-                temp[element] ?? (temp[element] = {});
-                temp = temp[element];
-            }
-        });
-    }
+    /**
+     * @des 这里考虑到 多种分组方式，传入函数
+     * @param operation.data.key function
+     */
     #groupByFn(operation, data) {
-        let that = this;
         const groups = {};
-        if (operation.data.key.includes(".")) {
-            data.forEach((item) => {
-                const groupKey = that.getProperty(item, operation.data.key);
-                if (!groups[groupKey]) {
-                    groups[groupKey] = [];
-                }
-                groups[groupKey].push(item);
-            });
-            data = groups;
-        }
-        else {
-            data.forEach((item) => {
-                const groupKey = item[operation.data.key];
-                if (!groups[groupKey]) {
-                    groups[groupKey] = [];
-                }
-                groups[groupKey].push(item);
-            });
-            data = groups;
-        }
-        return data;
-    }
-    #sortByFn(operation, data) {
-        data = data.sort((a, b) => {
-            if (operation.data.key.includes(".")) {
-                let value1 = this.getProperty(a, operation.data.key);
-                let value2 = this.getProperty(b, operation.data.key);
-                if (operation.data.method === 'asc') {
-                    return value1 - value2;
-                }
-                else {
-                    return value2 - value1;
-                }
+        data.forEach((item) => {
+            const groupKey = operation.data.key(item);
+            if (!groups[groupKey]) {
+                groups[groupKey] = [];
             }
-            else {
-                let value1 = Number(a[operation.data.key]);
-                let value2 = Number(b[operation.data.key]);
-                if (operation.data.method === 'asc') {
-                    return value1 - value2;
-                }
-                else {
-                    return value2 - value1;
-                }
-            }
+            groups[groupKey].push(item);
         });
+        return groups;
+    }
+    /**
+     * @des 这里考虑到 多种分组方式，传入函数
+     * @param operation.data.key function
+     */
+    #sortByFn(operation, data) {
+        data = data.sort(operation.data.key);
         return data;
     }
     #transform(operation, data) {
-        let origin = operation.data.key.originKey;
-        let target = operation.data.key.targetKey;
-        let cureArr = [];
-        // 遍历,每一个 object 是 value
         let res = data.map((value) => {
-            let cureItemArr = {};
-            for (let i = 0; i < origin.length; i++) {
-                if (origin[i].includes(".")) {
-                    // 两个都命中
-                    if (target[i].includes(".")) {
-                        this.setProperty(value, target[i], this.getProperty(value, origin[i]));
-                    }
-                    else {
-                        value[target[i]] = this.getProperty(value, origin[i]);
-                    }
-                }
-                else {
-                    if (target[i].includes(".")) {
-                        console.log("命中");
-                        this.setProperty(value, target[i], value[origin[i]]);
-                    }
-                    else {
-                        value[target[i]] = value[origin[i]];
-                    }
-                }
-            }
-            cureArr.push(cureItemArr);
+            value = operation.data.key(value);
             return value;
         });
         return res;
@@ -169,7 +116,7 @@ class Handle {
         let result = [...this.data];
         this.operations.forEach((operation) => {
             if (operation.type === 'where') {
-                result = result.filter(operation.data.callback);
+                result = result.filter(operation.data.key);
             }
             if (operation.type === 'sort') {
                 result = this.#sortByFn(operation, result);

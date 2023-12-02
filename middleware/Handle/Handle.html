@@ -13,23 +13,33 @@
        
         // 1.排序示例(测试完成)
         let data = [{id:1,children:{id:14}},{id:2,children:{id:19}},{id:1,children:{id:3}}]
-        // let instance1 = new Handle(data).sortBy({key:"id",method:"asc"}).execute()
+        // let SortFn = (a,b)=>{
+        //     return a.children.id - b.children.id
+        // }
+        // let instance1 = new Handle(data).sortBy({key:SortFn}).execute()
         // console.log("sortByInstance:",instance1)
 
         // // 2.筛选示例
         // let fliterUtil =(item) => {
         //     return item.id>1;
         // }
-        // let fliterInstance = new Handle(data).where({callback:fliterUtil}).execute()
+        // let fliterInstance = new Handle(data).where({key:fliterUtil}).execute()
         // console.log("fliterInstance:",fliterInstance)
 
         // 分组示例
-        // let instance3 = new Handle(data).groupBy({key:"children.id"}).execute()
+        // let HandleFn = (data)=>{
+        //     return data.children.id
+        // }
+        // let instance3 = new Handle(data).groupBy({key:HandleFn}).execute()
         // console.log("groupByInstance:",instance3)
 
 
 // // 属性转化示例
-let instance4 = new Handle(data).transformBy({originKey:["children.id"],targetKey:["te3.img"]}).execute()
+const transformByFn =(data)=>{
+    data["a"] = data["children"]["id"]
+    return data
+}
+let instance4 = new Handle(data).transformBy({key:transformByFn}).execute()
 console.log(instance4,)
 
 

@@ -11,21 +11,17 @@
 <body>
     <script type="module">
         import { Pool } from "./Pool.js"
-        let sleepFn = (e) => { return new Promise((resolve) => { setTimeout(() => {  resolve("执行一些延迟数据:",e); }, e); }); };
-        let sleep = async(e) => {
-            let varFn = await sleepFn()
-            console.log(varFn)
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    console.log("执行sleep:", e);
-                    if (Math.random() > 0.5) {
-                        reject(e);
-                    }
+        let sleepFn = (e, rejectBoolean = false) => {
+            return new Promise((resolve,reject) => {
+                console.log("开始执行settimeout方法:",e)
+                setTimeout((e) => {
+                    if (rejectBoolean) {reject(e) };
                     resolve(e);
-                }, e);
+                }, e,e);
             });
         };
-        let res 
+
+        let res
         let temp = {
             eventBus: {
                 finish: [(e) => {
@@ -37,19 +33,16 @@
             // 最大并发数
             MaxConcurrentCount: 2,
             // 异步数组
-            PromiseArr: [() => {return sleep(0) }, () => {return sleep(1000) }, () => {
-                setTimeout(() => {
-                    res.pauseStatus(true);
-                }, 1000);
-                setTimeout(() => {
-                    res.pauseStatus(false);
-                }, 8000);
-                return sleep(3000) 
-            }, () => {return sleep(0) }],
+            PromiseArr: [async() => { 
+                res.pa
+                return sleepFn(0) 
+            }, () => { return sleepFn(1000) }, () => {
+                return sleepFn(3000)
+            }, () => { return sleepFn(10) }],
             // 参数列表数组
         };
         res = new Pool(temp);
-     
+
 
     </script>
 </body>

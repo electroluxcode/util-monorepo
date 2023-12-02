@@ -33,10 +33,10 @@ class Pool {
             SplitNumber: 20,
             FailTask: [],
             ConcurrentFn:()=>{
-              console.log("utilmorepo默认提示:并发中")
+              console.log("utilmonorepo默认提示:并发中")
             },
             RetryFn:(data)=>{
-              console.log("utilmorepo默认提示:重试次数-",data.Retry)
+              console.log("utilmonorepo默认提示:重试次数-",data.Retry)
             }
         }
         this.config = Object.assign({}, BaseConfig, param)
@@ -63,7 +63,7 @@ class Pool {
     async execute(PromiseArr: Array<(e?: any) => Promise<any>>,Concurrent:number,Retry:number) { 
        
         if(!Retry && PromiseArr.length){
-            throw new Error("utilmorepo默认提示:重试次数达到上限.停止重试")
+            throw new Error("utilmonorepo默认提示:重试次数达到上限.停止重试")
         }
 
         let that = this
@@ -93,7 +93,7 @@ class Pool {
                         that.config.RetryFn({Retry})
                         that.execute(FailPromiselList,Concurrent,Retry-1)
                     }
-                   that.emit("finish","utilmorepo默认提示:并发池完成")
+                   that.emit("finish","utilmonorepo默认提示:并发池完成")
                 }
             })
             pool.push(task)
@@ -104,7 +104,7 @@ class Pool {
                   that.config.ConcurrentFn({Pool:pool})
                     await Promise.race(pool)
                 }catch{
-                    console.log("utilmorepo默认提示:报错")
+                    console.log("utilmonorepo默认提示:报错")
                 }
             }
         }
@@ -120,7 +120,7 @@ class Pool {
             if (this.config.eventBus[name]) {
               this.config.eventBus[name](data);
             } else {
-                console.warn('utilmorepo默认提示:没有这个事件');
+                console.log('utilmonorepo默认提示:没有这个事件');
             }
         }
     };

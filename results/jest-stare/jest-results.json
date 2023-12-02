@@ -1,14 +1,14 @@
 {
   "numFailedTestSuites": 0,
   "numFailedTests": 0,
-  "numPassedTestSuites": 4,
-  "numPassedTests": 10,
+  "numPassedTestSuites": 5,
+  "numPassedTests": 13,
   "numPendingTestSuites": 0,
   "numPendingTests": 0,
   "numRuntimeErrorTestSuites": 0,
   "numTodoTests": 0,
-  "numTotalTestSuites": 4,
-  "numTotalTests": 10,
+  "numTotalTestSuites": 5,
+  "numTotalTests": 13,
   "openHandles": [],
   "snapshot": {
     "added": 0,
@@ -26,21 +26,21 @@
     "unmatched": 0,
     "updated": 0
   },
-  "startTime": 1701516627961,
+  "startTime": 1701520055877,
   "success": false,
   "testResults": [
     {
       "leaks": false,
       "numFailingTests": 0,
-      "numPassingTests": 4,
+      "numPassingTests": 3,
       "numPendingTests": 0,
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1701516630343,
-        "runtime": 740,
+        "end": 1701520058389,
+        "runtime": 774,
         "slow": false,
-        "start": 1701516629603
+        "start": 1701520057615
       },
       "skipped": false,
       "snapshot": {
@@ -52,67 +52,125 @@
         "unmatched": 0,
         "updated": 0
       },
-      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Handle\\Handle.spec.js",
+      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Pool\\Pool.spec.js",
       "testResults": [
         {
           "ancestorTitles": [
-            "Handle"
+            "Pool"
           ],
-          "duration": 10,
+          "duration": 13,
           "failureDetails": [],
           "failureMessages": [],
-          "fullName": "Handle sort/mult",
+          "fullName": "Pool Pool/event",
           "invocations": 1,
           "location": null,
           "numPassingAsserts": 1,
           "retryReasons": [],
           "status": "passed",
-          "title": "sort/mult"
+          "title": "Pool/event"
         },
         {
           "ancestorTitles": [
-            "Handle"
+            "Pool"
+          ],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "Pool Pool/Concurrent",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "Pool/Concurrent"
+        },
+        {
+          "ancestorTitles": [
+            "Pool"
+          ],
+          "duration": 4,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "Pool Pool/Retry",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "Pool/Retry"
+        }
+      ],
+      "failureMessage": null
+    },
+    {
+      "leaks": false,
+      "numFailingTests": 0,
+      "numPassingTests": 3,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "openHandles": [],
+      "perfStats": {
+        "end": 1701520058459,
+        "runtime": 779,
+        "slow": false,
+        "start": 1701520057680
+      },
+      "skipped": false,
+      "snapshot": {
+        "added": 0,
+        "fileDeleted": false,
+        "matched": 0,
+        "unchecked": 0,
+        "uncheckedKeys": [],
+        "unmatched": 0,
+        "updated": 0
+      },
+      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Strategy\\Strategy.spec.js",
+      "testResults": [
+        {
+          "ancestorTitles": [
+            "Strategy"
+          ],
+          "duration": 12,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "Strategy Strategy/error+event",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "Strategy/error+event"
+        },
+        {
+          "ancestorTitles": [
+            "Strategy"
           ],
           "duration": 0,
           "failureDetails": [],
           "failureMessages": [],
-          "fullName": "Handle fliter/*",
+          "fullName": "Strategy Strategy/sortkey",
           "invocations": 1,
           "location": null,
-          "numPassingAsserts": 1,
+          "numPassingAsserts": 0,
           "retryReasons": [],
           "status": "passed",
-          "title": "fliter/*"
+          "title": "Strategy/sortkey"
         },
         {
           "ancestorTitles": [
-            "Handle"
+            "Strategy"
           ],
-          "duration": 1,
+          "duration": 0,
           "failureDetails": [],
           "failureMessages": [],
-          "fullName": "Handle groupBy/*",
+          "fullName": "Strategy Strategy/user_event",
           "invocations": 1,
           "location": null,
-          "numPassingAsserts": 1,
+          "numPassingAsserts": 0,
           "retryReasons": [],
           "status": "passed",
-          "title": "groupBy/*"
-        },
-        {
-          "ancestorTitles": [
-            "Handle"
-          ],
-          "duration": 1,
-          "failureDetails": [],
-          "failureMessages": [],
-          "fullName": "Handle transform/*",
-          "invocations": 1,
-          "location": null,
-          "numPassingAsserts": 1,
-          "retryReasons": [],
-          "status": "passed",
-          "title": "transform/*"
+          "title": "Strategy/user_event"
         }
       ],
       "failureMessage": null
@@ -125,10 +183,10 @@
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1701516630382,
-        "runtime": 764,
+        "end": 1701520058538,
+        "runtime": 841,
         "slow": false,
-        "start": 1701516629618
+        "start": 1701520057697
       },
       "skipped": false,
       "snapshot": {
@@ -163,15 +221,15 @@
     {
       "leaks": false,
       "numFailingTests": 0,
-      "numPassingTests": 3,
+      "numPassingTests": 4,
       "numPendingTests": 0,
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1701516630403,
-        "runtime": 781,
+        "end": 1701520058557,
+        "runtime": 814,
         "slow": false,
-        "start": 1701516629622
+        "start": 1701520057743
       },
       "skipped": false,
       "snapshot": {
@@ -183,52 +241,67 @@
         "unmatched": 0,
         "updated": 0
       },
-      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Pool\\Pool.spec.js",
+      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Handle\\Handle.spec.js",
       "testResults": [
         {
           "ancestorTitles": [
-            "Pool"
+            "Handle"
           ],
           "duration": 14,
           "failureDetails": [],
           "failureMessages": [],
-          "fullName": "Pool Pool/event",
+          "fullName": "Handle sort/mult",
           "invocations": 1,
           "location": null,
           "numPassingAsserts": 1,
           "retryReasons": [],
           "status": "passed",
-          "title": "Pool/event"
+          "title": "sort/mult"
         },
         {
           "ancestorTitles": [
-            "Pool"
+            "Handle"
           ],
-          "duration": 1,
+          "duration": 3,
           "failureDetails": [],
           "failureMessages": [],
-          "fullName": "Pool Pool/Concurrent",
+          "fullName": "Handle fliter/*",
           "invocations": 1,
           "location": null,
           "numPassingAsserts": 1,
           "retryReasons": [],
           "status": "passed",
-          "title": "Pool/Concurrent"
+          "title": "fliter/*"
         },
         {
           "ancestorTitles": [
-            "Pool"
+            "Handle"
           ],
-          "duration": 7,
+          "duration": 2,
           "failureDetails": [],
           "failureMessages": [],
-          "fullName": "Pool Pool/Retry",
+          "fullName": "Handle groupBy/*",
           "invocations": 1,
           "location": null,
           "numPassingAsserts": 1,
           "retryReasons": [],
           "status": "passed",
-          "title": "Pool/Retry"
+          "title": "groupBy/*"
+        },
+        {
+          "ancestorTitles": [
+            "Handle"
+          ],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "Handle transform/*",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "transform/*"
         }
       ],
       "failureMessage": null
@@ -241,10 +314,10 @@
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1701516631363,
-        "runtime": 1779,
+        "end": 1701520059616,
+        "runtime": 1874,
         "slow": false,
-        "start": 1701516629584
+        "start": 1701520057742
       },
       "skipped": false,
       "snapshot": {
@@ -262,7 +335,7 @@
           "ancestorTitles": [
             "Chain"
           ],
-          "duration": 31,
+          "duration": 34,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Chain Chain/error",
@@ -277,7 +350,7 @@
           "ancestorTitles": [
             "Chain"
           ],
-          "duration": 1008,
+          "duration": 1016,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Chain Chain/value/async",

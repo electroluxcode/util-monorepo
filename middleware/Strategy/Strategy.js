@@ -67,4 +67,39 @@ class Strategy {
         }
     }
 }
+class A {
+    eventbus = [];
+    constructor(fn) {
+        if (fn) {
+            this.eventbus.push(fn);
+        }
+    }
+}
+let test = new A((param) => {
+    console.log(param);
+});
+test.eventbus[0]; // 在这里会有智能提示
+class MyStrategy extends Strategy {
+}
+// let Age20_SchoolA_RegionCN = { age: 20, school: "A", region: "cn" };
+// let res2 = new Strategy({
+//     eventBus: {
+//         default: [(e) => {
+//             console.log("触发默认方法:", e)
+//         }],error:[(e) => {
+//             console.log("触发报错:", e)
+//         }]
+//     }
+// })
+// let fn = (...arg)=>{
+//     console.log(...arg)
+// }
+// fn({
+//     id:2
+// })
+// res2.ActionAdd(fn, function (workHours) {
+//     console.log("高");
+//     throw new Error("报错")
+//     return workHours * 25;
+// });
 export { Strategy };

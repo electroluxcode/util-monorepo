@@ -4,9 +4,10 @@ type emitNameType = 'finish' | 'error';
 type PoolRequestType = {
     // eventbus 
     eventBus?: {
-        finish:Function
-        error: Function
+        finish:Array<Function>
+        error:Array<Function>
     };
+    
     // 最大重试次数
     MaxRetryCount: number;
     RetryFn:(arg:any)=>void;
@@ -118,9 +119,11 @@ class Pool {
     emit = (name: emitNameType, data: any) => {
         if (this.config.eventBus) {
             if (this.config.eventBus[name]) {
-              this.config.eventBus[name](data);
+                this.config.eventBus[name].forEach((element: Function) => {
+                    element(data);
+                });
             } else {
-                console.log('utilmonorepo默认提示:没有这个事件');
+                throw new Error('utilmonorepo默认提示:没有这个事件',);
             }
         }
     };

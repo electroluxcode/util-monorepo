@@ -24,9 +24,9 @@
         let res
         let temp = {
             eventBus: {
-                finish: (e) => {
+                finish: [(e) => {
                     console.log("触发finish方法:", e);
-                }
+                }]
             },
             // 最大重试次数
             MaxRetryCount: 1,

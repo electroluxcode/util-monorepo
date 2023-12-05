@@ -45,7 +45,7 @@ describe('Chain', () => {
                         resolve()
                         expect(e).toBe("使用者触发error事件");       
                     }, 10) }],
-                    finish:[]
+                    finish:[()=>{}]
                 }
             })
             ChainFirstStep.passRequest();

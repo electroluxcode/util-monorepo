@@ -1,62 +1,30 @@
-class eventBus {
-    eventBus;
-    constructor() {
-        this.eventBus = {};
+class EventBus {
+    eventBus = {};
+    on(name, event) {
+        if (!this.eventBus[name]) {
+            this.eventBus[name] = [event];
+        }
+        else {
+            this.eventBus[name].push(event);
+        }
     }
-    /**
-     * @des 绑定单一事件
-     * @param name 事件名称
-     * @param event function来的
-     * @return void
-     */
-    on = (name, event) => {
-        this.eventBus[name] = [event];
-    };
-    /**
-     * @des 触发某一个事件
-     * @param name
-     * @param data 给function的值
-     */
-    emit = (name, data) => {
-        // 判断
+    emit(name, data) {
         if (this.eventBus[name]) {
-            this.eventBus[name].forEach((element) => {
-                element(data);
+            this.eventBus[name].forEach((handler) => {
+                // 在这里捕获并使用参数类型
+                handler(data);
             });
         }
         else {
             throw new Error("没有这个事件");
         }
-    };
-    /**
-     * @des 解绑事件
-     * @param eventName
-     */
-    off = (eventName) => {
-        if (this.eventBus.hasOwnProperty(eventName)) {
-            delete this.eventBus[eventName];
-        }
-        else {
-            this.eventBus[eventName] = null;
-        }
-    };
-    add = (name, event) => {
-        if (this.eventBus[name].length) {
-            this.eventBus[name].push(event);
-        }
-        else {
-            this.eventBus[name] = [event];
-        }
-    };
+    }
+    off(name) {
+        delete this.eventBus[name];
+    }
 }
-// let eventbus1 = new eventBus()
-// let test1 = (param:string)=>{
-//     console.log("这是test1:",param)
-// }
-// let test2 = (param:string)=>{
-//     console.log("这是test2:",param)
-// }
-// eventbus1.on("test",test1)
-// eventbus1.add("test",test2)
-// eventbus1.emit("test","我是参数")
-export default new eventBus();
+// let test = new EventBus<{"test1":any}>()
+// test.emit("test1",45)
+// test.on("test1",()=>{
+// })
+export { EventBus };

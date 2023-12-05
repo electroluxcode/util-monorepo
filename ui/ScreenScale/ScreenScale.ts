@@ -8,7 +8,7 @@ interface Base{
   delay?: number;
 }
 class ScreenScale {
-    private CurrelFixMap: HTMLElement = document.querySelector("#app");
+    private CurrelFixMap: HTMLElement = document.querySelector("#app")!;
     private CurrelFixMapLevel: string = '';
     private resizeListener: (() => void) | null = null;
     private timer: any = null;
@@ -47,8 +47,8 @@ class ScreenScale {
       style.innerHTML = `body {overflow: hidden;}`;
   
       const bodyEl = document.querySelector('body');
-      bodyEl.appendChild(style);
-      bodyEl.appendChild(ignoreStyle);
+      bodyEl!.appendChild(style);
+      bodyEl!.appendChild(ignoreStyle);
       
   
       dom.style.height = `${dh}px`;
@@ -87,7 +87,7 @@ class ScreenScale {
      * @param el - 要调整的元素选择器。
      * @param level - 缩放级别（默认为 1）。
      */
-    public FixMap(el: HTMLElement = document.querySelector("#app"), level: string = "1"): void {
+    public FixMap(el: HTMLElement = document.querySelector("#app")!, level: string = "1"): void {
     
       if (!this.isScreenScaleRunning) {
         console.error("尚未初始化");

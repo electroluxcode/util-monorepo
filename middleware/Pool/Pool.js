@@ -93,10 +93,12 @@ class Pool {
     emit = (name, data) => {
         if (this.config.eventBus) {
             if (this.config.eventBus[name]) {
-                this.config.eventBus[name](data);
+                this.config.eventBus[name].forEach((element) => {
+                    element(data);
+                });
             }
             else {
-                console.log('utilmonorepo默认提示:没有这个事件');
+                throw new Error('utilmonorepo默认提示:没有这个事件');
             }
         }
     };

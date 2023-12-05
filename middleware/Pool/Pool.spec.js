@@ -18,7 +18,7 @@ let sleepFn = (e, rejectBoolean = false) => {
 describe("Pool", () => {
 	let temp = {
 		eventBus: {
-			finish: null,
+			finish: [()=>{}],
 		},
 		// 最大重试次数
 		MaxRetryCount: 1,
@@ -38,10 +38,10 @@ describe("Pool", () => {
 		return new Promise((resolve) => {
 			temp = {
 				eventBus: {
-					finish: (e) => {
+					finish: [(e) => {
 						resolve();
 						expect(e).toBe("utilmonorepo默认提示:并发池完成");
-					},
+					},]
 				},
 				// 最大重试次数
 				MaxRetryCount: 1,
@@ -65,7 +65,7 @@ describe("Pool", () => {
 		return new Promise((resolve) => {
 			temp = {
 				eventBus: {
-					finish: (e) => {},
+					finish: [(e) => {}],
 				},
 				// 最大重试次数
 				MaxRetryCount: 1,
@@ -94,7 +94,7 @@ describe("Pool", () => {
 		return new Promise((resolve) => {
 			temp = {
 				eventBus: {
-					finish: (e) => {},
+					finish: [(e) => {}],
 				},
 				// 最大重试次数
 				MaxRetryCount: 2,

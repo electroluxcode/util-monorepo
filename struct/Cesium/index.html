@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cesium测试</title>
+</head>
+<body>
+    <div id="cesiumContainer"></div>
+
+    <div class="button_container">
+        <div class="button_control">经度移动测试</div>
+        <div class="button_control">纬度移动测试</div>
+        <div class="button_control"></div>
+    </div>
+   
+    <script type="module">
+        // import {cesiumInit} from "./CesiumConfig.js"
+        
+        // let base = new cesiumInit("cesiumContainer")
+        // base.initObject('bim');
+        setTimeout(() => {
+            // f1:视角移动
+            // base.cameraRelativeMove({x:0.01,y:0.02,z:0.03});
+        }, 1000);
+    </script>
+</body>
+
+
+
+
+
+
+<style>
+    /* html,
+    body,
+    #cesiumContainer {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    } */
+  
+</style>
+<link href="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+<script src="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Cesium.js"></script>
+</html>

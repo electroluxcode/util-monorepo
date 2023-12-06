@@ -3,6 +3,12 @@ import { Vector2 } from '../math/Vector2.js';
 class Camera {
     position;
     zoom;
+    /**
+     *
+     * @param x
+     * @param y
+     * @param zoom ju
+     */
     constructor(x = 0, y = 0, zoom = 1) {
         this.position = new Vector2(x, y);
         this.zoom = zoom;

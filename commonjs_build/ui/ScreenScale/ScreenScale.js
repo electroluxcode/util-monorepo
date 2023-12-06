@@ -64,7 +64,7 @@ class ScreenScale {
         this.isScreenScaleRunning = true;
     }
     /**
-     * 调整指定元素以进行缩放。
+     * 调整指定元素以进行缩放。一次缩放一个
      * @param el - 要调整的元素选择器。
      * @param level - 缩放级别（默认为 1）。
      */

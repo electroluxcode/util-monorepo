@@ -6,6 +6,12 @@ const Vector2_js_1 = require("../math/Vector2.js");
 class Camera {
     position;
     zoom;
+    /**
+     *
+     * @param x
+     * @param y
+     * @param zoom ju
+     */
     constructor(x = 0, y = 0, zoom = 1) {
         this.position = new Vector2_js_1.Vector2(x, y);
         this.zoom = zoom;

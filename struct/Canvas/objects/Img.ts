@@ -99,7 +99,7 @@ class Img extends Object2D {
 		const {
 			size: { x: imgW, y: imgH },
 		} = this
-		crtPathByMatrix(ctx, [0, 0, imgW, 0, imgW, imgH, 0, imgH], matrix)
+		crtPathByMatrix(ctx, [0, 0, imgW, 0, imgW, imgH, 0, imgH], matrix,true)
 	}
 }
 export { Img }

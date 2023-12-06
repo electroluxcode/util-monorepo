@@ -61,7 +61,7 @@ class Img extends Object2D_js_1.Object2D {
     /* 绘制图像边界 */
     crtPath(ctx, matrix = this.pvmoMatrix) {
         const { size: { x: imgW, y: imgH }, } = this;
-        (0, ObjectUtils_js_1.crtPathByMatrix)(ctx, [0, 0, imgW, 0, imgW, imgH, 0, imgH], matrix);
+        (0, ObjectUtils_js_1.crtPathByMatrix)(ctx, [0, 0, imgW, 0, imgW, imgH, 0, imgH], matrix, true);
     }
 }
 exports.Img = Img;

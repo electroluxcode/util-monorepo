@@ -5,6 +5,12 @@ class Camera {
 	position: Vector2
 	zoom: number
 
+	/**
+	 * 
+	 * @param x 
+	 * @param y 
+	 * @param zoom ju 
+	 */
 	constructor(x = 0, y = 0, zoom = 1) {
 		this.position = new Vector2(x, y)
 		this.zoom = zoom

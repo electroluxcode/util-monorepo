@@ -1,4 +1,9 @@
-// @ts-nocheck
+
+declare global {
+  interface Window {
+    Cesium: any;
+  }
+}
 import { baseConfig, defaultData } from './BaseConfig.js';
 
 type DegreesType = {
@@ -18,95 +23,40 @@ async function InitOsgbModel(viewer, url = '/Tile_+000_+001_dist/tileset.json') 
     skipLevelOfDetail: true,
     dynamicScreenSpaceError: true, // 根据测试，有了这个后，会在真正的全屏加载完之后才清晰化房屋
   };
-  tileset = await Cesium.Cesium3DTileset.fromUrl(url, option);
+  tileset = await window.Cesium.Cesium3DTileset.fromUrl(url, option);
   // add 返回的 参数可以 保存
   const TileData = await viewer.scene.primitives.add(tileset);
   viewer.zoomTo(
     tileset,
-    new Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0),
+    new window.Cesium.HeadingPitchRange(0.0, -0.5, tileset.boundingSphere.radius * 2.0),
   );
   //定位过去
   viewer.zoomTo(tileset);
   return TileData;
 }
 
-/**
- * @des 加载gltf 数据
- */
-async function InitGltfModel(
-  viewer,
-  url = 'http://smartdeliver.oss-cn-beijing.aliyuncs.com/yt300mb.gltf',
-  degrees: DegreesType,
-  that,
-) {
-  // 2d 状态
-  if (viewer.scene.morphTime === 1) {
-    console.log('');
-  } else {
-    return;
-  }
-  if (!degrees) {
-    degrees = defaultData;
-  }
-  const position = Cesium.Cartesian3.fromDegrees(degrees.x, degrees.y, degrees.z);
-  that.position = JSON.parse(
-    JSON.stringify({
-      x: degrees.x,
-      y: degrees.y,
-      z: degrees.z,
-    }),
-  );
-  const heading = Cesium.Math.toRadians(135);
-  const pitch = 0;
-  const roll = 0;
-  // 指定朝向
-  const orientation = Cesium.Transforms.headingPitchRollQuaternion(
-    position,
-    new Cesium.HeadingPitchRoll(heading, pitch, roll),
-  );
-  const entity = await viewer.entities.add({
-    name: url,
-    position: position,
-    orientation: orientation,
-    model: {
-      uri: url,
-      minimumPixelSize: 18,
-      maximumScale: 20,
-    },
-  });
-  viewer.zoomTo(entity);
-  // const helper = new Cesium.EventHelper();
-  // helper.add(viewer.scene.globe.tileLoadProgressEvent, function (event) {
-  //   console.log('每次加载矢量切片都会进入这个回调');
-  //   if (event == 0) {
-  //     console.log('这个是加载最后一个矢量切片的回调');
-  //   }
-  // });
-  // console.log('这个是加载最后一个矢量切片的回调------');
 
-  // alert("加载到这里了)
-  // viewer.trackedEntity = entity;
-  return entity;
-}
 type LifeCycleType = { status: 'LOADING' | 'FINISH'; onMounted: () => void };
 const cesiumToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkNWFkMGNlYS0xZjcyLTQ5NDctOGM3Ny02YjE4ZGIxOTRhNjQiLCJpZCI6MTc5OTE1LCJpYXQiOjE3MDA2MzMyMzh9.aQkgp-BpIpBsussmEOgn_Rl14048nNL74Z7aug0matM';
 
 export class cesiumInit {
-  container;
-  TileData;
-  ModelData;
-  LifeCycle: LifeCycleType;
+  private container;
+  private LifeCycle: LifeCycleType;
   // 当前模型位置
-  position = {
+  private ModelPosition = [{
+    x: null,
+    y: null,
+    z: null,
+  }];
+  private PositionData: any = {
     x: null,
     y: null,
     z: null,
   };
-  destroyedArr?: Array<any>;
-  constructor(idName) {
+  constructor(idName, initData?: { x: number, y: number, z: number }) {
     // 初始化参数
-    Cesium.Ion.defaultAccessToken = cesiumToken;
+    window.Cesium.Ion.defaultAccessToken = cesiumToken;
     this.LifeCycle = {
       status: 'LOADING',
       onMounted: () => {
@@ -114,49 +64,89 @@ export class cesiumInit {
       },
     };
 
-    this.container = new Cesium.Viewer(idName, baseConfig);
-    this.destroyedArr = [];
+    if (initData) {
+      this.PositionData = initData
+    } else {
+      this.PositionData = defaultData
+    }
 
+    this.container = new window.Cesium.Viewer(idName, baseConfig);
     this.initScene();
     this.initLight();
+    this.clickSearch(this.container)
   }
 
-  lifeCycleChange(arg: LifeCycleType) {
-    this.LifeCycle = arg;
-  }
-  destroyedAll() {
-    this.container.entities.removeAll();
-  }
-  async initScene() {
-    // this.container.scene.globe.show = false;
-    // this.container.scene.globe.baseColor = new Cesium.Color(0, 0, 0, 0.1); //设置地球颜色
-    // this.container.cesiumWidget.creditContainer.style.display = 'none';
-    // Cesium.Camera.DEFAULT_VIEW_FACTOR = 0; // 设置矩形框视图的远近缩放，等于0时不缩放，大于0时拉远，小于0时拉近
-  }
-  initLight() {}
+
+
   /**
-   * feature:基础方法
+   * @feature 模型加载
    * @param type
    */
-  async initObject(type: 'osgb' | 'bim') {
+  async initObject(type: 'osgb' | 'gltf' | "example", url?: string) {
     this.destroyedAll();
 
-    if (type == 'bim') {
-      this.ModelData = await InitGltfModel(
+    if (type == 'gltf') {
+      await this.InitGltfModel(
         this.container,
-        'http://smartdeliver.oss-cn-beijing.aliyuncs.com/yt300mb.gltf',
-        defaultData,
-        this,
-      );
-      console.log('this.ModelData:', this.ModelData);
-    } else {
-      this.TileData = await InitOsgbModel(
-        this.container,
-        '/myStatic/model/Tile_+000_+001_dist/tileset.json',
+        url ?? 'http://smartdeliver.oss-cn-beijing.aliyuncs.com/yt300mb.gltf',
+        this.PositionData,
       );
     }
+    if (type == "osgb") {
+      await InitOsgbModel(
+        this.container,
+        url ?? 'http://8.130.101.131:8088/model/Tile_+000_+001_dist/tileset.json',
+      );
+    }
+    if (type == "example") {
+      let sensorsList = [{
+        id: "test_number_001",
+        "longitude": 108.07671,
+        "latitude": 22,
+      }]
+      sensorsList.forEach((position: any) => {
+        let longitude;
+        let latitude;
+        let color = window.Cesium.Color.PURPLE;
+        longitude = parseFloat(position.longitude);
+        latitude = parseFloat(position.latitude);
+        const point = window.Cesium.Cartesian3.fromDegrees(longitude, latitude, 50);
+        this.container.entities.add({
+          id: position.id,
+          position: point,
+          // 2d 是 point
+          point: new window.Cesium.PointGraphics({
+            show: true,
+            pixelSize: 10,
+            color: color,
+            outlineColor: window.Cesium.Color.WHITE,
+            outlineWidth: 2,
+            clampToGround: true, //设置贴地
+            //heightReference: Cesium.HeightReference.CLAMP_TO_GROUND, //设置贴地
+          }),
+
+
+        });
+
+        this.container.zoomTo(this.container.entities);
+      })
+    }
   }
-  // temp1.objectMove("gltf","absolute",{x:0.003,y:0,z:0},{scale:1,heading:135})
+
+
+  clickSearch(_viewer) {
+    let handler = new window.Cesium.ScreenSpaceEventHandler(_viewer.scene.canvas);
+    handler.setInputAction((event) => {
+      let pick = _viewer.scene.pick(event.position);
+      if (window.Cesium.defined(pick)) {
+        console.log(pick);
+      }
+    }, window.Cesium.ScreenSpaceEventType.LEFT_CLICK);
+  }
+
+  /**
+   * @feature feature:控制模型
+   */
   // temp1.objectMove("gltf","relative",{x:0,y:300,z:0}，{scale:2,heading:135})
   objectMove(
     Type: 'gltf' | '3dtile',
@@ -167,21 +157,21 @@ export class cesiumInit {
       heading: 135,
     },
   ) {
+    // http://cesium.xin/cesium/cn/Documentation1.62/Cartesian3.html
+    // 坐标什么的随便写了一个
     let destination: any;
     let nowPos;
     if (Type == '3dtile') {
       const base = this.Cartesian3_to_WGS84(this.container.camera.position);
-      destination = Cesium.Cartesian3.fromDegrees(
+      destination = window.Cesium.Cartesian3.fromDegrees(
         base.x + DegreesType.x,
         base.y + DegreesType.y,
         base.z + DegreesType.z,
       );
-      const temp = Cesium.Transforms.headingPitchRollToFixedFrame(
+      const temp = window.Cesium.Transforms.headingPitchRollToFixedFrame(
         destination,
-        new Cesium.HeadingPitchRoll(0, 0, 0),
+        new window.Cesium.HeadingPitchRoll(0, 0, 0),
       );
-      console.log('移动:', this.TileData);
-      this.TileData.modelMatrix = temp;
     }
     if (Type == 'gltf') {
       // this.ModelData.model!.scale =
@@ -195,24 +185,22 @@ export class cesiumInit {
         });
       } else if (Mode == 'absolute') {
         nowPos = {
-          x: (this.position.x ?? 10) + DegreesType.x,
-          y: (this.position.y ?? 10) + DegreesType.y,
-          z: (this.position.z ?? 10) + DegreesType.z,
+          x: (this.ModelPosition[0].x ?? 10) + DegreesType.x,
+          y: (this.ModelPosition[0].y ?? 10) + DegreesType.y,
+          z: (this.ModelPosition[0].z ?? 10) + DegreesType.z,
         };
       }
-      console.log('nowPos:', nowPos);
-      const position = Cesium.Cartesian3.fromDegrees(nowPos.x, nowPos.y, nowPos.z);
+      const position = window.Cesium.Cartesian3.fromDegrees(nowPos.x, nowPos.y, nowPos.z);
       this.container.entities.values[0].position = position;
-
       this.container.entities.values[0].model.scale = config.scale;
 
-      const heading = Cesium.Math.toRadians(config.heading);
+      const heading = window.Cesium.Math.toRadians(config.heading);
       const pitch = 0;
       const roll = 0;
       // 指定朝向
-      const orientation = Cesium.Transforms.headingPitchRollQuaternion(
+      const orientation = window.Cesium.Transforms.headingPitchRollQuaternion(
         position,
-        new Cesium.HeadingPitchRoll(heading, pitch, roll),
+        new window.Cesium.HeadingPitchRoll(heading, pitch, roll),
       );
       this.container.entities.values[0].orientation = orientation;
 
@@ -225,45 +213,117 @@ export class cesiumInit {
    */
   cameraMove(
     Mode: 'absolute' | 'relative' = 'relative',
-    DegreesType = defaultData,
-    config = { heading_toRadians: 0, pitch_toRadians: -45 },
+    DegreesType = this.PositionData,
+    config = { heading_toRadians: 0, pitch_toRadians: -45, isTrackModel: true },
   ) {
     let destination;
     if (Mode == 'absolute') {
       this.container.camera.setView({
-        destination: Cesium.Cartesian3.fromDegrees(DegreesType.x, DegreesType.y, DegreesType.z),
+        destination: window.Cesium.Cartesian3.fromDegrees(DegreesType.x, DegreesType.y, DegreesType.z),
       });
-      destination = Cesium.Cartesian3.fromDegrees(DegreesType.x, DegreesType.y, DegreesType.z);
-    } else {
+      destination = window.Cesium.Cartesian3.fromDegrees(DegreesType.x, DegreesType.y, DegreesType.z);
+    }
+    if (Mode == "relative") {
       const base = this.Cartesian3_to_WGS84(this.container.camera.position);
-      destination = Cesium.Cartesian3.fromDegrees(
+      destination = window.Cesium.Cartesian3.fromDegrees(
         base.x + DegreesType.x,
         base.y + DegreesType.y,
         base.z + DegreesType.z,
       );
     }
     // 缩放
-
     this.container.camera.flyTo({
       destination,
       orientation: {
         // 方向  default value is 0.0 (north)
-        heading: Cesium.Math.toRadians(config.heading_toRadians),
+        heading: window.Cesium.Math.toRadians(config.heading_toRadians),
         // 俯仰,向下看
-        pitch: Cesium.Math.toRadians(config.pitch_toRadians),
+        pitch: window.Cesium.Math.toRadians(config.pitch_toRadians),
       },
     });
   }
+  lifeCycleChange(arg: LifeCycleType) {
+    this.LifeCycle = arg;
+  }
+  destroyedAll() {
+    this.container.entities.removeAll();
+  }
 
   /**
-   * @des 工具方法世界坐标转经纬度
+   * @des -------工具方法世界坐标转经纬度---------
    */
-  Cartesian3_to_WGS84(point = { x: 0, y: 0, z: 0 }) {
-    const cartesian33 = new Cesium.Cartesian3(point.x, point.y, point.z);
-    const cartographic = Cesium.Cartographic.fromCartesian(cartesian33);
-    const lat = Cesium.Math.toDegrees(cartographic.latitude);
-    const lng = Cesium.Math.toDegrees(cartographic.longitude);
+  private Cartesian3_to_WGS84(point = { x: 0, y: 0, z: 0 }) {
+    const cartesian33 = new window.Cesium.Cartesian3(point.x, point.y, point.z);
+    const cartographic = window.Cesium.Cartographic.fromCartesian(cartesian33);
+    const lat = window.Cesium.Math.toDegrees(cartographic.latitude);
+    const lng = window.Cesium.Math.toDegrees(cartographic.longitude);
     const alt = cartographic.height;
     return { x: lng, y: lat, z: alt };
   }
+
+
+  private async InitGltfModel(
+    viewer,
+    url = 'http://smartdeliver.oss-cn-beijing.aliyuncs.com/yt300mb.gltf',
+    degrees: DegreesType,
+  ) {
+    // 2d 状态
+    if (viewer.scene.morphTime === 1) {
+      console.log('');
+    } else {
+      return;
+    }
+    if (!degrees) {
+      degrees = this.PositionData;
+    }
+    const position = window.Cesium.Cartesian3.fromDegrees(degrees.x, degrees.y, degrees.z);
+    this.ModelPosition[0] = JSON.parse(
+      JSON.stringify({
+        x: degrees.x,
+        y: degrees.y,
+        z: degrees.z,
+      }),
+    );
+    const heading = window.Cesium.Math.toRadians(135);
+    const pitch = 0;
+    const roll = 0;
+    // 指定朝向
+    const orientation = window.Cesium.Transforms.headingPitchRollQuaternion(
+      position,
+      new window.Cesium.HeadingPitchRoll(heading, pitch, roll),
+    );
+    const entity = await viewer.entities.add({
+      id: "FirstBimModel",
+      name: url,
+      position: position,
+      orientation: orientation,
+      model: {
+        uri: url,
+        minimumPixelSize: 18,
+        maximumScale: 20,
+      },
+    });
+    //获取 id 后删除
+    // const box  = viewer.entites.getById("box");
+    // viewer.entities.remove(box);
+    viewer.zoomTo(entity);
+    const helper = new window.Cesium.EventHelper();
+    helper.add(viewer.scene.globe.tileLoadProgressEvent, function (event) {
+      console.log('每次加载矢量切片都会进入这个回调:', event);
+      if (event == 0) {
+        console.log('这个是加载最后一个矢量切片的回调');
+      }
+    });
+
+    // alert("加载到这里了)
+    // viewer.trackedEntity = entity;
+    return entity;
+  }
+  private async initScene() {
+    // this.container.scene.globe.show = false;
+    // this.container.scene.globe.baseColor = new window.Cesium.Color(0, 0, 0, 0.1); //设置地球颜色
+    // this.container.cesiumWidget.creditContainer.style.display = 'none';
+    // window.Cesium.Camera.DEFAULT_VIEW_FACTOR = 0; // 设置矩形框视图的远近缩放，等于0时不缩放，大于0时拉远，小于0时拉近
+  }
+  private initLight() { }
 }

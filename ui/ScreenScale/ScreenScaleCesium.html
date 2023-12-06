@@ -4,9 +4,101 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScreenScaleCesium</title>
+    <title>cesium测试</title>
 </head>
+<style>
+    #cesiumContainer{
+        position: relative;
+        width: 100%;
+        /* height: 100%; */
+        height:750px;
+    }
+    .button_container{
+        display: flex;
+        bottom: 0px;
+        position: absolute;
+    }
+    .button_control{
+        margin: 20px;
+        padding:10px 20px;
+        border-radius: 10px;
+        z-index: 9;
+        cursor: pointer;
+        color: white;
+        background: rgb(75, 93, 168);
+    }
+
+    .container{
+        display: grid;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        grid-template-columns: 300px 1fr;
+    }
+    .cesium_left{
+        height: 100%;
+
+    }
+    *{		/* CSS Reset */
+	margin : 0;
+	padding : 0;
+}
+</style>
 <body>
+    <div class="container">
+        <div class="cesium_left">
+
+        </div>
+        <div id="cesiumContainer">
+            <div class="button_container">
+                <div class="button_control">经度移动测试</div>
+                <div class="button_control">高度移动测试</div>
+            </div>
+        </div>
+
+    </div>
     
+    <script type="module" src="../../struct/Cesium/use.js">
+        
+    </script>
+    <script type="module">
+        import { ScreenScale } from "./ScreenScale.js"
+    const options = {
+      dw: 1536, // 设定宽度
+      dh: 707,  // 设定高度
+      el: document.querySelector(".container"),  // 要自动适配的元素选择器
+      resize: true, // 是否监听窗口大小变化
+    //   ignore: [document.querySelector("#cesiumContainer")],  // 要忽略的元素选择器
+      transition: '0.5', // 动画过渡时间
+      delay: 1000// 调整延迟
+    };
+
+    // 初始化 ScreenScale
+    const ScreenScaleInstance = new ScreenScale();
+    ScreenScaleInstance.init(options);
+    setTimeout(() => {
+        ScreenScaleInstance.FixMap(document.querySelector("#cesiumContainer"))
+    }, 1000);
+    </script>
 </body>
+
+
+
+
+
+
+<style>
+    /* html,
+    body,
+    #cesiumContainer {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    } */
+  
+</style>
+<link href="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+<script src="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Cesium.js"></script>
 </html>

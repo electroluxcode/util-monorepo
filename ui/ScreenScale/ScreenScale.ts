@@ -93,7 +93,7 @@ class ScreenScale {
         console.error("尚未初始化");
       }
       if (!el) {
-        console.error(`FixMap选择器错误: ${el}`);
+        console.error(`ScreenScale: 选择器错误: ${el}`);
       }
   
       this.CurrelFixMap = el;

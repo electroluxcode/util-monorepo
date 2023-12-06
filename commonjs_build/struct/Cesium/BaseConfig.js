@@ -17,6 +17,8 @@ exports.baseConfig = {
     infoBox: false,
     // 不显示home键
     homeButton: false,
+    // 去掉原生 选中 entity 后的 绿框
+    selectionIndicator: false,
     // requestRenderMode: false, // 启用请求渲染模式，不需要渲染，节约资源吧
     // baseLayerPicker: false, // 如果设置为false，将不会创建右上角图层按钮。
     // navigationHelpButton: false,  // 如果设置为false，则不会创建右上角帮助(问号)按钮。

@@ -48,6 +48,7 @@ class ScreenScale {
         this.resizeListener = () => {
             if (this.timer)
                 clearTimeout(this.timer);
+            console.log("resize测试");
             if (delay !== 0) {
                 this.KeepFit(dw, dh, dom, ignore);
                 if (this.IsMapElement)
@@ -93,7 +94,7 @@ class ScreenScale {
         item.style.height = `${item.originalHeight * rectification}px`;
         item.style.transform = `scale(${1 / this.currScale}) `;
         item.style.transformOrigin = `0 0`;
-        // this.IsMapElement = true;
+        this.IsMapElement = true;
     }
     /**
      * @des 调整大小

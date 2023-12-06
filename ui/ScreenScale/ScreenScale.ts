@@ -65,6 +65,7 @@ class ScreenScale {
    
       this.resizeListener = () => {
         if (this.timer) clearTimeout(this.timer);
+        console.log("resize测试")
         if (delay !== 0) {
           
           this.KeepFit(dw, dh, dom, ignore);
@@ -117,7 +118,7 @@ class ScreenScale {
       (item as any).style.transform = `scale(${1 / this.currScale}) `;
       (item as any).style.transformOrigin = `0 0`;
   
-      // this.IsMapElement = true;
+      this.IsMapElement = true;
     }
 
     /**

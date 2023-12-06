@@ -79,6 +79,9 @@
     setTimeout(() => {
         ScreenScaleInstance.FixMap(document.querySelector("#cesiumContainer"))
     }, 1000);
+    window.addEventListener("resize",()=>{
+        ScreenScaleInstance.FixMap(document.querySelector("#cesiumContainer"))
+    })
     </script>
 </body>
 

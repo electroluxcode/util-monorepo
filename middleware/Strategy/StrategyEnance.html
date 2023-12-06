@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="module">
+        import { StrategyEnance } from "./StrategyEnance.js"
+        let lk = new StrategyEnance()
+        let judge = (param1) => {
+            if (param1 > 1000) {
+                return "fly"
+            }
+            if (param1 < 30) {
+                return "run"
+            }
+        }
+        lk.EventBusSet({
+            eventBus: {
+                default: [() => {
+                    console.log("触发defalut")
+                }], error: [() => {
+                    console.log("触发了error")
+                }]
+            }
+        })
+        lk.JudgeFnSet(judge)
+        lk.StrategyAdd("fly", () => {
+            console.log("触发了fly",)
+        })
+        lk.StrategyAdd("run", () => {
+            console.log("触发了run",)
+        })
+        lk.Execute(0)
+    </script>
+</body>
+
+</html>

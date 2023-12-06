@@ -1,8 +1,8 @@
-type Handler<T = any> = (val: T) => void;
-class EventBus<Events extends Record<string, any>> {
+
+class EventBus<Events extends string> {
     private eventBus: any={};
 
-    on<K extends keyof Events>(name: K, event: Handler<Events[K]>) {
+    on<K extends  Events>(name: K, event: Function) {
         if (!this.eventBus[name]) {
             this.eventBus[name] = [event];
         } else {
@@ -10,7 +10,7 @@ class EventBus<Events extends Record<string, any>> {
         }
     }
 
-    emit<K extends keyof Events>(name: K, data: Events[K]) {
+    emit<K extends  Events>(name: K, data: any) {
         if (this.eventBus[name]) {
             this.eventBus[name]!.forEach((handler: Function) => {
                 // 在这里捕获并使用参数类型
@@ -21,13 +21,13 @@ class EventBus<Events extends Record<string, any>> {
         }
     }
 
-    off<K extends keyof Events>(name: K) {
+    off<K extends Events>(name: K) {
         delete this.eventBus[name];
     }
 }
 
 
-// let test = new EventBus<{"test1":any}>()
+// let test = new EventBus<"test1" | "ceshi">()
 // test.emit("test1",45)
 // test.on("test1",()=>{
 

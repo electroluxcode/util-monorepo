@@ -39,7 +39,6 @@ class Strategy {
      * @param HashFn 方法
      */
     ActionAdd(HashKey: ObjectType, HashFn: Function) {
-       
         let Key = this.HashMapGen(HashKey)
         this.MapHash.set(Key, HashFn)
     }
@@ -80,27 +79,7 @@ class Strategy {
     }
 }
 
-class A<T extends any> {
-    eventbus: ((param: T) => void)[] = [];
 
-    constructor(fn?: (param: T) => void) {
-        if(fn){
-            this.eventbus.push(fn);
-        }
-       
-    }
-}
-
-let test = new A((param:"obj" | "model") => {
-    console.log(param);
-});
-
-test.eventbus[0]; // 在这里会有智能提示
-
-
-class MyStrategy extends Strategy{
-
-}
 
 // let Age20_SchoolA_RegionCN = { age: 20, school: "A", region: "cn" };
 
@@ -120,6 +99,8 @@ class MyStrategy extends Strategy{
 // fn({
 //     id:2
 // })
+
+// data 识别给一个函数
 // res2.ActionAdd(fn, function (workHours) {
 //     console.log("高");
 //     throw new Error("报错")

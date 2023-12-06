@@ -23,7 +23,7 @@ class EventBus {
         delete this.eventBus[name];
     }
 }
-// let test = new EventBus<{"test1":any}>()
+// let test = new EventBus<"test1" | "ceshi">()
 // test.emit("test1",45)
 // test.on("test1",()=>{
 // })

@@ -1,14 +1,14 @@
 {
   "numFailedTestSuites": 0,
   "numFailedTests": 0,
-  "numPassedTestSuites": 6,
-  "numPassedTests": 14,
+  "numPassedTestSuites": 7,
+  "numPassedTests": 15,
   "numPendingTestSuites": 0,
   "numPendingTests": 0,
   "numRuntimeErrorTestSuites": 0,
   "numTodoTests": 0,
-  "numTotalTestSuites": 6,
-  "numTotalTests": 14,
+  "numTotalTestSuites": 7,
+  "numTotalTests": 15,
   "openHandles": [],
   "snapshot": {
     "added": 0,
@@ -26,7 +26,7 @@
     "unmatched": 0,
     "updated": 0
   },
-  "startTime": 1701774711639,
+  "startTime": 1701835748540,
   "success": false,
   "testResults": [
     {
@@ -37,10 +37,10 @@
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1701774714536,
-        "runtime": 827,
+        "end": 1701835751272,
+        "runtime": 843,
         "slow": false,
-        "start": 1701774713709
+        "start": 1701835750429
       },
       "skipped": false,
       "snapshot": {
@@ -52,22 +52,22 @@
         "unmatched": 0,
         "updated": 0
       },
-      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\EventBus\\EventBus.spec.js",
+      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Strategy\\StrategyEnance.spec.js",
       "testResults": [
         {
           "ancestorTitles": [
-            "EventBus"
+            "StrategyEnance"
           ],
-          "duration": 13,
+          "duration": 12,
           "failureDetails": [],
           "failureMessages": [],
-          "fullName": "EventBus EventBus/event",
+          "fullName": "StrategyEnance StrategyEnance/event",
           "invocations": 1,
           "location": null,
           "numPassingAsserts": 1,
           "retryReasons": [],
           "status": "passed",
-          "title": "EventBus/event"
+          "title": "StrategyEnance/event"
         }
       ],
       "failureMessage": null
@@ -80,10 +80,10 @@
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1701774714607,
-        "runtime": 901,
+        "end": 1701835751279,
+        "runtime": 837,
         "slow": false,
-        "start": 1701774713706
+        "start": 1701835750442
       },
       "skipped": false,
       "snapshot": {
@@ -131,7 +131,7 @@
           "ancestorTitles": [
             "Handle"
           ],
-          "duration": 0,
+          "duration": 1,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Handle groupBy/*",
@@ -163,15 +163,15 @@
     {
       "leaks": false,
       "numFailingTests": 0,
-      "numPassingTests": 1,
+      "numPassingTests": 3,
       "numPendingTests": 0,
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1701774714619,
-        "runtime": 912,
+        "end": 1701835751275,
+        "runtime": 844,
         "slow": false,
-        "start": 1701774713707
+        "start": 1701835750431
       },
       "skipped": false,
       "snapshot": {
@@ -183,22 +183,52 @@
         "unmatched": 0,
         "updated": 0
       },
-      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Http\\Http.spec.js",
+      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Pool\\Pool.spec.js",
       "testResults": [
         {
           "ancestorTitles": [
-            "Http"
+            "Pool"
           ],
-          "duration": 14,
+          "duration": 13,
           "failureDetails": [],
           "failureMessages": [],
-          "fullName": "Http Http/BaseConfig",
+          "fullName": "Pool Pool/event",
           "invocations": 1,
           "location": null,
           "numPassingAsserts": 1,
           "retryReasons": [],
           "status": "passed",
-          "title": "Http/BaseConfig"
+          "title": "Pool/event"
+        },
+        {
+          "ancestorTitles": [
+            "Pool"
+          ],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "Pool Pool/Concurrent",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "Pool/Concurrent"
+        },
+        {
+          "ancestorTitles": [
+            "Pool"
+          ],
+          "duration": 14,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "Pool Pool/Retry",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "Pool/Retry"
         }
       ],
       "failureMessage": null
@@ -211,10 +241,10 @@
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1701774714608,
-        "runtime": 900,
+        "end": 1701835751312,
+        "runtime": 871,
         "slow": false,
-        "start": 1701774713708
+        "start": 1701835750441
       },
       "skipped": false,
       "snapshot": {
@@ -232,7 +262,7 @@
           "ancestorTitles": [
             "Strategy"
           ],
-          "duration": 11,
+          "duration": 13,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Strategy Strategy/error+event",
@@ -279,15 +309,15 @@
     {
       "leaks": false,
       "numFailingTests": 0,
-      "numPassingTests": 3,
+      "numPassingTests": 1,
       "numPendingTests": 0,
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1701774714645,
-        "runtime": 938,
+        "end": 1701835751318,
+        "runtime": 873,
         "slow": false,
-        "start": 1701774713707
+        "start": 1701835750445
       },
       "skipped": false,
       "snapshot": {
@@ -299,52 +329,65 @@
         "unmatched": 0,
         "updated": 0
       },
-      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Pool\\Pool.spec.js",
+      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\EventBus\\EventBus.spec.js",
       "testResults": [
         {
           "ancestorTitles": [
-            "Pool"
+            "EventBus"
           ],
-          "duration": 30,
+          "duration": 18,
           "failureDetails": [],
           "failureMessages": [],
-          "fullName": "Pool Pool/event",
+          "fullName": "EventBus EventBus/event",
           "invocations": 1,
           "location": null,
           "numPassingAsserts": 1,
           "retryReasons": [],
           "status": "passed",
-          "title": "Pool/event"
-        },
+          "title": "EventBus/event"
+        }
+      ],
+      "failureMessage": null
+    },
+    {
+      "leaks": false,
+      "numFailingTests": 0,
+      "numPassingTests": 1,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "openHandles": [],
+      "perfStats": {
+        "end": 1701835751320,
+        "runtime": 880,
+        "slow": false,
+        "start": 1701835750440
+      },
+      "skipped": false,
+      "snapshot": {
+        "added": 0,
+        "fileDeleted": false,
+        "matched": 0,
+        "unchecked": 0,
+        "uncheckedKeys": [],
+        "unmatched": 0,
+        "updated": 0
+      },
+      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Http\\Http.spec.js",
+      "testResults": [
         {
           "ancestorTitles": [
-            "Pool"
+            "Http"
           ],
-          "duration": 1,
+          "duration": 14,
           "failureDetails": [],
           "failureMessages": [],
-          "fullName": "Pool Pool/Concurrent",
+          "fullName": "Http Http/BaseConfig",
           "invocations": 1,
           "location": null,
           "numPassingAsserts": 1,
           "retryReasons": [],
           "status": "passed",
-          "title": "Pool/Concurrent"
-        },
-        {
-          "ancestorTitles": [
-            "Pool"
-          ],
-          "duration": 7,
-          "failureDetails": [],
-          "failureMessages": [],
-          "fullName": "Pool Pool/Retry",
-          "invocations": 1,
-          "location": null,
-          "numPassingAsserts": 1,
-          "retryReasons": [],
-          "status": "passed",
-          "title": "Pool/Retry"
+          "title": "Http/BaseConfig"
         }
       ],
       "failureMessage": null
@@ -357,10 +400,10 @@
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1701774715648,
-        "runtime": 1939,
+        "end": 1701835752293,
+        "runtime": 1863,
         "slow": false,
-        "start": 1701774713709
+        "start": 1701835750430
       },
       "skipped": false,
       "snapshot": {
@@ -378,7 +421,7 @@
           "ancestorTitles": [
             "Chain"
           ],
-          "duration": 37,
+          "duration": 33,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Chain Chain/error",
@@ -393,7 +436,7 @@
           "ancestorTitles": [
             "Chain"
           ],
-          "duration": 1010,
+          "duration": 1016,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Chain Chain/value/async",

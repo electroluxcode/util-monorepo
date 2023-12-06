@@ -71,17 +71,3 @@ class Strategy {
     }
 }
 exports.Strategy = Strategy;
-class A {
-    eventbus = [];
-    constructor(fn) {
-        if (fn) {
-            this.eventbus.push(fn);
-        }
-    }
-}
-let test = new A((param) => {
-    console.log(param);
-});
-test.eventbus[0]; // 在这里会有智能提示
-class MyStrategy extends Strategy {
-}

@@ -2,6 +2,8 @@ import { Vector2 } from './Vector2.js'
 
 class Matrix3 {
 	elements: number[] = [1, 0, 0, 0, 1, 0, 0, 0, 1]
+
+	
 	set(
 		n11: number,
 		n12: number,
@@ -25,12 +27,6 @@ class Matrix3 {
 		te[8] = n33
 		return this
 	}
-	identity() {
-		this.set(1, 0, 0, 0, 1, 0, 0, 0, 1)
-
-		return this
-	}
-
 	copy(m: Matrix3) {
 		const te = this.elements
 		const me = m.elements
@@ -48,22 +44,25 @@ class Matrix3 {
 		return this
 	}
 
-	setFromMatrix4(m: Matrix3) {
-		const me = m.elements
-
-		this.set(me[0], me[4], me[8], me[1], me[5], me[9], me[2], me[6], me[10])
-
-		return this
-	}
-
+	
+	
+	/**
+	 * @des 矩阵相乘
+	 */
 	multiply(m: Matrix3) {
 		return this.multiplyMatrices(this, m)
 	}
 
+	/**
+	 * @des 顺序相反的相乘
+	 */
 	premultiply(m: Matrix3) {
 		return this.multiplyMatrices(m, this)
 	}
 
+	/**
+	 * @des 矩阵相乘
+	 */
 	multiplyMatrices(a: Matrix3, b: Matrix3) {
 		const ae = a.elements
 		const be = b.elements
@@ -120,6 +119,13 @@ class Matrix3 {
 		return this
 	}
 
+	/**
+	 * @des 得到函数的行列式，主要 用来判断 是否需要反向缩放
+	 * const det = m.determinant()
+		if (det < 0) {
+			sx = -sx
+		}
+	 */
 	determinant() {
 		const te = this.elements
 
@@ -136,6 +142,10 @@ class Matrix3 {
 		return a * e * i - a * f * h - b * d * i + b * f * g + c * d * h - c * e * g
 	}
 
+	/**
+	 * @des 逆矩阵
+	 * @returns 用处是可以撤销变化
+	 */
 	invert() {
 		const te = this.elements,
 			n11 = te[0],
@@ -171,65 +181,9 @@ class Matrix3 {
 		return this
 	}
 
-	transpose() {
-		let tmp
-		const m = this.elements
+	
 
-		tmp = m[1]
-		m[1] = m[3]
-		m[3] = tmp
-		tmp = m[2]
-		m[2] = m[6]
-		m[6] = tmp
-		tmp = m[5]
-		m[5] = m[7]
-		m[7] = tmp
-
-		return this
-	}
-
-	transposeIntoArray(r: number[]) {
-		const m = this.elements
-
-		r[0] = m[0]
-		r[1] = m[3]
-		r[2] = m[6]
-		r[3] = m[1]
-		r[4] = m[4]
-		r[5] = m[7]
-		r[6] = m[2]
-		r[7] = m[5]
-		r[8] = m[8]
-
-		return this
-	}
-
-	setUvTransform(
-		tx: number,
-		ty: number,
-		sx: number,
-		sy: number,
-		rotation: number,
-		cx: number,
-		cy: number
-	) {
-		const c = Math.cos(rotation)
-		const s = Math.sin(rotation)
-
-		this.set(
-			sx * c,
-			sx * s,
-			-sx * (c * cx + s * cy) + cx + tx,
-			-sy * s,
-			sy * c,
-			-sy * (-s * cx + c * cy) + cy + ty,
-			0,
-			0,
-			1
-		)
-
-		return this
-	}
+	
 
 	scale(sx: number, sy: number = sx) {
 		this.premultiply(_m3.makeScale(sx, sy))
@@ -243,6 +197,9 @@ class Matrix3 {
 		return this
 	}
 
+	/**
+	 * @des 平移矩阵
+	 */
 	translate(tx: number, ty: number) {
 		this.premultiply(_m3.makeTranslation(tx, ty))
 
@@ -253,7 +210,6 @@ class Matrix3 {
 
 	makeTranslation(x: number, y: number) {
 		this.set(1, 0, x, 0, 1, y, 0, 0, 1)
-
 		return this
 	}
 
@@ -270,9 +226,9 @@ class Matrix3 {
 
 	makeScale(x: number, y: number) {
 		this.set(x, 0, 0, 0, y, 0, 0, 0, 1)
-
 		return this
 	}
+
 
 	equals(matrix: Matrix3) {
 		const te = this.elements
@@ -297,8 +253,6 @@ class Matrix3 {
 		return new Matrix3().fromArray(this.elements)
 	}
 }
-const _v1 = new Vector2()
-const _m1 = new Matrix3()
 const _m3 = new Matrix3()
 
 export { Matrix3 }

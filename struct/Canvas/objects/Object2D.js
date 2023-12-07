@@ -95,6 +95,7 @@ class Object2D extends EventDispatcher {
         /*  矩阵变换 */
         this.transform(ctx);
         /* 绘制图形 */
+        // ctx.filter = "blur(10px)"; // Adjust the blur value as needed
         this.drawShape(ctx);
         ctx.restore();
     }

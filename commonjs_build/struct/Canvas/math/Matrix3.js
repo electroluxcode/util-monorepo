@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Matrix3 = void 0;
-const Vector2_js_1 = require("./Vector2.js");
 class Matrix3 {
     elements = [1, 0, 0, 0, 1, 0, 0, 0, 1];
     set(n11, n12, n13, n21, n22, n23, n31, n32, n33) {
@@ -15,10 +14,6 @@ class Matrix3 {
         te[6] = n13;
         te[7] = n23;
         te[8] = n33;
-        return this;
-    }
-    identity() {
-        this.set(1, 0, 0, 0, 1, 0, 0, 0, 1);
         return this;
     }
     copy(m) {
@@ -35,17 +30,21 @@ class Matrix3 {
         te[8] = me[8];
         return this;
     }
-    setFromMatrix4(m) {
-        const me = m.elements;
-        this.set(me[0], me[4], me[8], me[1], me[5], me[9], me[2], me[6], me[10]);
-        return this;
-    }
+    /**
+     * @des 矩阵相乘
+     */
     multiply(m) {
         return this.multiplyMatrices(this, m);
     }
+    /**
+     * @des 顺序相反的相乘
+     */
     premultiply(m) {
         return this.multiplyMatrices(m, this);
     }
+    /**
+     * @des 矩阵相乘
+     */
     multiplyMatrices(a, b) {
         const ae = a.elements;
         const be = b.elements;
@@ -80,11 +79,22 @@ class Matrix3 {
         te[8] *= s;
         return this;
     }
+    /**
+     * @des 得到函数的行列式，主要 用来判断 是否需要反向缩放
+     * const det = m.determinant()
+        if (det < 0) {
+            sx = -sx
+        }
+     */
     determinant() {
         const te = this.elements;
         const a = te[0], b = te[1], c = te[2], d = te[3], e = te[4], f = te[5], g = te[6], h = te[7], i = te[8];
         return a * e * i - a * f * h - b * d * i + b * f * g + c * d * h - c * e * g;
     }
+    /**
+     * @des 逆矩阵
+     * @returns 用处是可以撤销变化
+     */
     invert() {
         const te = this.elements, n11 = te[0], n21 = te[1], n31 = te[2], n12 = te[3], n22 = te[4], n32 = te[5], n13 = te[6], n23 = te[7], n33 = te[8], t11 = n33 * n22 - n32 * n23, t12 = n32 * n13 - n33 * n12, t13 = n23 * n12 - n22 * n13, det = n11 * t11 + n21 * t12 + n31 * t13;
         if (det === 0)
@@ -101,39 +111,6 @@ class Matrix3 {
         te[8] = (n22 * n11 - n21 * n12) * detInv;
         return this;
     }
-    transpose() {
-        let tmp;
-        const m = this.elements;
-        tmp = m[1];
-        m[1] = m[3];
-        m[3] = tmp;
-        tmp = m[2];
-        m[2] = m[6];
-        m[6] = tmp;
-        tmp = m[5];
-        m[5] = m[7];
-        m[7] = tmp;
-        return this;
-    }
-    transposeIntoArray(r) {
-        const m = this.elements;
-        r[0] = m[0];
-        r[1] = m[3];
-        r[2] = m[6];
-        r[3] = m[1];
-        r[4] = m[4];
-        r[5] = m[7];
-        r[6] = m[2];
-        r[7] = m[5];
-        r[8] = m[8];
-        return this;
-    }
-    setUvTransform(tx, ty, sx, sy, rotation, cx, cy) {
-        const c = Math.cos(rotation);
-        const s = Math.sin(rotation);
-        this.set(sx * c, sx * s, -sx * (c * cx + s * cy) + cx + tx, -sy * s, sy * c, -sy * (-s * cx + c * cy) + cy + ty, 0, 0, 1);
-        return this;
-    }
     scale(sx, sy = sx) {
         this.premultiply(_m3.makeScale(sx, sy));
         return this;
@@ -142,6 +119,9 @@ class Matrix3 {
         this.premultiply(_m3.makeRotation(theta));
         return this;
     }
+    /**
+     * @des 平移矩阵
+     */
     translate(tx, ty) {
         this.premultiply(_m3.makeTranslation(tx, ty));
         return this;
@@ -182,6 +162,4 @@ class Matrix3 {
     }
 }
 exports.Matrix3 = Matrix3;
-const _v1 = new Vector2_js_1.Vector2();
-const _m1 = new Matrix3();
 const _m3 = new Matrix3();

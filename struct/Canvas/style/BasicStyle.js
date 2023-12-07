@@ -10,13 +10,15 @@ class BasicStyle {
     globalCompositeOperation;
     // 裁剪
     clip = false;
+    // 滤镜
+    filter = "";
     /* 设置样式 */
     setOption(attr = {}) {
         Object.assign(this, attr);
     }
     /* 应用样式 */
     apply(ctx) {
-        const { globalAlpha, globalCompositeOperation, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, clip, } = this;
+        const { globalAlpha, globalCompositeOperation, shadowColor, shadowBlur, shadowOffsetX, shadowOffsetY, clip, filter } = this;
         /* 投影 */
         if (shadowColor) {
             ctx.shadowColor = shadowColor;
@@ -29,6 +31,8 @@ class BasicStyle {
             (ctx.globalCompositeOperation = globalCompositeOperation);
         /*透明度合成*/
         globalAlpha !== undefined && (ctx.globalAlpha = globalAlpha);
+        // ctx
+        ctx.filter = filter;
         /* 裁剪 */
         clip && ctx.clip();
     }

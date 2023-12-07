@@ -13,6 +13,9 @@ export type BasicStyleType = {
 
 	// 裁剪
 	clip?: boolean
+
+	// 滤镜
+	filter?:any
 }
 
 class BasicStyle {
@@ -31,6 +34,8 @@ class BasicStyle {
 	// 裁剪
 	clip = false
 
+	// 滤镜
+	filter = ""
 	/* 设置样式 */
 	setOption(attr: BasicStyleType = {}) {
 		Object.assign(this, attr)
@@ -46,6 +51,7 @@ class BasicStyle {
 			shadowOffsetX,
 			shadowOffsetY,
 			clip,
+			filter
 		} = this
 
 		/* 投影 */
@@ -63,6 +69,8 @@ class BasicStyle {
 		/*透明度合成*/
 		globalAlpha !== undefined && (ctx.globalAlpha = globalAlpha)
 
+		// ctx
+		ctx.filter = filter
 		/* 裁剪 */
 		clip && ctx.clip()
 	}

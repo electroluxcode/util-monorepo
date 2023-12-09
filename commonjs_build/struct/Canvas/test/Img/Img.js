@@ -15,7 +15,7 @@ const ctx = canvas?.getContext('2d');
 const image = new Image();
 image.src = './img.png';
 const pattern = new Img_js_1.Img({ image });
-// 3.进行操作
+// 3.进行操作 重要：关键就是 一个 setOption | draw | crtdraw
 // image.style.filter = " blur(10000px)"
 /* 绘图 */
 image.onload = () => {

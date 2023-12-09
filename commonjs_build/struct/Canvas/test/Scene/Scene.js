@@ -11,7 +11,6 @@ canvas.width = size.width;
 canvas.height = size.height;
 const ctx = canvas?.getContext('2d');
 // step2:相机方法的测试原理是 逆向操作 
-// 重要：new camera 可以初始化 x y scale
 // 对应 x y 距离  距离越短越大
 const camera = new Camera_js_1.Camera(10, 0, 1);
 function matrixTest(ctx) {

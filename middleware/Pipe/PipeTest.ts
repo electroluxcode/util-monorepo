@@ -10,8 +10,6 @@ let pipeCFn = Pipe<number>(addC,plusC)
 console.log(pipeCFn(0))
 
 
-
-
 let sleep = (param)=>{
     return new Promise((resolve)=>{
         setTimeout((param) => {

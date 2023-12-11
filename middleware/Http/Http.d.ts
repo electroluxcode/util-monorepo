@@ -24,13 +24,14 @@ type BaseConfigType = {
 
 type BaseRequestType = {
     url?: string;
-    method?: "GET" | "POST" | "SSE";
+    method?: "GET" | "POST" | "SSE" | "DELETE" |  "PUT";
     data?: any;
-    headers: Record<'Accept' | 'Content-Length' | 'User-Agent' | 'Content-Encoding' | 'Authorization', any>;
+    headers: Record<'Accept' | 'Content-Length' | 'User-Agent' | 'Content-Encoding' | 'Authorization' | any, any>;
     mode?: "cors" | "no-cors" | "no-cors" | "same-origin",
     cache?: "no-store" | "default" | "no-cache",
     signal?: any;
-    body?: any
+    body?: any;
+    [key : string] : any
 }
 
 

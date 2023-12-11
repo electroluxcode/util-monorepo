@@ -20,7 +20,7 @@ type View = {
 	height: number
 }
 
-class Img extends Object2D {
+class Img2D  extends Object2D {
 	image: CanvasImageSource = new Image()
 	offset: Vector2 = new Vector2()
 	size: Vector2 = new Vector2(300, 150)
@@ -60,7 +60,16 @@ class Img extends Object2D {
 		} = this
 		return this.worldMatrix.multiply(new Matrix3().makeTranslation(x, y))
 	}
-
+	// 计算边界盒子，很牛皮
+	computeBoundingBox() {
+		const {
+			boundingBox: { min, max },
+			size,
+			offset,
+		} = this
+		min.copy(offset)
+		max.addVectors(offset, size)
+	}
 	/* 视图投影矩阵*世界模型矩阵*偏移矩阵  */
 	get pvmoMatrix(): Matrix3 {
 		const {
@@ -102,4 +111,4 @@ class Img extends Object2D {
 		crtPathByMatrix(ctx, [0, 0, imgW, 0, imgW, imgH, 0, imgH], matrix,true)
 	}
 }
-export { Img }
+export { Img2D  }

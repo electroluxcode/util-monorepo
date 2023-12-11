@@ -1,6 +1,6 @@
 
 import { Vector2 } from '../../math/Vector2.js'
-import { Img } from '../../objects/Img.js'
+import { Img2D  } from '../../objects/Img2D.js'
 
 // step1:基本参数初始化
 let size = {
@@ -15,7 +15,7 @@ const ctx = canvas?.getContext('2d')!
 // 2.img 对象操作 初始化
 const image = new Image()
 image.src = './img.png'
-const pattern = new Img({ image })
+const pattern = new Img2D ({ image })
 
 // 3.进行操作 重要：关键就是 一个 setOption | draw | crtdraw
 // image.style.filter = " blur(10000px)"

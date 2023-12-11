@@ -35,7 +35,7 @@ class HttpClass {
      * @des step1:初始化
      * @param BaseConfig 
      */
-    create(BaseConfig: BaseConfigType) {
+    create(BaseConfig: Omit<BaseConfigType,"NowConcurrentNumber">) {
         this.BaseConfig = Object.assign(this.BaseConfig, BaseConfig)
     }
     /**
@@ -46,20 +46,15 @@ class HttpClass {
      */
     common({
         method, mode, cache, headers, data, signal, url
-    }: BaseRequestType,): BaseRequestType {
+    ,...args}: Omit<BaseRequestType,"body"> & any) {
+
+      
         let init: BaseRequestType
         let BaseRequestBefore = this.BaseConfig.BeforeRequest({
             method, mode, cache, headers, data, signal, url
         });
-        init = {
-            url: BaseRequestBefore.url,
-            method: BaseRequestBefore.method,
-            mode: BaseRequestBefore.mode,
-            cache: BaseRequestBefore.cache,
-            headers: BaseRequestBefore.headers,
-            body: BaseRequestBefore.data,
-            signal: BaseRequestBefore.signal
-        }
+        console.log("------------------",data,BaseRequestBefore)
+        init = BaseRequestBefore
 
         // 2.2 get post 不同请求
         if (init.method == "GET") {
@@ -68,9 +63,10 @@ class HttpClass {
             }
             init.url =QsString(init.data) ? init.url + "?" + QsString(init.data) : init.url
             Reflect.deleteProperty(init, "body")
-        } else if (init.method == "POST") {
+        } else  {
+            console.log("zptest:init.data:",init)
             if (Object.prototype.toString.call(init.data) == '[object FormData]') {
-
+                init.body = init.data
             } else {
                 // post中区分文件 和 普通data
                 init.body = JSON.stringify(init.data)
@@ -86,7 +82,7 @@ class HttpClass {
 
         // 2.6 全局基础配置
         init.url = this.BaseConfig.BaseUrl! + init.url
-        return init
+        return {...init,...args}
     }
     async pauseIfNeeded() {
         // console.log(this.BaseConfig.NowConcurrentNumber,",this.BaseConfig.MaxConcurrent",this.BaseConfig.NowConcurrentNumber>=this.BaseConfig.MaxConcurrent)
@@ -102,13 +98,14 @@ class HttpClass {
      * @returns 
      */
     request({
-        method, mode, cache, headers, data, signal, url
+        method, mode, cache, headers, data, signal, url,...args
     }: BaseRequestType, {
         onclose, onmessage, onopen, onerror
     }: BaseEventType = {}) {
         let that = this
+        console.log("zptest:data",data,args)
         // 3.1 一般模式。初始化基本参数
-        let init = this.common({ method, mode, cache, headers, data, signal, url })
+        let init = this.common({ method, mode, cache, headers, data, signal, url,...args })
         // 3.2 hook 初始化 
         let res
         let retryTimer = null;
@@ -128,10 +125,12 @@ class HttpClass {
                             await new Promise(resolve => setTimeout(resolve, 1000));
                         }
                         that.BaseConfig.NowConcurrentNumber++
+                       
                         let result = await fetch(init.url!, init)
                       
                         // 错误重试机制
                         if (result.status > 300) {
+                            console.log("error:",result)
                             retry--
                             that.BaseConfig.NowConcurrentNumber--
                             main(retry)
@@ -144,7 +143,8 @@ class HttpClass {
                         let output =await that.BaseConfig.BeforeResponse(result)
                         // console.log(JSON.stringify(output))
                         resolve({code: 200, config: init,data:output})
-                    } catch {
+                    } catch(e) {
+                        console.log("error:",e)
                         // console.error("未知报错,停止")
                         that.BaseConfig.NowConcurrentNumber--
                         retry--;

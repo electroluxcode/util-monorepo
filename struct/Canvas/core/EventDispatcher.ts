@@ -13,7 +13,7 @@ class EventDispatcher {
 	_listeners = {}
 
 	/* 监听事件 */
-	addEventListener(type: string, listener: EventListener) {
+	on(type: string, listener: EventListener) {
 		const listeners = this._listeners
 		if (listeners[type] === undefined) {
 			listeners[type] = []
@@ -24,7 +24,7 @@ class EventDispatcher {
 	}
 
 	/* 判断目标对象的某个状态是否被某个监听器监听 */
-	hasEventListener(type: string, listener: EventListener) {
+	hasEmit(type: string, listener: EventListener) {
 		const listeners = this._listeners
 		return (
 			listeners[type] !== undefined && listeners[type].indexOf(listener) !== -1
@@ -32,7 +32,7 @@ class EventDispatcher {
 	}
 
 	/* 取消事件监听 */
-	removeEventListener(type: string, listener: EventListener) {
+	removeEmit(type: string, listener: EventListener) {
 		const listeners = this._listeners
 		const listenerArray = listeners[type]
 		if (listenerArray !== undefined) {
@@ -44,7 +44,7 @@ class EventDispatcher {
 	}
 
 	/* 触发事件 */
-	dispatchEvent(event: CustomEvent) {
+	emit(event: CustomEvent) {
 		const listeners = this._listeners
 		const listenerArray = listeners[event.type]
 		if (listenerArray !== undefined) {

@@ -1,3 +1,4 @@
+// step0:定义类型帮助提示
 type DeepShowType<t> = {
     [key in keyof t]: t[key]
 } & {}
@@ -12,7 +13,7 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends
     ? I
     : never;
 
-// step1 : 定义api格式
+// step2 : 定义api格式
 type DictValueType = {
     remark?: string | number;
     id: string | number;
@@ -24,6 +25,7 @@ type DictValueType = {
     value: string | number;
     isEnable: string | number;
 };
+// 需要自己根据 api 添加 union 类型
 type DictKeyType = "workType" 
 type DictType = {
     data: {
@@ -32,7 +34,7 @@ type DictType = {
 };
 
 
-// step2:mock 请求
+// step3:mock 请求
 const data: DictType = {
     data: {
         workType: [
@@ -76,13 +78,12 @@ const DataDictTest = {
     workType: apiData.data.workType,
 };
 
-// step3 拼装数据
+// step4 拼装数据
 function KeyApiDataSwitch<t extends string>(DataDictTest) {
     const BaseKey = Object.keys(DataDictTest);
     BaseKey.map((e) => {
         const nowKey = {};
         const arr = DataDictTest[e];
-
         if (!arr) {
             throw new Error('zptest:数据字典key与后端不统一,请检查:' + e);
         }
@@ -105,11 +106,11 @@ function KeyApiDataSwitch<t extends string>(DataDictTest) {
         }
         DataDictTest[e] = nowKey;
     });
-    console.log('赋值完成:', DataDictTest);
     return DataDictTest as UnionToIntersection<GetterAble<t, "Enhance">>
 }
+// 泛型传入 api key的 联合类型可获得类型提示
 let result = KeyApiDataSwitch<DictKeyType>(DataDictTest)
-console.log(result)
+console.log('zptest:赋值完成:',result)
 
 
 export { KeyApiDataSwitch }

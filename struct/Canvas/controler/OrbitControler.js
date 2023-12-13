@@ -31,12 +31,16 @@ class OrbitControler extends EventDispatcher {
     setOption(option) {
         Object.assign(this, option);
     }
-    /* 缩放 */
+    /**
+     * @des 缩放
+     * @param deltaY 鼠标状态 > 0 往上滑动  <0 向下活动
+     */
     doScale(deltaY) {
         const { enableZoom, camera, zoomSpeed, stage } = this;
         if (!enableZoom) {
             return;
         }
+        // 回退可用
         stage.cameraZoom = camera.zoom;
         const scale = Math.pow(0.95, zoomSpeed);
         if (deltaY > 0) {
@@ -45,7 +49,7 @@ class OrbitControler extends EventDispatcher {
         else {
             camera.zoom *= scale;
         }
-        this.dispatchEvent(_changeEvent);
+        this.emit(_changeEvent);
     }
     /* 鼠标按下 */
     pointerdown(cx, cy) {
@@ -54,6 +58,7 @@ class OrbitControler extends EventDispatcher {
             return;
         }
         this.panning = true;
+        // 复制 position 到 camera 中去
         cameraPosition.copy(position);
         panStart.set(cx, cy);
     }
@@ -68,7 +73,7 @@ class OrbitControler extends EventDispatcher {
             return;
         }
         position.copy(cameraPosition.clone().add(new Vector2(x - cx, y - cy)));
-        this.dispatchEvent(_changeEvent);
+        this.emit(_changeEvent);
     }
 }
 export { OrbitControler };

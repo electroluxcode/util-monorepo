@@ -25,7 +25,7 @@ class Group extends Object2D {
 			obj.parent && obj.remove()
 			obj.parent = this
 			this.children.push(obj)
-			this.dispatchEvent({ type: 'add', obj })
+			this.emit({ type: 'add', obj })
 		}
 		this.sort()
 		return this
@@ -104,7 +104,7 @@ class Group extends Object2D {
 			if (index !== -1) {
 				obj.parent = undefined
 				this.children.splice(index, 1)
-				this.dispatchEvent({ type: 'remove', obj })
+				this.emit({ type: 'remove', obj })
 			} else {
 				for (let child of children) {
 					if (child instanceof Group) {
@@ -120,7 +120,7 @@ class Group extends Object2D {
 	clear() {
 		for (let obj of this.children) {
 			obj.parent = undefined
-			this.dispatchEvent({ type: 'removed', obj })
+			this.emit({ type: 'removed', obj })
 		}
 		this.children = []
 		return this

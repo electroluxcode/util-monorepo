@@ -51,7 +51,7 @@ function test(canvas) {
 function ani(time = 0) {
     /* 相机缩放测试 */
     const inter = (Math.sin(time * 0.002) + 1) / 2;
-    // scene.camera.zoom = inter + 1
+    scene.camera.zoom = inter + 1;
     /* 投影 */
     // pattern.style.shadowOffsetY = 80 * (1 - inter)
     // pattern.style.shadowBlur = 10 * (1 - inter)
@@ -66,6 +66,7 @@ function ani(time = 0) {
     // 为什么这里的image图层ctxpath不会渲染的原因是 ctx 不在同一个画布了
     // scene render的时候会自动把 目标放在中间
     scene.render();
+    // 这里的第三个为什么可以手动传入，因为 img本身 的 pvm 矩阵没有位移，是 scene本身位移导致了 img居中，所以需要  mouseClipPos 先进行复位
     if (scene.isPointInObj(pattern, mouseClipPos, pattern.pvmoMatrix)) {
         pattern.rotate += 0.02;
     }

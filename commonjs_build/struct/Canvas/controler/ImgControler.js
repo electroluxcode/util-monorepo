@@ -69,13 +69,13 @@ class ImgControler extends Object2D_js_1.Object2D {
             this.imgTransformer.setOption({ img: val });
             this.imgTransformer.passImgDataTo(this.controlStage);
             this.frame.img = val;
-            this.dispatchEvent({ type: 'selected', img: val });
+            this.emit({ type: 'selected', img: val });
         }
         else {
             this.mouseState = null;
             this.controlState = null;
         }
-        this.dispatchEvent(_changeEvent);
+        this.emit(_changeEvent);
     }
     get controlState() {
         return this._controlState;
@@ -194,7 +194,7 @@ class ImgControler extends Object2D_js_1.Object2D {
             // 更新鼠标父级位
             this.updateParentMousePos();
         }
-        this.dispatchEvent(_changeEvent);
+        this.emit(_changeEvent);
     }
     /* 键盘按下 */
     keydown(key, altKey, shiftKey) {
@@ -220,13 +220,13 @@ class ImgControler extends Object2D_js_1.Object2D {
                     break;
             }
         }
-        this.dispatchEvent(_changeEvent);
+        this.emit(_changeEvent);
     }
     /* 键盘抬起 */
     keyup(altKey, shiftKey) {
         this.shiftKey = shiftKey;
         this.altKey = altKey;
-        this.dispatchEvent(_changeEvent);
+        this.emit(_changeEvent);
     }
     /* 更新鼠标在图案父级坐标系中的位置 */
     updateParentMousePos() {
@@ -250,20 +250,20 @@ class ImgControler extends Object2D_js_1.Object2D {
             // 获取鼠标状态
             this.mouseState = this.frame.getMouseState(mp);
         }
-        this.dispatchEvent(_changeEvent);
+        this.emit(_changeEvent);
     }
     /* 鼠标抬起 */
     pointerup() {
         if (this.controlState) {
             this.controlState = null;
-            this.dispatchEvent(_changeEvent);
+            this.emit(_changeEvent);
         }
     }
     /* 变换图案 */
     transformImg() {
         const { imgTransformer, controlState, shiftKey, img } = this;
         controlState && imgTransformer[controlState + Number(shiftKey)]();
-        this.dispatchEvent({ type: 'transformed', img });
+        this.emit({ type: 'transformed', img });
     }
     /* 绘图 */
     draw(ctx) {

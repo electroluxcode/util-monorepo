@@ -90,8 +90,7 @@ class Scene extends Group {
 	}
 
 	/**
-	 * @des client坐标转canvas坐标
-	 * @des 我们需要 鼠标位置 减去 canvas 这个 元素的 左边和上面的位置
+	 * @des client坐标转canvas坐标 我们需要 鼠标位置 减去 canvas 这个 元素的 左边和上面的位置
 	 */
 	clientToCanvas(clientX: number, clientY: number) {
 		const { canvas } = this
@@ -100,8 +99,7 @@ class Scene extends Group {
 	}
 
 	/**
-	 * @des canvas坐标转裁剪坐标(工具方法)
-	 * 因为 在 render 的时候 我们会  偏移 到中间去
+	 * @des canvas坐标转裁剪坐标(工具方法) 因为 在 render 的时候 我们会  偏移 到中间去
 	 */
 	canvastoClip({ x, y }: Vector2) {
 		const {
@@ -111,8 +109,7 @@ class Scene extends Group {
 	}
 
 	/**
-	 * @des client坐标转裁剪坐标。一般是 做鼠标事件的时候用的，因此clientToClip 是后来调用的
-	 * @des  向着左边平移 一半确实是正确的坐标系
+	 * @des client坐标转裁剪坐标。一般是 做鼠标事件的时候用的，因此clientToClip 是后来调用的 向着左边平移 一半确实是正确的坐标系
 	 */
 	clientToClip(clientX: number, clientY: number) {
 		return this.canvastoClip(this.clientToCanvas(clientX, clientY))
@@ -127,7 +124,6 @@ class Scene extends Group {
 		const { ctx } = this
 		
 		ctx.beginPath()
-		// console.log(matrix)
 		obj.crtPath(ctx, matrix,false)
 		
 		return ctx.isPointInPath(mp.x, mp.y)

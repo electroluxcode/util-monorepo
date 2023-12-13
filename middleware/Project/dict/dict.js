@@ -1,4 +1,4 @@
-// step2:mock 请求
+// step3:mock 请求
 const data = {
     data: {
         workType: [
@@ -37,7 +37,7 @@ console.log(apiData);
 const DataDictTest = {
     workType: apiData.data.workType,
 };
-// step3 拼装数据
+// step4 拼装数据
 function KeyApiDataSwitch(DataDictTest) {
     const BaseKey = Object.keys(DataDictTest);
     BaseKey.map((e) => {
@@ -65,9 +65,9 @@ function KeyApiDataSwitch(DataDictTest) {
         }
         DataDictTest[e] = nowKey;
     });
-    console.log('赋值完成:', DataDictTest);
     return DataDictTest;
 }
+// 泛型传入 api key的 联合类型可获得类型提示
 let result = KeyApiDataSwitch(DataDictTest);
-console.log(result);
+console.log('zptest:赋值完成:', result);
 export { KeyApiDataSwitch };

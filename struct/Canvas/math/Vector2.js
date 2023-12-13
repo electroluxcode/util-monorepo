@@ -260,6 +260,9 @@ class Vector2 {
             return ang;
         }
     }
+    /**
+     * @des 将一个3维 坐标 变成 2维
+     */
     applyMatrix3(m) {
         const x = this.x, y = this.y;
         const e = m.elements;
@@ -267,6 +270,9 @@ class Vector2 {
         this.y = e[1] * x + e[4] * y + e[7];
         return this;
     }
+    /**
+     * @des 这个方法可以学一下
+     */
     *[Symbol.iterator]() {
         yield this.x;
         yield this.y;

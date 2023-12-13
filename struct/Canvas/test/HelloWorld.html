@@ -35,6 +35,36 @@
         const ctx = canvas?.getContext('2d')
         ctx?.fillRect(100, 100, 200, 100)
 
+   
+        ctx.beginPath()
+        ctx.moveTo(0,0)
+        ctx.lineTo(0,100)
+        ctx.strokeStyle = "red"
+        ctx.lineWidth = 10
+        test(ctx)
+        ctx.stroke()
+     
+
+       
+        ctx.beginPath()
+        ctx.moveTo(0,0)
+        ctx.lineTo(100,100)
+        ctx.strokeStyle = "blue"
+        ctx.lineWidth = 1
+        test(ctx)
+        // ctx.stroke()
+
+        ctx.beginPath()
+        ctx.moveTo(0,0)
+        ctx.lineTo(100,0)
+        ctx.strokeStyle = "purple"
+        ctx.lineWidth = 1
+        test(ctx)
+        ctx.stroke()
+
+        function test(ca){
+            ca.closePath()
+        }
     </script>
 </body>
 

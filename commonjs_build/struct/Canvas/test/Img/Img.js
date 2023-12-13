@@ -48,11 +48,11 @@ image.onload = () => {
         // },
         /* 样式 */
         style: {
-            globalAlpha: 1,
-            shadowColor: 'rgba(0,0,0,0.5)',
-            shadowBlur: 5,
-            shadowOffsetY: 20,
-            // filter:"contrast(200%) grayscale(80%)"
+        // globalAlpha: 1,
+        // shadowColor: 'rgba(0,0,0,0.5)',
+        // shadowBlur: 5,
+        // shadowOffsetY: 20,
+        // filter:"contrast(200%) grayscale(80%)"
         },
     });
     ctx.translate(size.width / 2, size.height / 2);

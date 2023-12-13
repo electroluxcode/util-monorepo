@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+    }
+    .container{
+        position: relative;
+        top: 100vh;
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 100px minmax(0, 1fr);
+    }
+    .left{
+        background: red;
+        transform: scale(0.8);
+        zoom: 0.8;
+    }
+    .right{
+        background: blue;
+        transform: scale(0.8);
+        zoom: 0.8;
+    }
+</style>
+<body>
+    <div class="container">
+        <div class="left">left</div>
+        <div class="right">right</div>
+    </div>
+    <script>
+        // 全面的测试 offset
+        document.querySelector(".right").addEventListener("click",(e)=>{
+            e.preventDefault()
+            // 混淆点1:
+            // 1.1 pageX 会考虑到滚动(页面级别)
+            // 1.2 clientX 不会考虑滚动(页面级别)
+            // 1.3 offsetX 相对于物体左上角的 坐标(页面级别)
+            // 1.4 screenY 相对于物体左上角的 坐标(全局屏幕级别)
+            console.log("e.pageX | e.pageY:",e.pageX,e.pageY)
+            console.log("e.clientX | e.clientY:",e.clientX,e.clientY)
+            console.log("e.offsetX | e.offsetY:",e.offsetX,e.offsetY)
+            console.log("e.screenX | e.screenY:",e.screenX , e.screenY)
+            
+        })
+    </script>
+</body>
+</html>

@@ -102,6 +102,6 @@ class Object2D extends EventDispatcher {
     /* 绘制图形-接口 */
     drawShape(ctx) { }
     /* 创建路径-接口 */
-    crtPath(ctx, projectionMatrix) { }
+    crtPath(ctx, projectionMatrix, isShow) { }
 }
 export { Object2D };

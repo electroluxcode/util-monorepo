@@ -55,14 +55,15 @@ image.onload = () => {
 
         /* 样式 */
         style: {
-            globalAlpha: 1,
-            shadowColor: 'rgba(0,0,0,0.5)',
-            shadowBlur: 5,
-            shadowOffsetY: 20,
+            // globalAlpha: 1,
+            // shadowColor: 'rgba(0,0,0,0.5)',
+            // shadowBlur: 5,
+            // shadowOffsetY: 20,
             // filter:"contrast(200%) grayscale(80%)"
         },
     })
     ctx.translate(size.width / 2, size.height / 2)
+    
     // draw 的时候 
     // 会先进行option 上面 position, rotate, scale的操作。也就是 object2d.transform 分别调用ctx.drawImage
     // 然后通过 drawShape 分别调用ctx.drawImage

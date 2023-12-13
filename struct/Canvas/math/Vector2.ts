@@ -355,6 +355,9 @@ class Vector2 {
 		}
 	}
 
+	/**
+	 * @des 将一个3维 坐标 变成 2维
+	 */
 	applyMatrix3(m: Matrix3) {
 		const x = this.x,
 			y = this.y
@@ -366,6 +369,9 @@ class Vector2 {
 		return this
 	}
 
+	/**
+	 * @des 这个方法可以学一下
+	 */
 	*[Symbol.iterator]() {
 		yield this.x
 		yield this.y

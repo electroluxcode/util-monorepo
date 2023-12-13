@@ -124,6 +124,6 @@ class Object2D extends EventDispatcher {
 	drawShape(ctx: CanvasRenderingContext2D) {}
 
 	/* 创建路径-接口 */
-	crtPath(ctx: CanvasRenderingContext2D, projectionMatrix: Matrix3) {}
+	crtPath(ctx: CanvasRenderingContext2D, projectionMatrix: Matrix3,isShow:boolean) {}
 }
 export { Object2D }

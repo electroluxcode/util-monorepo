@@ -38,7 +38,11 @@ class Scene extends Group {
 		this._canvas = value
 		this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D
 	}
-	/* 设置属性 */
+	/**
+	 * @des 设置属性 和 add 图层后 把canvas 传递过去就可以了
+	 * canvas 被设置之后会自动触发 得到 ctx 的事件
+	 * @param attr 
+	 */
 	setOption(attr: SceneType) {
 		for (let [key, val] of Object.entries(attr)) {
 			this[key] = val
@@ -55,30 +59,50 @@ class Scene extends Group {
 			autoClear,
 		} = this
 		ctx.save()
+
 		// 清理画布
+		// 里面的children 元素做一次清空 并且向着中间移动
 		autoClear && ctx.clearRect(0, 0, width, height)
-		// 裁剪坐标系：将canvas坐标系的原点移动到canvas画布中心
+		// 裁剪坐标系：将canvas坐标系的原点移动到canvas画布中心。
+		// 因为之后是需要 防止相机的 相机处于 0 0 点并不是很好
 		ctx.translate(width / 2, height / 2)
 		// 渲染子对象
 		for (let obj of children) {
 			ctx.save()
-			// 视图投影矩阵
+			// 如果要使用相机，要么要 对相机 的 视图投影 矩阵做逆向变化。这部分很简单
+			/** const {position: { x, y },zoom, } = this
+				const scale = 1 / zoom
+				ctx.translate(-x, -y)
+				ctx.scale(scale, scale) */
+
 			obj.enableCamera && camera.transformInvert(ctx)
-			// 绘图
+			// fix(bug):内部添加了beginpath.也就是说会绘制 这段代码的 path。这就导致了重叠。
+			// obj.crtPath(ctx,obj.pvmoMatrix,true)
+
+			// 绘图.回顾一下这个方法是object2d 上面的 方法
+			// 首先是进行矩阵变化，然后进行 drawimage 之类的 drawshape 方法
+			// 注意 每一个图层 需要在最终 绘制的时候调用 
 			obj.draw(ctx)
+			
 			ctx.restore()
 		}
 		ctx.restore()
 	}
 
-	/* client坐标转canvas坐标 */
+	/**
+	 * @des client坐标转canvas坐标
+	 * @des 我们需要 鼠标位置 减去 canvas 这个 元素的 左边和上面的位置
+	 */
 	clientToCanvas(clientX: number, clientY: number) {
 		const { canvas } = this
 		const { left, top } = canvas.getBoundingClientRect()
 		return new Vector2(clientX - left, clientY - top)
 	}
 
-	/* canvas坐标转裁剪坐标 */
+	/**
+	 * @des canvas坐标转裁剪坐标(工具方法)
+	 * 因为 在 render 的时候 我们会  偏移 到中间去
+	 */
 	canvastoClip({ x, y }: Vector2) {
 		const {
 			canvas: { width, height },
@@ -86,17 +110,28 @@ class Scene extends Group {
 		return new Vector2(x - width / 2, y - height / 2)
 	}
 
-	/* client坐标转裁剪坐标 */
+	/**
+	 * @des client坐标转裁剪坐标。一般是 做鼠标事件的时候用的，因此clientToClip 是后来调用的
+	 * @des  向着左边平移 一半确实是正确的坐标系
+	 */
 	clientToClip(clientX: number, clientY: number) {
 		return this.canvastoClip(this.clientToCanvas(clientX, clientY))
 	}
 
-	/* 基于某个坐标系，判断某个点是否在图形内 */
+	/**
+	 * @des 基于某个坐标系，判断某个点是否在图形内 
+	 * 需要先绘制 边缘路径接下来再进行 判断  调用原生 的 isPointInPath 判断就可以了
+	 * isPointInPath(x,y) 面向的对象是路径，所以对文字、fillRect()、strokeRect()不好使，
+	 */
 	isPointInObj(obj: Object2D, mp: Vector2, matrix: Matrix3 = new Matrix3()) {
 		const { ctx } = this
+		
 		ctx.beginPath()
-		obj.crtPath(ctx, matrix)
+		// console.log(matrix)
+		obj.crtPath(ctx, matrix,false)
+		
 		return ctx.isPointInPath(mp.x, mp.y)
 	}
+
 }
 export { Scene }

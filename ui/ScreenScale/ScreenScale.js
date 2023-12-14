@@ -1,11 +1,26 @@
+let debounce = (fn, timer) => {
+    let flag;
+    return function (args) {
+        if (flag) {
+            clearTimeout(flag);
+        }
+        flag = setTimeout(() => {
+            fn(args);
+        }, timer);
+    };
+};
 class ScreenScale {
-    CurrelFixMap = "#app";
+    CurrelFixMap = ["#app"];
     CurrelFixMapLevel = '';
     resizeListener = null;
     timer = null;
     currScale = 1;
     isScreenScaleRunning = false;
     IsMapElement = false;
+    // 等比例缩放
+    CurrelScaleRadio = {
+        NowRadio: { width: 0, height: 0 }, initRadio: { width: 0, height: 0 }
+    };
     options;
     /**
      * 初始化 ScreenScale 类。
@@ -15,11 +30,15 @@ class ScreenScale {
     init(options = {}, isShowInitTip = true) {
         // step1:输出label
         if (isShowInitTip) {
-            console.log(`%c` + `util_monorepo` + ` 运行中`, `color: rgba(0,0,0,0.6); ;background: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 100%); padding: 8px 12px; border-radius: 4px;`);
+            console.log(`util_monorepo/scale:` + ` 运行中`);
         }
         this.options = options;
         const { dw = 1920, dh = 929, el, resize = true, ignore = [], transition = 'none', delay = 0 } = options;
-        const dom = el;
+        if (!el) {
+            console.error(`ScreenScale: '${el}' 没有输入`);
+            return;
+        }
+        const dom = document.querySelector(el);
         if (!dom) {
             console.error(`ScreenScale: '${el}' 不存在`);
             return;
@@ -43,29 +62,41 @@ class ScreenScale {
         dom.style.overflow = "hidden";
         this.KeepFit(dw, dh, dom, ignore);
         this.resizeListener = () => {
+            // window.location.reload()
             if (this.timer)
                 clearTimeout(this.timer);
-            console.log("resize测试");
+            this.CurrelScaleRadio.NowRadio = {
+                width: document.body.clientWidth,
+                height: document.body.clientHeight
+            };
             if (delay !== 0) {
+                this.KeepFit(dw, dh, dom, ignore);
                 if (this.IsMapElement)
                     this.FixMap(this.CurrelFixMap, this.CurrelFixMapLevel);
-                this.KeepFit(dw, dh, dom, ignore);
             }
             else {
+                this.KeepFit(dw, dh, dom, ignore);
                 if (this.IsMapElement)
                     this.FixMap(this.CurrelFixMap, this.CurrelFixMapLevel);
-                this.KeepFit(dw, dh, dom, ignore);
             }
         };
-        resize && window.addEventListener('resize', this.resizeListener);
+        // this.resizeListener
+        let enhanceFn = debounce(this.resizeListener, 300);
+        resize && window.addEventListener('resize', () => { enhanceFn(""); });
+        // resize && window.addEventListener('resize',this.resizeListener);
+        enhanceFn("");
         this.isScreenScaleRunning = true;
+        this.CurrelScaleRadio.initRadio = {
+            width: document.body.clientWidth,
+            height: document.body.clientHeight
+        };
     }
     /**
      * 调整指定元素以进行缩放。一次缩放一个
      * @param el - 要调整的元素选择器。不能传入元素
      * @param level - 缩放级别（默认为 1）。
      */
-    FixMap(el = "#app", level = "1") {
+    FixMap(el = ["#app"], level = "1") {
         if (!this.isScreenScaleRunning) {
             console.error("尚未初始化");
         }
@@ -74,22 +105,66 @@ class ScreenScale {
         }
         this.CurrelFixMap = el;
         this.CurrelFixMapLevel = level;
-        const currEl = el;
-        if (!currEl) {
-            console.error("FixMap: 未找到任何元素");
-            return;
+        for (let i in this.CurrelFixMap) {
+            // let item = document.querySelector(this.CurrelFixMap[i])!
+            let item = this.CurrelFixMap[i];
+            if (!item) {
+                console.error("FixMap: 未找到任何元素");
+                return;
+            }
+            if (!this.IsMapElement) {
+                item.originalWidth = item.clientWidth;
+                item.originalHeight = item.clientHeight;
+                // console.log("初次渲染:",{
+                //   originalWidth:item.clientWidth,
+                //   originalHeight:item.originalHeight,
+                // })
+            }
+            let w1 = this.CurrelScaleRadio.NowRadio.width / this.CurrelScaleRadio.initRadio.width;
+            let h1 = this.CurrelScaleRadio.NowRadio.height / this.CurrelScaleRadio.initRadio.height;
+            let radio1 = this.CurrelScaleRadio.NowRadio.width / this.CurrelScaleRadio.NowRadio.height;
+            let radio2 = this.CurrelScaleRadio.initRadio.width / this.CurrelScaleRadio.initRadio.height;
+            // 得到变化尺寸 用于自定义
+            const rectification = this.currScale === 1 ? 1 : this.currScale * Number(level);
+            // 不等比例缩放
+            // 下面是等比例缩放的情况
+            // let radio = this.CurrelScaleRadio.initRadio / this.CurrelScaleRadio.NowRadio;
+            // 变化的时候 会优先满足 最短的一条边长(高) * rectification * rectification
+            item.style.transform = `scale(${1 / this.currScale}) `;
+            item.style.transformOrigin = `0 0`;
+            // console.log({
+            //   item:item,
+            //       faceHeight: `${(item as any).originalHeight * this.currScale }px `,
+            //       factWidth: `${(item as any).originalWidth* this.currScale   }px `
+            //     },{radio1,radio2,w1,h1,currScale:this.currScale,CurrelScaleRadio:this.CurrelScaleRadio});
+            if (Math.abs(1 - h1) < 0.1) {
+                // (item as any).style.height = `${(item as any).originalHeight     }px`;
+                // (item as any).style.width = `${(item as any).originalWidth   * this.currScale   }px`;
+            }
+            else if (Math.abs(1 - w1) < 0.1) {
+                // console.log("其他ddd");
+                // (item as any).style.height = `${(item as any).originalHeight * this.currScale      }px`;
+                //   (item as any).style.width = `${(item as any).originalWidth    }px`;
+                // (item as any).style.height = `${(item as any).originalHeight  * this.currScale    }px`;
+                // (item as any).style.width = `${(item as any).originalWidth   * this.currScale / h1   }px`;
+                //   console.log({
+                //     factWidth: `${(item as any).originalWidth   * this.currScale / h1   }px`,
+                //     faceHeight: `${(item as any).originalHeight  * this.currScale /w1   }px`
+                //   },{radio1,radio2,w1,h1,currScale:this.currScale,CurrelScaleRadio:this.CurrelScaleRadio})
+            }
+            if (Math.abs(radio1 - radio2) < 0.005) {
+                // console.log("等比例:")
+            }
+            else {
+                //   console.log(`${Number(item.style.height.replace("px",""))  * this.currScale    }`);
+                //   (item as any).style.height = `${Number(item.style.height.replace("px",""))  * this.currScale    }`;
+                // (item as any).style.width = `${Number(item.style.width.replace("px",""))   * this.currScale    }`;
+            }
+            // /w1 * h1
+            // if()
+            item.style.height = `${item.originalHeight * this.currScale}px `;
+            item.style.width = `${item.originalWidth * this.currScale}px `;
         }
-        let item = document.querySelector(this.CurrelFixMap);
-        if (!this.IsMapElement) {
-            item.originalWidth = item.clientWidth;
-            item.originalHeight = item.clientHeight;
-        }
-        // 得到变化尺寸 用于自定义
-        const rectification = this.currScale === 1 ? 1 : this.currScale * Number(level);
-        item.style.transform = `scale(${1 / this.currScale}) `;
-        item.style.width = `${item.originalWidth * rectification}px`;
-        item.style.height = `${item.originalHeight * rectification}px`;
-        item.style.transformOrigin = `0 0`;
         this.IsMapElement = true;
     }
     /**
@@ -139,5 +214,8 @@ class ScreenScale {
         }
     }
 }
+window.addEventListener("resize", () => {
+    window.location.reload();
+});
 export { ScreenScale };
 export default ScreenScale;

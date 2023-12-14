@@ -8,7 +8,7 @@ interface Base{
   delay?: number;
 }
 class ScreenScale {
-    private CurrelFixMap: HTMLElement = document.querySelector("#app")!;
+    private CurrelFixMap: string = "#app";
     private CurrelFixMapLevel: string = '';
     private resizeListener: (() => void) | null = null;
     private timer: any = null;
@@ -67,12 +67,13 @@ class ScreenScale {
         if (this.timer) clearTimeout(this.timer);
         console.log("resize测试")
         if (delay !== 0) {
-          
-          this.KeepFit(dw, dh, dom, ignore);
           if (this.IsMapElement) this.FixMap(this.CurrelFixMap, this.CurrelFixMapLevel);
+          this.KeepFit(dw, dh, dom, ignore);
+         
         } else {
-          this.KeepFit(dw, dh, dom, ignore);
           if (this.IsMapElement) this.FixMap(this.CurrelFixMap, this.CurrelFixMapLevel);
+          this.KeepFit(dw, dh, dom, ignore);
+          
         }
       };
   
@@ -85,10 +86,10 @@ class ScreenScale {
   
     /**
      * 调整指定元素以进行缩放。一次缩放一个
-     * @param el - 要调整的元素选择器。
+     * @param el - 要调整的元素选择器。不能传入元素
      * @param level - 缩放级别（默认为 1）。
      */
-    public FixMap(el: HTMLElement = document.querySelector("#app")!, level: string = "1"): void {
+    public FixMap(el: string = "#app", level: string = "1"): void {
     
       if (!this.isScreenScaleRunning) {
         console.error("尚未初始化");
@@ -105,17 +106,20 @@ class ScreenScale {
         console.error("FixMap: 未找到任何元素");
         return;
       }
-      let item = el
+      let item = document.querySelector(this.CurrelFixMap)!
+
+    
       if (!this.IsMapElement) {
         (item as any).originalWidth = item.clientWidth;
         (item as any).originalHeight = item.clientHeight;
       }
-      // 得到变化尺寸
+      // 得到变化尺寸 用于自定义
       const rectification = this.currScale === 1 ? 1 : this.currScale * Number(level);
-      // console.log("rect222:",rectification);
+     
+      (item as any).style.transform = `scale(${1 / this.currScale}) `;
       (item as any).style.width = `${(item as any).originalWidth * rectification}px`;
       (item as any).style.height = `${(item as any).originalHeight * rectification}px`;
-      (item as any).style.transform = `scale(${1 / this.currScale}) `;
+    
       (item as any).style.transformOrigin = `0 0`;
   
       this.IsMapElement = true;

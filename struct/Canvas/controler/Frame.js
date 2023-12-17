@@ -1,6 +1,6 @@
 import { Matrix3 } from '../math/Matrix3.js';
 import { Vector2 } from '../math/Vector2.js';
-import { Img } from '../objects/Img.js';
+import { Img2D } from '../objects/Img2D.js';
 import { crtPath, crtPathByMatrix } from '../objects/ObjectUtils.js';
 const pi2 = Math.PI * 2;
 /* 布尔变量 */
@@ -10,7 +10,7 @@ const ctx = document
     .createElement('canvas')
     .getContext('2d');
 class Frame {
-    _img = new Img();
+    _img = new Img2D();
     // 图案边框的顶点集合
     vertives = [];
     // 图案中点

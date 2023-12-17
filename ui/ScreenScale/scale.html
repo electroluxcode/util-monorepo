@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+    }
+    /*
+    大的容器
+    width 800;heigth 400 scale 0.5
+    小的容器
+
+    */
+    .container{
+        display: grid;
+        grid-template-columns: 300px 1fr;
+
+        height: 400px;
+        width: 800px;
+        transform-origin: left top;
+ 
+        transform: scale(0.5); 
+        transition: all 0.5s ease 0s;
+    }
+    .cesium_left{
+        height: 420px;
+        background: red;
+    }
+    .cesium_container{
+      
+        /* overflow: hidden; */
+        position: relative;
+        /* transform: scale(0.5); */
+        transform-origin: 0px 0px;
+        transform: scale(2);
+        height: 210px;
+        background: blue;
+    }
+</style>
+<body>
+    <div class="container">
+        <div class="cesium_left">1</div>
+        <div class="cesium_container">
+2
+        </div>
+    </div>
+
+    <script>
+        this.a="dddd"
+        // let i = 0;
+        for(let i = 0;i<5;i++){
+            console.log(this.a)
+            // console.log(i)
+        }
+    </script>
+</body>
+</html>

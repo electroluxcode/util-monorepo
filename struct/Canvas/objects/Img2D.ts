@@ -104,7 +104,7 @@ class Img2D  extends Object2D {
 	}
 
 	/* 绘制图像边界, */
-	crtPath(ctx: CanvasRenderingContext2D, matrix = this.pvmoMatrix,isShow = true,style={width:5,color:"red"}) {
+	crtPath(ctx: CanvasRenderingContext2D, matrix = this.pvmoMatrix,isShow = false,style={width:5,color:"red"}) {
 		const {
 			size: { x: imgW, y: imgH },
 		} = this

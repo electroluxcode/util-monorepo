@@ -1,6 +1,6 @@
 import { Vector2 } from '../../math/Vector2.js'
 import { Group } from '../../objects/Group.js'
-import { Img } from '../../objects/Img.js'
+import { Img2D } from '../../objects/Img2D.js'
 
 // step1:基本参数初始化
 let size = {
@@ -39,7 +39,7 @@ function ImagePromise(image: HTMLImageElement) {
 function onMount(){
     group.add(
         ...images.map((image, i) => {
-            return new Img({
+            return new Img2D({
                 image,
                 position: new Vector2(200, 80 * i + 50),
                 size: new Vector2(image.width, image.height).multiplyScalar(0.3),

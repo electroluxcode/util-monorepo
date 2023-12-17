@@ -5,6 +5,7 @@ const Vector2_js_1 = require("../math/Vector2.js");
 const EventDispatcher_js_1 = require("../core/EventDispatcher.js");
 const Matrix3_js_1 = require("../math/Matrix3.js");
 const MathUtils_js_1 = require("../math/MathUtils.js");
+const pi2 = Math.PI * 2;
 class Object2D extends EventDispatcher_js_1.EventDispatcher {
     // 位置
     position = new Vector2_js_1.Vector2();
@@ -12,6 +13,13 @@ class Object2D extends EventDispatcher_js_1.EventDispatcher {
     rotate = 0;
     // 缩放
     scale = new Vector2_js_1.Vector2(1, 1);
+    // 偏移
+    offset = new Vector2_js_1.Vector2();
+    // 边界盒子
+    boundingBox = {
+        min: new Vector2_js_1.Vector2(),
+        max: new Vector2_js_1.Vector2(),
+    };
     // 可见性
     visible = true;
     // 渲染顺序
@@ -72,6 +80,26 @@ class Object2D extends EventDispatcher_js_1.EventDispatcher {
         ctx.rotate(rotate);
         ctx.scale(scale.x, scale.y);
     }
+    /* 将矩阵分解到当期对象的position, rotate, scale中 */
+    decomposeModelMatrix(m) {
+        const e = [...m.elements];
+        // 位移量
+        this.position.set(e[6], e[7]);
+        // 缩放量
+        let sx = new Vector2_js_1.Vector2(e[0], e[1]).length();
+        const sy = new Vector2_js_1.Vector2(e[3], e[4]).length();
+        const det = m.determinant();
+        if (det < 0) {
+            sx = -sx;
+        }
+        this.scale.set(sx, sy);
+        // 旋转量
+        let ang = Math.atan2(e[1] / sx, e[0] / sx);
+        if (ang < 0) {
+            ang += pi2;
+        }
+        this.rotate = ang;
+    }
     /* 从父级中删除自身 */
     remove() {
         const { parent } = this;
@@ -98,7 +126,6 @@ class Object2D extends EventDispatcher_js_1.EventDispatcher {
         /*  矩阵变换 */
         this.transform(ctx);
         /* 绘制图形 */
-        // ctx.filter = "blur(10px)"; // Adjust the blur value as needed
         this.drawShape(ctx);
         ctx.restore();
     }
@@ -106,5 +133,7 @@ class Object2D extends EventDispatcher_js_1.EventDispatcher {
     drawShape(ctx) { }
     /* 创建路径-接口 */
     crtPath(ctx, projectionMatrix, isShow) { }
+    /* 计算边界盒子-接口 */
+    computeBoundingBox() { }
 }
 exports.Object2D = Object2D;

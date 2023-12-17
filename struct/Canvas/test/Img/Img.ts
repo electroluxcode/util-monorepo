@@ -69,8 +69,89 @@ image.onload = () => {
     // 然后通过 drawShape 分别调用ctx.drawImage
     pattern.draw(ctx)
     // 会根据 pvmoMatrix 和 width，height来进行操作
-    pattern.crtPath(ctx)
+    // pattern.crtPath(ctx)
     ctx.stroke()
     ctx.restore()
 }
+
+document.querySelector("#btn1")?.addEventListener("click",()=>{
+    console.log("图像加载完成")
+    ctx.clearRect(0,0,canvas.width,canvas.height)
+    ctx.save()
+    
+    console.log("image:",image)
+    const imgSize = new Vector2(image.width, image.height)
+
+    pattern.setOption({
+        position: new Vector2(0, 0),
+        size: imgSize.clone(),
+        offset: imgSize.clone().multiplyScalar(-0.5),
+        /* 样式 */
+        style: {
+            globalAlpha: 1,
+            shadowColor: 'rgba(0,0,0,0.5)',
+            shadowBlur: 5,
+            shadowOffsetY: 20,
+            filter:"contrast(150%) grayscale(80%)"
+        },
+    })
+    ctx.translate(size.width / 2, size.height / 2)
+    pattern.draw(ctx)
+    ctx.stroke()
+    ctx.restore()
+})
+
+document.querySelector("#btn2")?.addEventListener("click",()=>{
+    console.log("图像加载完成")
+    ctx.clearRect(0,0,canvas.width,canvas.height)
+    ctx.save()
+    
+    console.log("image:",image)
+    const imgSize = new Vector2(image.width, image.height)
+
+    pattern.setOption({
+        position: new Vector2(0, 0),
+        size: imgSize.clone(),
+        offset: imgSize.clone().multiplyScalar(-0.5),
+        /* 样式 */
+        style: {
+            globalAlpha: 1,
+            shadowColor: 'rgba(0,0,0,0.5)',
+            shadowBlur: 5,
+            shadowOffsetY: 20,
+            filter:"contrast(100%) grayscale(100%)"
+        },
+    })
+    ctx.translate(size.width / 2, size.height / 2)
+    pattern.draw(ctx)
+    ctx.stroke()
+    ctx.restore()
+})
+
+document.querySelector("#btn3")?.addEventListener("click",()=>{
+    console.log("图像加载完成")
+    ctx.clearRect(0,0,canvas.width,canvas.height)
+    ctx.save()
+    
+    console.log("image:",image)
+    const imgSize = new Vector2(image.width, image.height)
+
+    pattern.setOption({
+        position: new Vector2(0, 0),
+        size: imgSize.clone(),
+        offset: imgSize.clone().multiplyScalar(-0.5),
+        /* 样式 */
+        style: {
+            globalAlpha: 1,
+            shadowColor: 'rgba(0,0,0,0.5)',
+            shadowBlur: 5,
+            shadowOffsetY: 20,
+            filter:"contrast(80%) blur(150%)"
+        },
+    })
+    ctx.translate(size.width / 2, size.height / 2)
+    pattern.draw(ctx)
+    ctx.stroke()
+    ctx.restore()
+})
 /* 绘制图案边界 */

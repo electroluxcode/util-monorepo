@@ -52,4 +52,5 @@ class Cache {
 
 
 let test = new Cache()
+export  default test;
 export  {test as Cache};

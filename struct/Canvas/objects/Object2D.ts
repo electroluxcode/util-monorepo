@@ -9,13 +9,23 @@ export type Object2DType = {
 	position?: Vector2
 	rotate?: number
 	scale?: Vector2
+	offset?: Vector2
+	boundingBox?: BoundingBox
 	visible?: boolean
 	index?: number
 	name?: string
 	parent?: Scene | Group | undefined
 	enableCamera?: boolean
+	uuid?: string
 	[key: string]: any
 }
+
+type BoundingBox = {
+	min: Vector2
+	max: Vector2
+}
+
+const pi2 = Math.PI * 2
 
 class Object2D extends EventDispatcher {
 	// 自定义属性
@@ -26,6 +36,13 @@ class Object2D extends EventDispatcher {
 	rotate = 0
 	// 缩放
 	scale = new Vector2(1, 1)
+	// 偏移
+	offset = new Vector2()
+	// 边界盒子
+	boundingBox: BoundingBox = {
+		min: new Vector2(),
+		max: new Vector2(),
+	}
 	// 可见性
 	visible = true
 	// 渲染顺序
@@ -38,6 +55,7 @@ class Object2D extends EventDispatcher {
 	enableCamera = true
 	// UUID
 	uuid = generateUUID()
+
 	// 类型
 	readonly isObject2D = true
 
@@ -89,6 +107,27 @@ class Object2D extends EventDispatcher {
 		ctx.scale(scale.x, scale.y)
 	}
 
+	/* 将矩阵分解到当期对象的position, rotate, scale中 */
+	decomposeModelMatrix(m: Matrix3) {
+		const e = [...m.elements]
+		// 位移量
+		this.position.set(e[6], e[7])
+		// 缩放量
+		let sx = new Vector2(e[0], e[1]).length()
+		const sy = new Vector2(e[3], e[4]).length()
+		const det = m.determinant()
+		if (det < 0) {
+			sx = -sx
+		}
+		this.scale.set(sx, sy)
+		// 旋转量
+		let ang = Math.atan2(e[1] / sx, e[0] / sx)
+		if (ang < 0) {
+			ang += pi2
+		}
+		this.rotate = ang
+	}
+
 	/* 从父级中删除自身 */
 	remove() {
 		const { parent } = this
@@ -115,7 +154,6 @@ class Object2D extends EventDispatcher {
 		/*  矩阵变换 */
 		this.transform(ctx)
 		/* 绘制图形 */
-		// ctx.filter = "blur(10px)"; // Adjust the blur value as needed
 		this.drawShape(ctx)
 		ctx.restore()
 	}
@@ -125,5 +163,9 @@ class Object2D extends EventDispatcher {
 
 	/* 创建路径-接口 */
 	crtPath(ctx: CanvasRenderingContext2D, projectionMatrix: Matrix3,isShow:boolean) {}
+
+	/* 计算边界盒子-接口 */
+	computeBoundingBox() {}
 }
+
 export { Object2D }

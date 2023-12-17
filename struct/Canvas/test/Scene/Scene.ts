@@ -1,3 +1,4 @@
+import { text } from 'stream/consumers'
 import { Scene } from '../../core/Scene.js'
 import { Vector2 } from '../../math/Vector2.js'
 import { Img2D } from '../../objects/Img2D.js'
@@ -99,3 +100,4 @@ if (canvas) {
     }
    
 }
+

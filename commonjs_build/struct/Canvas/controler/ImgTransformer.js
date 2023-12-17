@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ImgTransformer = void 0;
 const Vector2_js_1 = require("../math/Vector2.js");
-const Img_js_1 = require("../objects/Img.js");
+const Img2D_js_1 = require("../objects/Img2D.js");
 /* PI*2 */
 const pi2 = Math.PI * 2;
 class ImgTransformer {
     /* 变换图案 */
-    img = new Img_js_1.Img();
+    img = new Img2D_js_1.Img2D();
     /* 暂存图案的变换信息 */
     position = new Vector2_js_1.Vector2();
     scale = new Vector2_js_1.Vector2(1, 1);

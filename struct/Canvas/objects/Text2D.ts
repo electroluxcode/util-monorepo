@@ -74,11 +74,13 @@ class Text2D extends Object2D {
 				max: { x: x1, y: y1 },
 			},
 		} = this
+		
 		crtPathByMatrix(ctx, [x0, y0, x1, y0, x1, y1, x0, y1], matrix)
 	}
 
 	/* 计算边界盒子 */
 	computeBoundingBox() {
+		console.log("zptest:crtPath:",this)
 		const {
 			boundingBox: { min, max },
 			size,
@@ -91,6 +93,7 @@ class Text2D extends Object2D {
 			offset.y + size.y * baselineRatio[textBaseline]
 		)
 		max.addVectors(min, size)
+		
 	}
 
 	/* 绘图 */

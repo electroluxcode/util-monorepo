@@ -59,6 +59,7 @@ class Text2D extends Object2D {
     }
     /* 计算边界盒子 */
     computeBoundingBox() {
+        console.log("zptest:crtPath:", this);
         const { boundingBox: { min, max }, size, offset, style: { textAlign, textBaseline }, } = this;
         min.set(offset.x + size.x * alignRatio[textAlign], offset.y + size.y * baselineRatio[textBaseline]);
         max.addVectors(min, size);

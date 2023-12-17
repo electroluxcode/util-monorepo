@@ -6,7 +6,9 @@ const Vector2_js_1 = require("../math/Vector2.js");
  * @des 重要:绘制边界
  * 各个边界moveto lineto 后 closepath就好了,如果想要显示出来就需要 stroke
  */
-function crtPathByMatrix(ctx, vertices, matrix, closePath = true, isShow = false, style) {
+function crtPathByMatrix(ctx, vertices, matrix, closePath = true, isShow = false, style = {
+    width: 5, color: "color"
+}) {
     // 需要展示的时候的东西 需要 beginpath把数据闭合
     if (isShow) {
         ctx.beginPath();

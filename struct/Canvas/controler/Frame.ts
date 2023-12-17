@@ -1,6 +1,6 @@
 import { Matrix3 } from '../math/Matrix3.js'
 import { Vector2 } from '../math/Vector2.js'
-import { Img } from '../objects/Img.js'
+import { Img2D } from '../objects/Img2D.js'
 import { crtPath, crtPathByMatrix } from '../objects/ObjectUtils.js'
 
 const pi2 = Math.PI * 2
@@ -12,7 +12,7 @@ type Leve = 'moMatrix' | 'pvmoMatrix'
 
 //参数类型
 type FrameType = {
-	img?: Img
+	img?: Img2D
 	level?: Leve
 }
 
@@ -28,7 +28,7 @@ const ctx = document
 	.getContext('2d') as CanvasRenderingContext2D
 
 class Frame {
-	_img = new Img()
+	_img = new Img2D()
 	// 图案边框的顶点集合
 	vertives: number[] = []
 	// 图案中点

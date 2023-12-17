@@ -50,3 +50,4 @@ class Cache {
 }
 let test = new Cache();
 exports.Cache = test;
+exports.default = test;

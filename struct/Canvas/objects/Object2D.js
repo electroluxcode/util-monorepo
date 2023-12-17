@@ -2,6 +2,7 @@ import { Vector2 } from '../math/Vector2.js';
 import { EventDispatcher } from '../core/EventDispatcher.js';
 import { Matrix3 } from '../math/Matrix3.js';
 import { generateUUID } from '../math/MathUtils.js';
+const pi2 = Math.PI * 2;
 class Object2D extends EventDispatcher {
     // 位置
     position = new Vector2();
@@ -9,6 +10,13 @@ class Object2D extends EventDispatcher {
     rotate = 0;
     // 缩放
     scale = new Vector2(1, 1);
+    // 偏移
+    offset = new Vector2();
+    // 边界盒子
+    boundingBox = {
+        min: new Vector2(),
+        max: new Vector2(),
+    };
     // 可见性
     visible = true;
     // 渲染顺序
@@ -69,6 +77,26 @@ class Object2D extends EventDispatcher {
         ctx.rotate(rotate);
         ctx.scale(scale.x, scale.y);
     }
+    /* 将矩阵分解到当期对象的position, rotate, scale中 */
+    decomposeModelMatrix(m) {
+        const e = [...m.elements];
+        // 位移量
+        this.position.set(e[6], e[7]);
+        // 缩放量
+        let sx = new Vector2(e[0], e[1]).length();
+        const sy = new Vector2(e[3], e[4]).length();
+        const det = m.determinant();
+        if (det < 0) {
+            sx = -sx;
+        }
+        this.scale.set(sx, sy);
+        // 旋转量
+        let ang = Math.atan2(e[1] / sx, e[0] / sx);
+        if (ang < 0) {
+            ang += pi2;
+        }
+        this.rotate = ang;
+    }
     /* 从父级中删除自身 */
     remove() {
         const { parent } = this;
@@ -95,7 +123,6 @@ class Object2D extends EventDispatcher {
         /*  矩阵变换 */
         this.transform(ctx);
         /* 绘制图形 */
-        // ctx.filter = "blur(10px)"; // Adjust the blur value as needed
         this.drawShape(ctx);
         ctx.restore();
     }
@@ -103,5 +130,7 @@ class Object2D extends EventDispatcher {
     drawShape(ctx) { }
     /* 创建路径-接口 */
     crtPath(ctx, projectionMatrix, isShow) { }
+    /* 计算边界盒子-接口 */
+    computeBoundingBox() { }
 }
 export { Object2D };

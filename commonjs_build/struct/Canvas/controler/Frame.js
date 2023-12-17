@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Frame = void 0;
 const Matrix3_js_1 = require("../math/Matrix3.js");
 const Vector2_js_1 = require("../math/Vector2.js");
-const Img_js_1 = require("../objects/Img.js");
+const Img2D_js_1 = require("../objects/Img2D.js");
 const ObjectUtils_js_1 = require("../objects/ObjectUtils.js");
 const pi2 = Math.PI * 2;
 /* 布尔变量 */
@@ -13,7 +13,7 @@ const ctx = document
     .createElement('canvas')
     .getContext('2d');
 class Frame {
-    _img = new Img_js_1.Img();
+    _img = new Img2D_js_1.Img2D();
     // 图案边框的顶点集合
     vertives = [];
     // 图案中点

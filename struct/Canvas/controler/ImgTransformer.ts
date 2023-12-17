@@ -1,5 +1,5 @@
 import { Vector2 } from '../math/Vector2.js'
-import { Img } from '../objects/Img.js'
+import { Img2D } from '../objects/Img2D.js'
 
 /* PI*2 */
 const pi2 = Math.PI * 2
@@ -13,7 +13,7 @@ export type ImgData = {
 }
 
 type ImgTransformerType = {
-	img?: Img
+	img?: Img2D
 	orign?: Vector2
 	mousePos?: Vector2
 	mouseStart?: Vector2
@@ -22,7 +22,7 @@ type ImgTransformerType = {
 
 class ImgTransformer {
 	/* 变换图案 */
-	img = new Img()
+	img = new Img2D()
 
 	/* 暂存图案的变换信息 */
 	position = new Vector2()

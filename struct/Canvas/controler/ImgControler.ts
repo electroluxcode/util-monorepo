@@ -1,13 +1,21 @@
 import { Vector2 } from '../math/Vector2.js'
 import { Object2D, Object2DType } from '../objects/Object2D.js'
-import { Img } from '../objects/Img.js'
+import { Img2D } from '../objects/Img2D.js'
 import { Matrix3 } from '../math/Matrix3.js'
-import { Scene } from '../core/Scene.js'
-import { Frame, State } from './Frame.js'
+import { ImgTransformer } from './ImgTransformer.js'
 import { MouseShape } from './MouseShape.js'
-import { ImgTransformer, ImgData } from './ImgTransformer.js'
+import { Frame, State } from './Frame.js'
 
+// change 事件
 const _changeEvent = { type: 'change' }
+
+/* 图案数据类型 */
+type ImgData = {
+	position: Vector2
+	scale: Vector2
+	rotate: number
+	offset: Vector2
+}
 
 /* 变换之前的暂存数据类型 */
 type TransformStage = {
@@ -18,26 +26,23 @@ type TransformStage = {
 
 class ImgControler extends Object2D {
 	// 要控制的图片
-	_img: Img | null = null
+	_img: Img2D | null = null
 	// 图案控制框
 	frame = new Frame()
-	// 渲染顺序
-	index = Infinity
-	// 不受相机影响
-	enableCamera = false
-
 	// 鼠标状态
 	mouseState: State = null
-
 	// 鼠标的裁剪坐标位
-	clipMousePos = new Vector2()
-
+	readonly clipMousePos = new Vector2()
 	// 鼠标图案
 	mouseShape = new MouseShape({
 		vertives: this.frame.vertives,
 		center: this.frame.center,
 		mousePos: this.clipMousePos,
 	})
+	// 渲染顺序
+	index = Infinity
+	// 不受相机影响
+	enableCamera = false
 
 	// 控制状态
 	_controlState: State = null
@@ -45,12 +50,12 @@ class ImgControler extends Object2D {
 	_altKey = false
 	// shift 键是否按下
 	shiftKey = false
-	// 图案在父级坐标系内的变换基点
+	// 图案基点在父级坐标系中的位置
 	origin = new Vector2()
-	// 图案在裁剪坐标系内的变换基点
+	// 图案基点在裁剪坐标系中的位置
 	clipOrigin = new Vector2()
 
-	// 鼠标在图案父级坐标系内的坐标位
+	// 鼠标父级坐标位
 	parentMousePos = new Vector2()
 	// 选中图案时的暂存数据，用于取消变换
 	controlStage: ImgData = {
@@ -126,24 +131,23 @@ class ImgControler extends Object2D {
 			return
 		}
 		this._altKey = val
-		const { img, controlState, origin, imgTransformer } = this
+		const { img, controlState, imgTransformer } = this
 		if (!img) {
 			return
 		}
 		if (controlState?.includes('scale')) {
 			// 将图案回退到变换之前的状态
 			imgTransformer.restoreImg()
-			// 根据alt键设置缩放基点
+			// 缩放基点在图案中心
 			this.setScaleOrigin()
-			// 根据变换基点，偏移图案
+			// 基于本地偏移坐标系设置基点
 			this.offsetImgByOrigin(img)
 			// 变换图案
 			this.transformImg()
 		}
 	}
-
 	/* 暂存变换数据 */
-	saveTransformData(img: Img) {
+	saveTransformData(img: Img2D) {
 		const {
 			clipMousePos,
 			imgTransformer,
@@ -158,6 +162,21 @@ class ImgControler extends Object2D {
 			img,
 			mouseStart: clipMousePos.clone().applyMatrix3(parentPvmInvert),
 		})
+	}
+	/* 设置旋转基点 */
+	setRotateOrigin() {
+		const {
+			origin,
+			imgTransformer,
+			clipOrigin,
+			transformStage: { clipCenter, parentPvmInvert },
+		} = this
+		// 图案基点在裁剪坐标系中的位置
+		clipOrigin.copy(clipCenter)
+		// 将图案中心点从裁剪坐标系转父级坐标系
+		origin.copy(clipCenter.clone().applyMatrix3(parentPvmInvert))
+		// 更新父级坐标系里基点到鼠标起点的向量
+		imgTransformer.updateOriginToMouseStart()
 	}
 
 	/* 设置缩放基点 */
@@ -180,25 +199,8 @@ class ImgControler extends Object2D {
 		// 更新父级坐标系里基点到鼠标起点的向量
 		imgTransformer.updateOriginToMouseStart()
 	}
-
-	/* 设置旋转基点 */
-	setRotateOrigin() {
-		const {
-			origin,
-			imgTransformer,
-			clipOrigin,
-			transformStage: { clipCenter, parentPvmInvert },
-		} = this
-		// 图案基点在裁剪坐标系中的位置
-		clipOrigin.copy(clipCenter)
-		// 将图案中心点从裁剪坐标系转父级坐标系
-		origin.copy(clipCenter.clone().applyMatrix3(parentPvmInvert))
-		// 更新父级坐标系里基点到鼠标起点的向量
-		imgTransformer.updateOriginToMouseStart()
-	}
-
-	/* 基点变换 */
-	offsetImgByOrigin(img: Img) {
+	/* 根据变换基点，偏移图案*/
+	offsetImgByOrigin(img: Img2D) {
 		const { offset, position, scale, rotate, pvmMatrix } = img
 		// 偏移量
 		const curOffset = new Vector2().subVectors(
@@ -213,15 +215,27 @@ class ImgControler extends Object2D {
 		position.sub(diff.multiply(scale).rotate(rotate))
 	}
 
-	/* 鼠标按下 */
-	pointerdown(img: Img | null, mp: Vector2) {
+	/**
+	 * @des 监听鼠标选择了什么图片
+	 */
+	pointerdown(img: Img2D | null, mp: Vector2) {
+		this.img = img
+        if (!this.img) {
+            return
+        }
+        console.log('选中图案', this.img.name)
+        this.emit(_changeEvent)
+
+
+		return 
 		if (!this.mouseState) {
 			this.img = img
-			if (!this.img) {
+			if (!img) {
 				return
 			}
 		}
-		// 更新鼠标裁剪坐标位
+
+		// 更新鼠标裁剪位
 		this.clipMousePos.copy(mp)
 		// 获取鼠标状态
 		this.mouseState = this.frame.getMouseState(mp)
@@ -229,10 +243,38 @@ class ImgControler extends Object2D {
 			// 控制状态等于鼠标状态
 			this.controlState = this.mouseState
 			// 更新鼠标父级位
-			this.updateParentMousePos()
+			this.updateLocalMousePos()
 		}
-
+		
 		this.emit(_changeEvent)
+	}
+
+	/* 鼠标移动 */
+	pointermove(mp: Vector2) {
+		if (!this.img) {
+			return
+		}
+		// 更新鼠标世界位
+		this.clipMousePos.copy(mp)
+
+		if (this.controlState) {
+			// 更新鼠标在图案父级坐标系中的位置
+			this.updateLocalMousePos()
+			// 变换图案
+			this.transformImg()
+		} else {
+			// 获取鼠标状态
+			this.mouseState = this.frame.getMouseState(mp)
+		}
+		this.emit(_changeEvent)
+	}
+
+	/* 鼠标抬起 */
+	pointerup() {
+		if (this.controlState) {
+			this.controlState = null
+			this.emit(_changeEvent)
+		}
 	}
 
 	/* 键盘按下 */
@@ -252,9 +294,7 @@ class ImgControler extends Object2D {
 					this.img = null
 					break
 				case 'Delete':
-					// 将img从其所在的group中删除
 					this.img.remove()
-					// 图案置空
 					this.img = null
 					break
 			}
@@ -270,41 +310,13 @@ class ImgControler extends Object2D {
 	}
 
 	/* 更新鼠标在图案父级坐标系中的位置 */
-	updateParentMousePos() {
+	updateLocalMousePos() {
 		const {
 			clipMousePos,
 			parentMousePos,
 			transformStage: { parentPvmInvert },
 		} = this
 		parentMousePos.copy(clipMousePos.clone().applyMatrix3(parentPvmInvert))
-	}
-
-	/* 鼠标移动 */
-	pointermove(mp: Vector2) {
-		if (!this.img) {
-			return
-		}
-		// 更新鼠标裁剪坐标位
-		this.clipMousePos.copy(mp)
-		if (this.controlState) {
-			// 更新鼠标在图案父级坐标系中的位置
-			this.updateParentMousePos()
-			// 变换图案
-			this.transformImg()
-		} else {
-			// 获取鼠标状态
-			this.mouseState = this.frame.getMouseState(mp)
-		}
-
-		this.emit(_changeEvent)
-	}
-
-	/* 鼠标抬起 */
-	pointerup() {
-		if (this.controlState) {
-			this.controlState = null
-			this.emit(_changeEvent)
-		}
 	}
 
 	/* 变换图案 */
@@ -327,4 +339,5 @@ class ImgControler extends Object2D {
 		mouseShape.draw(ctx, mouseState)
 	}
 }
+
 export { ImgControler }

@@ -11,9 +11,8 @@ function crtPathByMatrix(
 	matrix: Matrix3,
 	closePath = true,
 	isShow = false,
-	style:{
-		width:any,
-		color:any
+	style = {
+		width:5,color:"color"
 	}
 ) {
 	// 需要展示的时候的东西 需要 beginpath把数据闭合

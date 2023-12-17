@@ -1,19 +1,16 @@
 import { Vector2 } from '../math/Vector2.js';
 import { Object2D } from '../objects/Object2D.js';
 import { Matrix3 } from '../math/Matrix3.js';
-import { Frame } from './Frame.js';
-import { MouseShape } from './MouseShape.js';
 import { ImgTransformer } from './ImgTransformer.js';
+import { MouseShape } from './MouseShape.js';
+import { Frame } from './Frame.js';
+// change 事件
 const _changeEvent = { type: 'change' };
 class ImgControler extends Object2D {
     // 要控制的图片
     _img = null;
     // 图案控制框
     frame = new Frame();
-    // 渲染顺序
-    index = Infinity;
-    // 不受相机影响
-    enableCamera = false;
     // 鼠标状态
     mouseState = null;
     // 鼠标的裁剪坐标位
@@ -24,17 +21,21 @@ class ImgControler extends Object2D {
         center: this.frame.center,
         mousePos: this.clipMousePos,
     });
+    // 渲染顺序
+    index = Infinity;
+    // 不受相机影响
+    enableCamera = false;
     // 控制状态
     _controlState = null;
     // alt 键是否按下
     _altKey = false;
     // shift 键是否按下
     shiftKey = false;
-    // 图案在父级坐标系内的变换基点
+    // 图案基点在父级坐标系中的位置
     origin = new Vector2();
-    // 图案在裁剪坐标系内的变换基点
+    // 图案基点在裁剪坐标系中的位置
     clipOrigin = new Vector2();
-    // 鼠标在图案父级坐标系内的坐标位
+    // 鼠标父级坐标位
     parentMousePos = new Vector2();
     // 选中图案时的暂存数据，用于取消变换
     controlStage = {
@@ -109,16 +110,16 @@ class ImgControler extends Object2D {
             return;
         }
         this._altKey = val;
-        const { img, controlState, origin, imgTransformer } = this;
+        const { img, controlState, imgTransformer } = this;
         if (!img) {
             return;
         }
         if (controlState?.includes('scale')) {
             // 将图案回退到变换之前的状态
             imgTransformer.restoreImg();
-            // 根据alt键设置缩放基点
+            // 缩放基点在图案中心
             this.setScaleOrigin();
-            // 根据变换基点，偏移图案
+            // 基于本地偏移坐标系设置基点
             this.offsetImgByOrigin(img);
             // 变换图案
             this.transformImg();
@@ -136,6 +137,16 @@ class ImgControler extends Object2D {
             mouseStart: clipMousePos.clone().applyMatrix3(parentPvmInvert),
         });
     }
+    /* 设置旋转基点 */
+    setRotateOrigin() {
+        const { origin, imgTransformer, clipOrigin, transformStage: { clipCenter, parentPvmInvert }, } = this;
+        // 图案基点在裁剪坐标系中的位置
+        clipOrigin.copy(clipCenter);
+        // 将图案中心点从裁剪坐标系转父级坐标系
+        origin.copy(clipCenter.clone().applyMatrix3(parentPvmInvert));
+        // 更新父级坐标系里基点到鼠标起点的向量
+        imgTransformer.updateOriginToMouseStart();
+    }
     /* 设置缩放基点 */
     setScaleOrigin() {
         const { altKey, origin, imgTransformer, clipOrigin, transformStage: { clipCenter, clipOpposite, parentPvmInvert }, } = this;
@@ -151,17 +162,7 @@ class ImgControler extends Object2D {
         // 更新父级坐标系里基点到鼠标起点的向量
         imgTransformer.updateOriginToMouseStart();
     }
-    /* 设置旋转基点 */
-    setRotateOrigin() {
-        const { origin, imgTransformer, clipOrigin, transformStage: { clipCenter, parentPvmInvert }, } = this;
-        // 图案基点在裁剪坐标系中的位置
-        clipOrigin.copy(clipCenter);
-        // 将图案中心点从裁剪坐标系转父级坐标系
-        origin.copy(clipCenter.clone().applyMatrix3(parentPvmInvert));
-        // 更新父级坐标系里基点到鼠标起点的向量
-        imgTransformer.updateOriginToMouseStart();
-    }
-    /* 基点变换 */
+    /* 根据变换基点，偏移图案*/
     offsetImgByOrigin(img) {
         const { offset, position, scale, rotate, pvmMatrix } = img;
         // 偏移量
@@ -173,15 +174,24 @@ class ImgControler extends Object2D {
         // 上一级的position 再偏移回来，以确保图案的世界位不变
         position.sub(diff.multiply(scale).rotate(rotate));
     }
-    /* 鼠标按下 */
+    /**
+     * @des 监听鼠标选择了什么图片
+     */
     pointerdown(img, mp) {
+        this.img = img;
+        if (!this.img) {
+            return;
+        }
+        console.log('选中图案', this.img.name);
+        this.emit(_changeEvent);
+        return;
         if (!this.mouseState) {
             this.img = img;
-            if (!this.img) {
+            if (!img) {
                 return;
             }
         }
-        // 更新鼠标裁剪坐标位
+        // 更新鼠标裁剪位
         this.clipMousePos.copy(mp);
         // 获取鼠标状态
         this.mouseState = this.frame.getMouseState(mp);
@@ -189,9 +199,35 @@ class ImgControler extends Object2D {
             // 控制状态等于鼠标状态
             this.controlState = this.mouseState;
             // 更新鼠标父级位
-            this.updateParentMousePos();
+            this.updateLocalMousePos();
         }
         this.emit(_changeEvent);
+    }
+    /* 鼠标移动 */
+    pointermove(mp) {
+        if (!this.img) {
+            return;
+        }
+        // 更新鼠标世界位
+        this.clipMousePos.copy(mp);
+        if (this.controlState) {
+            // 更新鼠标在图案父级坐标系中的位置
+            this.updateLocalMousePos();
+            // 变换图案
+            this.transformImg();
+        }
+        else {
+            // 获取鼠标状态
+            this.mouseState = this.frame.getMouseState(mp);
+        }
+        this.emit(_changeEvent);
+    }
+    /* 鼠标抬起 */
+    pointerup() {
+        if (this.controlState) {
+            this.controlState = null;
+            this.emit(_changeEvent);
+        }
     }
     /* 键盘按下 */
     keydown(key, altKey, shiftKey) {
@@ -210,9 +246,7 @@ class ImgControler extends Object2D {
                     this.img = null;
                     break;
                 case 'Delete':
-                    // 将img从其所在的group中删除
                     this.img.remove();
-                    // 图案置空
                     this.img = null;
                     break;
             }
@@ -226,35 +260,9 @@ class ImgControler extends Object2D {
         this.emit(_changeEvent);
     }
     /* 更新鼠标在图案父级坐标系中的位置 */
-    updateParentMousePos() {
+    updateLocalMousePos() {
         const { clipMousePos, parentMousePos, transformStage: { parentPvmInvert }, } = this;
         parentMousePos.copy(clipMousePos.clone().applyMatrix3(parentPvmInvert));
-    }
-    /* 鼠标移动 */
-    pointermove(mp) {
-        if (!this.img) {
-            return;
-        }
-        // 更新鼠标裁剪坐标位
-        this.clipMousePos.copy(mp);
-        if (this.controlState) {
-            // 更新鼠标在图案父级坐标系中的位置
-            this.updateParentMousePos();
-            // 变换图案
-            this.transformImg();
-        }
-        else {
-            // 获取鼠标状态
-            this.mouseState = this.frame.getMouseState(mp);
-        }
-        this.emit(_changeEvent);
-    }
-    /* 鼠标抬起 */
-    pointerup() {
-        if (this.controlState) {
-            this.controlState = null;
-            this.emit(_changeEvent);
-        }
     }
     /* 变换图案 */
     transformImg() {

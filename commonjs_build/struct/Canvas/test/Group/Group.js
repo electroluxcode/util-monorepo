@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Vector2_js_1 = require("../../math/Vector2.js");
 const Group_js_1 = require("../../objects/Group.js");
-const Img_js_1 = require("../../objects/Img.js");
+const Img2D_js_1 = require("../../objects/Img2D.js");
 // step1:基本参数初始化
 let size = {
     width: 300,
@@ -35,7 +35,7 @@ function ImagePromise(image) {
 // group 里面 可以几种 draw
 function onMount() {
     group.add(...images.map((image, i) => {
-        return new Img_js_1.Img({
+        return new Img2D_js_1.Img2D({
             image,
             position: new Vector2_js_1.Vector2(200, 80 * i + 50),
             size: new Vector2_js_1.Vector2(image.width, image.height).multiplyScalar(0.3),

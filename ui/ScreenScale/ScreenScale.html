@@ -5,9 +5,12 @@
   <title>ScreenScale 示例</title>
 </head>
 <style>
+  
   * {
     margin: 0px;
-    padding: 0px
+    padding: 0px;
+    font-size: 30px;
+    color: white;
   }
 
   .container {
@@ -15,27 +18,34 @@
     height: 100vh;
     background: green;
   }
-
-  .content {
-    background: red;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-
-  }
-
-  .item {
-    background: blue;
-    width: 100%;
-    height: 100%;
-    color: white;
-  }
-
   #app {
-    width: 100%;
-    height: 100%;
+    width: 1536px;
+    height: 707px;
+    background: red;
+    display: grid;
+    grid-template-columns:  100px 1436px;
+  }
+  .left{
+    background: green;
+  }
+  .right{
+    display: grid;
+    grid-template-rows: 100px 1fr 100px;
+  }
+  .right_top{
+    background: purple;
+  }
+  .right_bottom{
+    /* height:607px ; */
+    overflow: hidden;
+    background: blue;
+    position: relative;
+  }
+  .right_bottom_bottom{
+    /* height:607px ; */
+    overflow: hidden;
+    background: yellow;
+    position: relative;
   }
 </style>
 
@@ -43,17 +53,20 @@
 
   <div class="container">
     <div id="app">
-      <div class="content">
-        <div class="item">222222552</div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
+     <div class="left"></div>
+     <div class="right">
+
+      <div class="right_top">right_top</div>
+      <div class="right_bottom">right_bottom
+
+
+        <div class="right_right" style="position: absolute ;right: 0px;top: 0px;">23</div>
+        
+
+        <div class="right_box" style="position: absolute ;right: 0px; bottom: 0px;">23</div>
       </div>
+      <div class="right_bottom_bottom">right_bottom_bottom</div>
+     </div>
     </div>
   </div>
   <script type="module">
@@ -61,18 +74,19 @@
     const options = {
       dw: 1536, // 设定宽度
       dh: 707,  // 设定高度
-      el: document.querySelector("#app"),  // 要自动适配的元素选择器
+      el: "#app",  // 要自动适配的元素选择器
       resize: true, // 是否监听窗口大小变化
       //   ignore: [document.querySelector(".item")],  // 要忽略的元素选择器
-      transition: '0.5', // 动画过渡时间
-      delay: 1000// 调整延迟
+      transition: '0.2', // 动画过渡时间
+      delay: 200// 调整延迟
     };
 
     // 初始化 ScreenScale
     const ScreenScaleInstance = new ScreenScale();
     ScreenScaleInstance.init(options);
     
-    // ScreenScaleInstance.FixMap(document.querySelector(".item"))
+    // ScreenScaleInstance.FixMap([".right_bottom"])
+    ScreenScaleInstance.FixMap([document.querySelector(".right_bottom")])
     // 关闭 ScreenScale
     // ScreenScaleInstance.off();
   </script>

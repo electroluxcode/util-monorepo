@@ -1,20 +1,36 @@
-import { Camera } from '../../core/Camera.js';
+import { Text2D } from '../../objects/Text2D.js';
+import { OrbitControler } from '../../controler/OrbitControler.js';
+import { Scene } from '../../core/Scene.js';
 // step1:基本参数初始化
 let size = {
-    width: 300,
-    height: 300
+    width: 400,
+    height: 400
 };
 const canvas = document.querySelector("canvas");
 canvas.width = size.width;
 canvas.height = size.height;
 const ctx = canvas?.getContext('2d');
-// step2:相机方法的测试原理是 逆向操作 
-// 对应 x y 距离  距离越短越大
-const camera = new Camera(10, 0, 1);
-function matrixTest(ctx) {
-    ctx.save();
-    camera.transformInvert(ctx);
-    ctx.fillRect(0, 0, 200, 100);
-    ctx.restore();
-}
-ctx && matrixTest(ctx);
+// step2:
+const scene = new Scene();
+const orbitControler = new OrbitControler(scene.camera);
+const text2D = new Text2D({
+    text: 'Sphinx',
+    style: {
+        fontSize: 100,
+        fillStyle: '#00acec',
+        textAlign: 'center',
+        textBaseline: 'middle',
+    },
+});
+scene.add(text2D);
+const { canvas: { width, height }, } = scene;
+ctx.save();
+ctx.strokeStyle = 'maroon';
+ctx.translate(width / 2, height / 2);
+ctx.beginPath();
+text2D.crtPath(ctx, text2D.pvmMatrix);
+ctx.closePath();
+ctx.stroke();
+ctx.restore();
+scene.setOption({ canvas });
+scene.render();

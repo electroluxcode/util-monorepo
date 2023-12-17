@@ -62,7 +62,7 @@ class Img2D extends Object2D {
         }
     }
     /* 绘制图像边界, */
-    crtPath(ctx, matrix = this.pvmoMatrix, isShow = true, style = { width: 5, color: "red" }) {
+    crtPath(ctx, matrix = this.pvmoMatrix, isShow = false, style = { width: 5, color: "red" }) {
         const { size: { x: imgW, y: imgH }, } = this;
         // 第二个参数是宽高 和周围的边界
         // 第三个参数是 默认是正方形,然后向着指定方向做位移

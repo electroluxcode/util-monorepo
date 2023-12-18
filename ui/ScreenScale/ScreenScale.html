@@ -14,8 +14,8 @@
   }
 
   .container {
-    width: 100vw;
-    height: 100vh;
+    width: 98vw;
+    height: 98vh;
     background: green;
   }
   #app {
@@ -23,16 +23,17 @@
     height: 707px;
     background: red;
     display: grid;
-    grid-template-columns:  100px 1436px;
+    grid-template-columns:  100px 1fr;
   }
   .left{
     background: green;
   }
   .right{
     display: grid;
-    grid-template-rows: 100px 1fr 100px;
+    grid-template-rows: 100px 1fr 200px;
   }
   .right_top{
+    overflow: hidden;
     background: purple;
   }
   .right_bottom{
@@ -53,20 +54,22 @@
 
   <div class="container">
     <div id="app">
-     <div class="left"></div>
-     <div class="right">
+      <div class="left"></div>
+      <div class="right">
 
-      <div class="right_top">right_top</div>
-      <div class="right_bottom">right_bottom
-
-
-        <div class="right_right" style="position: absolute ;right: 0px;top: 0px;">23</div>
-        
-
-        <div class="right_box" style="position: absolute ;right: 0px; bottom: 0px;">23</div>
-      </div>
-      <div class="right_bottom_bottom">right_bottom_bottom</div>
-     </div>
+        <div class="right_top">right_top</div>
+        <div class="right_bottom">right_bottom
+  
+  
+          <div class="right_right" style="position: absolute ;right: 0px;top: 0px;">23</div>
+          
+  
+          <div class="right_box" style="position: absolute ;right: 0px; bottom: 0px;">23</div>
+        </div>
+        <div class="right_bottom_bottom">right_bottom_bottom</div>
+       </div>
+     
+     
     </div>
   </div>
   <script type="module">
@@ -77,16 +80,16 @@
       el: "#app",  // 要自动适配的元素选择器
       resize: true, // 是否监听窗口大小变化
       //   ignore: [document.querySelector(".item")],  // 要忽略的元素选择器
-      transition: '0.2', // 动画过渡时间
-      delay: 200// 调整延迟
+      transition: '0.5', // 动画过渡时间
+      delay: 0// 调整延迟
     };
 
     // 初始化 ScreenScale
     const ScreenScaleInstance = new ScreenScale();
     ScreenScaleInstance.init(options);
     
-    // ScreenScaleInstance.FixMap([".right_bottom"])
-    ScreenScaleInstance.FixMap([document.querySelector(".right_bottom")])
+    ScreenScaleInstance.FixMap([".right_bottom"])
+    // ScreenScaleInstance.FixMap([document.querySelector(".right_bottom")])
     // 关闭 ScreenScale
     // ScreenScaleInstance.off();
   </script>

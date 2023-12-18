@@ -43,20 +43,28 @@ background: red;
 	margin : 0;
 	padding : 0;
 }
+.app{
+    width: 98vw;
+    height: 98vh;
+}
 </style>
 <body>
-    <div class="container">
-        <div class="cesium_left">
-
-        </div>
-        <div id="cesiumContainer">
-            <div class="button_container">
-                <div class="button_control">经度移动测试</div>
-                <div class="button_control">高度移动测试</div>
+    <div class="app">
+        <div class="container">
+            <div class="cesium_left">
+    
             </div>
+            <div id="cesiumContainer">
+                <div class="button_container">
+                    <div class="button_control">经度移动测试</div>
+                    <div class="button_control">高度移动测试</div>
+                </div>
+            </div>
+    
         </div>
 
     </div>
+   
     
     <script type="module" src="../../struct/Cesium/use.js">
         
@@ -76,7 +84,7 @@ background: red;
     // 初始化 ScreenScale
     const ScreenScaleInstance = new ScreenScale();
     ScreenScaleInstance.init(options);
-    let a = document.querySelector("#cesiumContainer");
+    let a = "#cesiumContainer";
     ScreenScaleInstance.FixMap([a])
 
 

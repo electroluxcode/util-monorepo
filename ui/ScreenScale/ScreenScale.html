@@ -16,7 +16,7 @@
   .container {
     width: 98vw;
     height: 98vh;
-    background: green;
+    /* background: green; */
   }
   #app {
     width: 1536px;
@@ -73,6 +73,25 @@
     </div>
   </div>
   <script type="module">
+    // import { ScreenScale } from "./ScreenScale.js"
+    // const options = {
+    //   dw: 1536, // 设定宽度
+    //   dh: 707,  // 设定高度
+    //   el: "#app",  // 要自动适配的元素选择器
+    //   resize: true, // 是否监听窗口大小变化
+    //   //   ignore: [document.querySelector(".item")],  // 要忽略的元素选择器
+    //   transition: '0.5', // 动画过渡时间
+    //   delay: 0// 调整延迟
+    // };
+
+    // // 初始化 ScreenScale
+    // const ScreenScaleInstance = new ScreenScale();
+    // ScreenScaleInstance.init(options);
+    
+    // ScreenScaleInstance.FixMap([".right_bottom"])
+  
+
+    // 添加了保持比例的选项 isKeepRadio   
     import { ScreenScale } from "./ScreenScale.js"
     const options = {
       dw: 1536, // 设定宽度
@@ -81,7 +100,8 @@
       resize: true, // 是否监听窗口大小变化
       //   ignore: [document.querySelector(".item")],  // 要忽略的元素选择器
       transition: '0.5', // 动画过渡时间
-      delay: 0// 调整延迟
+      delay: 0,// 调整延迟
+      isKeepRadio:true
     };
 
     // 初始化 ScreenScale
@@ -89,9 +109,6 @@
     ScreenScaleInstance.init(options);
     
     ScreenScaleInstance.FixMap([".right_bottom"])
-    // ScreenScaleInstance.FixMap([document.querySelector(".right_bottom")])
-    // 关闭 ScreenScale
-    // ScreenScaleInstance.off();
   </script>
 </body>
 

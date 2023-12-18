@@ -6,6 +6,7 @@ interface Base {
   ignore?: string[];
   transition?: string;
   delay?: number;
+  isKeepRadio?:boolean
 }
 
 let debounce = (fn: Function, timer: number) => {
@@ -22,18 +23,13 @@ let debounce = (fn: Function, timer: number) => {
 }
 class ScreenScale {
   private CurrelFixMap: string[] = ["#app"];
-  private CurrelFixMapLevel: string = '';
+  private CurrelFixMapLevel: number = 1;
   private resizeListener: (() => void) | null = null;
   private timer: any = null;
   private currScale: number = 1;
   private isScreenScaleRunning: boolean = false;
   private IsMapElement: boolean = false;
-  // 等比例缩放
-  private CurrelScaleRadio : {
-    NowRadio:{ width:any, height:any }; initRadio:{ width:any, height:any } } = {
-    NowRadio:{ width:0, height:0 }, initRadio:{ width:0, height:0 }
-  }
-  dom?:any;
+  private currelRectificationIsKeepRatio : boolean = false;
   options: Base;
 
 
@@ -48,8 +44,10 @@ class ScreenScale {
     if (isShowInitTip) {
       console.log(`util_monorepo/scale:` + ` 运行中`);
     }
-    
-    this.options = options
+    let base = {
+      isKeepRadio:false
+    }
+    this.options = Object.assign(base,options)
     const { dw = 1920, dh = 929, el, resize = true, ignore = [], transition = 'none', delay = 0 } = options;
     if(!el){
       console.error(`ScreenScale: '${el}' 没有输入`);
@@ -57,7 +55,6 @@ class ScreenScale {
     }
     const dom = document.querySelector(el)! as HTMLElement;
     
-
     const style = document.createElement('style');
     const ignoreStyle = document.createElement('style');
     style.lang = 'text/css';
@@ -70,126 +67,83 @@ class ScreenScale {
     bodyEl!.appendChild(style);
     bodyEl!.appendChild(ignoreStyle);
 
-
     dom.style.height = `${dh}px`;
     dom.style.width = `${dw}px`;
 
-
-    dom.style.transformOrigin = `left top`;
-    setTimeout(() => {
-      dom.style.transition = `${transition}s`;
-    }, 0);
-    dom.style.overflow = "hidden";
+    if(!this.options.isKeepRadio){
+      dom.style.transformOrigin = `left top`;
+      setTimeout(() => {
+        dom.style.transition = `${transition}s`;
+      }, 0);
+      dom.style.overflow = "hidden";
+    }else{
+      dom.style.transformOrigin = `left top`;
+      setTimeout(() => {
+        dom.style.transition = `${transition}s`;
+      }, 0);
+      
+    }
+    
     
     if (!dom) {
       console.error(`ScreenScale: '${el}' 不存在`);
       return;
     }
 
-
     this.KeepFit(dw, dh, el, ignore);
-    this.dom = dom
     this.resizeListener = () => {
-      // window.location.reload()
       if (this.timer) clearTimeout(this.timer);
-      this.CurrelScaleRadio.NowRadio = {
-        width:document.documentElement.clientWidth ,
-        height: document.documentElement.clientHeight
-      }
       if (delay !== 0) {
-
         this.KeepFit(dw, dh, el, ignore);
-        if (this.IsMapElement) this.FixMap(this.CurrelFixMap, this.CurrelFixMapLevel);
-
+        if (this.IsMapElement) this.FixMap(this.CurrelFixMap,this.currelRectificationIsKeepRatio, this.CurrelFixMapLevel);
       } else {
 
         this.KeepFit(dw, dh, el, ignore);
         if (this.IsMapElement) {setTimeout(() => {
-          this.FixMap(this.CurrelFixMap, this.CurrelFixMapLevel)
+          this.FixMap(this.CurrelFixMap, this.currelRectificationIsKeepRatio,this.CurrelFixMapLevel)
         }, 0);};
       }
-      // this.updateElementSize()
     };
-    // this.resizeListener
     let enhanceFn = debounce(this.resizeListener, 30)
     resize && window.addEventListener('resize', () => { enhanceFn("") });
-    // resize && window.addEventListener('resize',this.resizeListener);
-    // enhanceFn("")
     this.isScreenScaleRunning = true;
-    this.CurrelScaleRadio.initRadio = {
-      width:document.documentElement.clientWidth ,
-      height: document.documentElement.clientHeight
-    }
   }
-
-  updateElementSize() {
-    let dom = this.dom;
-    dom.style.height = `${document.documentElement.clientHeight / this.currScale}px`;
-    dom.style.width = `${document.documentElement.clientWidth / this.currScale}px`;
-  }
-
+  
   /**
-   * 调整指定元素以进行缩放。一次缩放一个
-   * @param el - 要调整的元素选择器。不能传入元素
-   * @param level - 缩放级别（默认为 1）。
+   * @des 解决事件偏移
    */
-  public FixMap(el: string[] = ["#app"], level: string = "1",): void {
-    
+  public FixMap(el: string[] = ["#app"], isKeepRatio = false,level: number = 1,): void {
     if (!this.isScreenScaleRunning) {
       console.error("尚未初始化");
     }
     if (!el) {
       console.error(`ScreenScale: 选择器错误: ${el}`);
     }
-
+    this.currelRectificationIsKeepRatio = isKeepRatio
     this.CurrelFixMap = el;
     this.CurrelFixMapLevel = level;
-
     for (let i in this.CurrelFixMap) {
-      console.log(this.CurrelFixMap)
-      let item = document.querySelector(this.CurrelFixMap[i])!
-      // let item = this.CurrelFixMap[i] as any
+      let rectification = this.currScale == 1 ? 1 : this.currScale * level;
+      let item = document.querySelector(this.CurrelFixMap[i])! as any
       if (!item) {
         console.error("FixMap: 未找到任何元素");
-        // return;
+        return;
       }
-      
       if (!this.IsMapElement) {
-        (item as any).originalWidth = item.clientWidth;
-        (item as any).originalHeight = item.clientHeight;
-      
+        item.originalWidth = item.clientWidth;
+        item.originalHeight = item.clientHeight;
       }
-
-      // 变化的时候 会优先满足 最短的一条边长(高) * rectification * rectification
-      (item as any).style.transform = `scale(${1 / this.currScale}) `;
+      if (isKeepRatio) {
+        item.style.width = `${item.originalWidth * rectification}px`;
+        item.style.height = `${item.originalHeight * rectification}px`;
+      } else {
+        item.style.width = `${100 * rectification}%`;
+        item.style.height = `${100 * rectification}%`;
+      }
+      item.style.transform = `scale(${1 / this.currScale})`;
+      item.style.transformOrigin = `0 0`;
       
-      (item as any).style.transformOrigin = `0 0`;
-      
-      document.querySelector(this.options.el!)!.addEventListener("transitionend",()=>{
-        // item = document.querySelector(this.CurrelFixMap[i])!
-
-        // let containerHeight = document.querySelector(this.options.el!)!.getBoundingClientRect().height;
-        // let containerTop = item!.getBoundingClientRect().top;
-        // let containerBottom =( containerHeight-item!.getBoundingClientRect().height-item!.getBoundingClientRect().top) ;
-        
-        // (item as any).style.height = `${containerHeight -containerTop-containerBottom }px   `;
-        
-        // let containerWidth = document.querySelector(this.options.el!)!.getBoundingClientRect().width;
-        // let containerLeft = item!.getBoundingClientRect().left;
-        // // let containerRight =( item!.getBoundingClientRect().right-item!.getBoundingClientRect().width) ;
-        // let containerRight =( containerWidth-item!.getBoundingClientRect().left-item!.getBoundingClientRect().width) ;
-        // (item as any).style.width = `${containerWidth-containerRight-containerLeft }px   `;
-        // debugger
-      });
-     
-  
-      (item as any).style.height = `${this.currScale * 100}%`;
-      (item as any).style.width = `${this.currScale *100}%`;
-      // (item as any).style.height = `${item.clientHeight}px`;
-      // (item as any).style.width = `${item.clientWidth}px`;
     }
-
-
     this.IsMapElement = true;
   }
 
@@ -203,19 +157,21 @@ class ScreenScale {
     const clientWidth = document.documentElement.clientWidth;
     this.currScale = (clientWidth / clientHeight) < (dw / dh) ? clientWidth / dw : clientHeight / dh;
 
-    // if((clientWidth / clientHeight)< (dw / dh)){
-    //   let curr = clientWidth / dw
-    //   dom.style.height = `${clientHeight / this.currScale}px`;
-    //   dom.style.width = `${clientWidth / this.currScale}px`;  
-    // }else{
-    //   let curr = clientWidth / dw
-    // dom.style.height = `${clientHeight / this.currScale}px`;
-    // dom.style.width = `${clientWidth / this.currScale}px`;
-    // }
-   
-    dom.style.height = `${clientHeight / this.currScale}px`;
-    dom.style.width = `${clientWidth / this.currScale}px`;
-    dom.style.transform = `scale(${this.currScale})`;
+    if(this.options.isKeepRadio){
+      dom.style.overflow = "hidden";
+      dom.style.width = `${this.options.dw}px`;
+      dom.style.height = `${this.options.dh}px`;
+      dom.style.position = `absolute`;
+      dom.style.transform = `scale(${this.currScale}) translate(-50%, -50%)`;
+      dom.style.left= "50%";
+      dom.style.top= "50%";
+    }else{
+      dom.style.height = `${clientHeight / this.currScale}px`;
+      dom.style.width = `${clientWidth / this.currScale}px`;
+      dom.style.transform = `scale(${this.currScale})`;
+    }
+    
+    
     const ignoreStyleDOM = document.querySelector('#ignoreStyle') as HTMLStyleElement;
     ignoreStyleDOM.innerHTML = '';
     for (let item of ignore) {

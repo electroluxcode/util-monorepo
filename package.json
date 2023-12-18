@@ -4,7 +4,7 @@
   "description": "```shell\r npm install pnpm -g\r # 然后创造一个 新文件夹，在这个新文件夹中\r pnpm init\r ```",
   "main": "index.js",
   "repository": {
-    "url": "https://github.com/yilaikesi/util-monorepo"
+    "url": "https://github.com/electroluxcode/util-monorepo"
   },
   "jest-stare": {
     "resultDir": "results/jest-stare",

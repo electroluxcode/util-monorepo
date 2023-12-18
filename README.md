@@ -53,7 +53,7 @@
 
 ### 发布
 
-如果想要成为发布者请联系仓库管理者，https://github.com/yilaikesi。否则请等大版本发布
+如果想要成为发布者请联系仓库管理者，https://github.com/electroluxcode。否则请等大版本发布
 
 #### 普通版本
 

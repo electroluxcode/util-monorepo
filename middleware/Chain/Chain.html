@@ -60,7 +60,7 @@
         ChainFirstStep.dataSet({
             init: "helloworld",
             eventBus: {
-                finish: [(e) => {  console.log(ChainFirstStep.ChainData) }],
+                finish: [(e) => {  console.log("责任链完成:",ChainFirstStep.ChainData) }],
             }
         })
         ChainFirstStep.passRequest();

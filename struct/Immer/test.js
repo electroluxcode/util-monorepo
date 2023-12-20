@@ -16,22 +16,25 @@ function FnTest2(name) {
 }
 
 
+
+
+
 // 这里注意一个
 const handler = {
 	/**
 	 * @f1 函数拦截
-	 * @param {*} target ()=>{}
+	 * @param {()=>{}} target 
 	 * @param {*} thisArg this
-	 * @param {*} argumentsList array<string>
+	 * @param {Array<string>} argumentsList array<string>
 	 * @returns
 	 */
 	apply: function (target, thisArg, argumentsList) {
-		console.log(
-			`handler/apply/target, thisArg, argumentsList :`,
-			target,
-			thisArg,
-			argumentsList
-		);
+		// console.log(
+		// 	`handler/apply/target, thisArg, argumentsList :`,
+		// 	target,
+		// 	thisArg,
+		// 	argumentsList
+		// );
 		return target(...argumentsList);
 	},
 	/**
@@ -64,7 +67,7 @@ const handler = {
 	 * @returns
 	 */
 	set(obj, prop, value) {
-		console.log(`handler/set/obj, prop, value:`, obj, prop, value);
+		console.log(`handler/set/obj, prop, value:`, {obj, prop, value});
 		if (prop === "eyeCount" && value % 2 !== 0) {
 			console.log("Monsters must have an even number of eyes");
 		} else {
@@ -85,7 +88,7 @@ const handler = {
 
 let test4 = new Proxy(ObjectTest, handler);
 // test4.id = 2
-test4.a = "修改后"
+test4.a.id = "修改后"
 
 
 

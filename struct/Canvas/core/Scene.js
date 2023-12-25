@@ -88,7 +88,7 @@ class Scene extends Group {
         return this.canvastoClip(this.clientToCanvas(clientX, clientY));
     }
     /**
-     * @des 基于某个坐标系，判断某个点是否在图形内
+     * @des 基于中心坐标系，判断某个点是否在图形内
      * 需要先绘制 边缘路径接下来再进行 判断  调用原生 的 isPointInPath 判断就可以了
      * isPointInPath(x,y) 面向的对象是路径，所以对文字、fillRect()、strokeRect()不好使，
      */

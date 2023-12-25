@@ -1,6 +1,5 @@
 import { OrbitControler } from '../../controler/OrbitControler.js';
 import { Scene } from '../../core/Scene.js';
-import { Vector2 } from '../../math/Vector2.js';
 import { Img2D } from '../../objects/Img2D.js';
 // step1:基本参数初始化
 let size = {
@@ -24,16 +23,6 @@ scene.add(pattern);
 // step3:图片加载后需要做的事
 scene.setOption({ canvas });
 image.onload = function () {
-    const imgSize = new Vector2(image.width, image.height).multiplyScalar(0.6);
-    pattern.setOption({
-        /* 模型矩阵 */
-        rotate: 0.4,
-        position: new Vector2(0, 0),
-        scale: new Vector2(0.5),
-        /* Img属性 */
-        size: imgSize.clone(),
-        offset: imgSize.clone().multiplyScalar(-0.5),
-    });
     /* 监听wheel和pointer 的渲染 */
     orbitControler.on('change', () => {
         scene.render();

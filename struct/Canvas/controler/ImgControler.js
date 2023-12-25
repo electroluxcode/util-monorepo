@@ -182,9 +182,8 @@ class ImgControler extends Object2D {
         if (!this.img) {
             return;
         }
-        console.log('选中图案', this.img.name);
         this.emit(_changeEvent);
-        return;
+        // return 
         if (!this.mouseState) {
             this.img = img;
             if (!img) {

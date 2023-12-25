@@ -62,6 +62,7 @@ image.onload = () => {
     pattern.draw(ctx);
     // 会根据 pvmoMatrix 和 width，height来进行操作
     // pattern.crtPath(ctx)
+    console.log("pattern.pvmoMatrix:", pattern.pvmoMatrix);
     ctx.stroke();
     ctx.restore();
 };

@@ -21,7 +21,7 @@ scene.add(imgControler);
 const images = [];
 for (let i = 1; i < 5; i++) {
     const image = new Image();
-    image.src = `https://yxyy-pandora.oss-cn-beijing.aliyuncs.com/stamp-images/${i}.png`;
+    image.src = `../img.png`;
     images.push(image);
 }
 const imgGroup = new Group();
@@ -56,12 +56,14 @@ Promise.all(ImagePromises(images)).then(() => {
         const { button, clientX, clientY } = event;
         // 转化成裁剪坐标(就是中间的点 作为坐标原点)
         const mp = scene.clientToClip(clientX, clientY);
+        // const mp = {x:0,y:0}
+        console.log("zptest:点击下去 scene.clienttoClip", mp);
         switch (button) {
             // 鼠标左键
             case 0:
                 imgHover = selectObj(imgGroup.children, mp);
-                console.log("imgHover:", imgHover?.name);
-                // imgControler.pointerdown(imgHover, mp)
+                // 重要：控制权交给使用者，如果不想frame出现就注释掉这一行
+                imgControler.pointerdown(imgHover, mp);
                 break;
             // 鼠标中键
             case 1:
@@ -72,11 +74,17 @@ Promise.all(ImagePromises(images)).then(() => {
     /* 鼠标移动 */
     canvas.addEventListener('pointermove', (event) => {
         orbitControler.pointermove(event.clientX, event.clientY);
+        orbitControler.pointermove(event.clientX, event.clientY);
+        const mp = scene.clientToClip(event.clientX, event.clientY);
+        imgControler.pointermove(mp);
     });
     /* 鼠标抬起 */
     window.addEventListener('pointerup', (event) => {
         if (event.button == 1) {
             orbitControler.pointerup();
+        }
+        if (event.button == 0) {
+            imgControler.pointerup();
         }
     });
     /* 滑动滚轮缩放 */
@@ -92,6 +100,15 @@ Promise.all(ImagePromises(images)).then(() => {
     });
     /* 渲染 */
     scene.render();
+    /* 键盘按下 */
+    window.addEventListener('keydown', ({ key, altKey, shiftKey }) => {
+        imgControler.keydown(key, altKey, shiftKey);
+        // updateMouseCursor()
+    });
+    /* 键盘抬起 */
+    window.addEventListener('keyup', ({ altKey, shiftKey }) => {
+        imgControler.keyup(altKey, shiftKey);
+    });
 });
 // step2:scene 重要：
 // 2.1  

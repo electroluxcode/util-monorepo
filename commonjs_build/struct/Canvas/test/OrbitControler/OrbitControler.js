@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const OrbitControler_js_1 = require("../../controler/OrbitControler.js");
 const Scene_js_1 = require("../../core/Scene.js");
-const Vector2_js_1 = require("../../math/Vector2.js");
 const Img2D_js_1 = require("../../objects/Img2D.js");
 // step1:基本参数初始化
 let size = {
@@ -26,16 +25,6 @@ scene.add(pattern);
 // step3:图片加载后需要做的事
 scene.setOption({ canvas });
 image.onload = function () {
-    const imgSize = new Vector2_js_1.Vector2(image.width, image.height).multiplyScalar(0.6);
-    pattern.setOption({
-        /* 模型矩阵 */
-        rotate: 0.4,
-        position: new Vector2_js_1.Vector2(0, 0),
-        scale: new Vector2_js_1.Vector2(0.5),
-        /* Img属性 */
-        size: imgSize.clone(),
-        offset: imgSize.clone().multiplyScalar(-0.5),
-    });
     /* 监听wheel和pointer 的渲染 */
     orbitControler.on('change', () => {
         scene.render();

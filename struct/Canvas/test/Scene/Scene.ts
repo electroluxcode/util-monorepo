@@ -33,7 +33,6 @@ image.addEventListener("load",()=>{
 		size: imgSize.clone(),
 		offset: imgSize.clone().multiplyScalar(-0.5),
 	})
-
 })
 
 
@@ -47,17 +46,14 @@ const mouseClipPos = new Vector2(Infinity)
 
 
 function test(canvas: HTMLCanvasElement) {
-	
 	/* 相机位移测试 */
 	// scene.camera.position.set(0, 100)
-
 	/* 记录鼠标的裁剪坐标位 */
     // 用 clientX 是因为 这个属性不会考虑到滚动
 	canvas.addEventListener('mousemove', ({ clientX, clientY }) => {
         // 转化成 以中心作为基础点的坐标
 		mouseClipPos.copy(scene.clientToClip(clientX, clientY))
 	})
-
 	/* 动画 */
 	ani()
 }
@@ -86,7 +82,8 @@ function ani(time = 0) {
 	scene.render()
 
     // 这里的第三个为什么可以手动传入，因为 img本身 的 pvm 矩阵没有位移，是 scene本身位移导致了 img居中，所以需要  mouseClipPos 先进行复位
-    if (scene.isPointInObj(pattern, mouseClipPos, pattern.pvmoMatrix)) {
+    // console.log("pattern.pvmoMatrix:",pattern.pvmoMatrix)
+	if (scene.isPointInObj(pattern, mouseClipPos, pattern.pvmoMatrix)) {
 		pattern.rotate += 0.02
 	}
 	requestAnimationFrame(()=>{ani(time+15)})

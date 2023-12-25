@@ -2,6 +2,7 @@ import { Vector2 } from '../math/Vector2.js';
 import { Img2D } from '../objects/Img2D.js';
 /* PI*2 */
 const pi2 = Math.PI * 2;
+// 0 是 按住了 shrit，1是没按住
 class ImgTransformer {
     /* 变换图案 */
     img = new Img2D();
@@ -124,7 +125,7 @@ class ImgTransformer {
         const { img, position, mouseStart, mousePos } = this;
         img.position.copy(position.clone().add(mousePos.clone().sub(mouseStart)));
     }
-    // 正交位移-作业，留给同学们实现
+    // 重要:正交位移-作业
     move1() { }
 }
 export { ImgTransformer };

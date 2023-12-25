@@ -67,6 +67,7 @@ function ani(time = 0) {
     // scene render的时候会自动把 目标放在中间
     scene.render();
     // 这里的第三个为什么可以手动传入，因为 img本身 的 pvm 矩阵没有位移，是 scene本身位移导致了 img居中，所以需要  mouseClipPos 先进行复位
+    // console.log("pattern.pvmoMatrix:",pattern.pvmoMatrix)
     if (scene.isPointInObj(pattern, mouseClipPos, pattern.pvmoMatrix)) {
         pattern.rotate += 0.02;
     }

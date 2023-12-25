@@ -28,7 +28,7 @@ scene.add(imgControler)
 const images: HTMLImageElement[] = []
 for (let i = 1; i < 5; i++) {
     const image = new Image()
-    image.src = `https://yxyy-pandora.oss-cn-beijing.aliyuncs.com/stamp-images/${i}.png`
+    image.src = `../img.png`
     images.push(image)
 }
 
@@ -41,7 +41,7 @@ let imgHover: Img2D | null
 
 // step2: 定义渲染之后的事件
 function selectObj(imgGroup: Object2D[], mp: Vector2): Img2D | null {
-	// 选择次序问题,可以简单忽略
+    // 选择次序问题,可以简单忽略
     for (let img of [...imgGroup].reverse()) {
         if (img instanceof Img2D && scene.isPointInObj(img, mp, img.pvmoMatrix)) {
             return img
@@ -52,8 +52,8 @@ function selectObj(imgGroup: Object2D[], mp: Vector2): Img2D | null {
 
 scene.setOption({ canvas })
 Promise.all(ImagePromises(images)).then(() => {
-	// group 传入 object2d 的数组
-	imgGroup.add(
+    // group 传入 object2d 的数组
+    imgGroup.add(
         ...images.map((image, i) => {
             const size = new Vector2(image.width, image.height).multiplyScalar(0.3)
             return new Img2D({
@@ -65,19 +65,22 @@ Promise.all(ImagePromises(images)).then(() => {
             })
         })
     )
-	/* 鼠标按下*/
+    /* 鼠标按下*/
     canvas.addEventListener('pointerdown', (event: PointerEvent) => {
         const { button, clientX, clientY } = event
-		// 转化成裁剪坐标(就是中间的点 作为坐标原点)
+        // 转化成裁剪坐标(就是中间的点 作为坐标原点)
         const mp = scene.clientToClip(clientX, clientY)
+        // const mp = {x:0,y:0}
+        console.log("zptest:点击下去 scene.clienttoClip", mp)
         switch (button) {
-			// 鼠标左键
+            // 鼠标左键
             case 0:
                 imgHover = selectObj(imgGroup.children, mp)
-				console.log("imgHover:",imgHover?.name )
-                // imgControler.pointerdown(imgHover, mp)
+
+                // 重要：控制权交给使用者，如果不想frame出现就注释掉这一行
+                imgControler.pointerdown(imgHover, mp)
                 break
-			// 鼠标中键
+            // 鼠标中键
             case 1:
                 orbitControler.pointerdown(clientX, clientY)
                 break
@@ -87,12 +90,19 @@ Promise.all(ImagePromises(images)).then(() => {
     /* 鼠标移动 */
     canvas.addEventListener('pointermove', (event: PointerEvent) => {
         orbitControler.pointermove(event.clientX, event.clientY)
+        orbitControler.pointermove(event.clientX, event.clientY)
+        const mp = scene.clientToClip(event.clientX, event.clientY)
+        imgControler.pointermove(mp)
+
     })
 
     /* 鼠标抬起 */
     window.addEventListener('pointerup', (event: PointerEvent) => {
         if (event.button == 1) {
             orbitControler.pointerup()
+        }
+        if (event.button == 0) {
+            imgControler.pointerup()
         }
     })
 
@@ -111,6 +121,22 @@ Promise.all(ImagePromises(images)).then(() => {
 
     /* 渲染 */
     scene.render()
+
+
+    /* 键盘按下 */
+    window.addEventListener(
+        'keydown',
+        ({ key, altKey, shiftKey }: KeyboardEvent) => {
+            imgControler.keydown(key, altKey, shiftKey)
+            // updateMouseCursor()
+        }
+    )
+
+    /* 键盘抬起 */
+    window.addEventListener('keyup', ({ altKey, shiftKey }: KeyboardEvent) => {
+        imgControler.keyup(altKey, shiftKey)
+    })
+
 
 })
 

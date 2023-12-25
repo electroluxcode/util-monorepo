@@ -22,7 +22,7 @@ class Frame {
     matrix = new Matrix3_js_1.Matrix3();
     // 要把路径变换到哪个坐标系中，默认裁剪坐标系
     level = 'pvmoMatrix';
-    // 对面节点
+    // 镜像节点
     opposite = new Vector2_js_1.Vector2();
     // 描边色
     strokeStyle = '#558ef0';
@@ -43,6 +43,10 @@ class Frame {
     /* 更新矩阵、路径初始顶点、中点 */
     updateShape() {
         const { vertives: fv, center, img, level, img: { size: { x: imgW, y: imgH }, }, } = this;
+        // 左上角
+        // 左上中
+        // 左上右
+        // 左中右  依次的坐标
         const vertices = [
             0,
             0,
@@ -63,9 +67,10 @@ class Frame {
         ];
         /* 更新路径变换矩阵 */
         this.matrix = img[level];
+        // 依次给 frame 上面的 坐标赋值
         for (let i = 0, len = vertices.length; i < len; i += 2) {
             const { x, y } = new Vector2_js_1.Vector2(vertices[i], vertices[i + 1]).applyMatrix3(this.matrix);
-            /* 更新路径顶点 */
+            /* 更新路径顶点 | 就是简单赋值 */
             fv[i] = x;
             fv[i + 1] = y;
         }
@@ -84,6 +89,7 @@ class Frame {
             if (new Vector2_js_1.Vector2(fv[i], fv[i + 1]).sub(mp).length() < scaleDist) {
                 const ind = (i + 8) % 16;
                 opposite.set(fv[ind], fv[ind + 1]);
+                // console.log("zptest:scale")
                 return 'scale';
             }
         }
@@ -135,6 +141,7 @@ class Frame {
         if (ctx.isPointInPath(mp.x, mp.y)) {
             return 'move';
         }
+        //重要： 这里单纯就是 顺序问题了。旋转在前面就是旋转 ，scale 在前面就是 scale
         /* 旋转 */
         ctx.save();
         ctx.lineWidth = 80;
@@ -148,9 +155,20 @@ class Frame {
         /* 无状态 */
         return null;
     }
+    /**
+     * @des 重要:绘制 frmae
+     */
     draw(ctx) {
         this.updateShape();
         const { img: { size }, vertives: fv, center, matrix, strokeStyle, fillStyle, } = this;
+        console.log("zptest-framedraw", {
+            img: { size },
+            vertives: fv,
+            center,
+            matrix,
+            strokeStyle,
+            fillStyle,
+        });
         /* 图案尺寸的一半 */
         const [halfWidth, halfheight] = [size.width / 2, size.height / 2];
         /* 绘图 */
@@ -159,18 +177,23 @@ class Frame {
         ctx.fillStyle = fillStyle;
         /* 矩形框 */
         ctx.beginPath();
+        // moveto lineto 老一套 
+        // 重要:绘制线
         (0, ObjectUtils_js_1.crtPath)(ctx, [fv[0], fv[1], fv[4], fv[5], fv[8], fv[9], fv[12], fv[13]], true);
         ctx.stroke();
-        /* 矩形节点 */
+        /* frame 对里面的矩形 提取缩放量 先除缩放量，再乘缩放量 */
         const { elements: e } = matrix;
         // 矩阵内的缩放量
         const sx = new Vector2_js_1.Vector2(e[0], e[1]).length();
         const sy = new Vector2_js_1.Vector2(e[3], e[4]).length();
-        // 节点尺寸，消去缩放量
+        // console.log(e)
+        // const sx = 1
+        // const sy = 1
+        // 节点尺寸(8)，消去缩放量
         const pointSize = new Vector2_js_1.Vector2(8 / sx, 8 / sy);
         //节点尺寸的一半
         const [w, h] = [pointSize.x / 2, pointSize.y / 2];
-        // 绘制节点
+        // 重要:绘制顶点 8个
         ctx.beginPath();
         for (let y = 0; y < 3; y++) {
             for (let x = 0; x < 3; x++) {
@@ -184,7 +207,7 @@ class Frame {
         }
         ctx.fill();
         ctx.stroke();
-        /* 中点 */
+        // 重要:绘制中点
         ctx.beginPath();
         ctx.arc(center.x, center.y, 5, 0, pi2);
         ctx.fill();

@@ -73,7 +73,6 @@ const mockData = (): Promise<DictType> => {
 const apiData = await mockData();
 console.log(apiData);
 
-
 const DataDictTest = {
     workType: apiData.data.workType,
 };

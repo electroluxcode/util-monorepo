@@ -75,6 +75,7 @@ class OrbitControler extends EventDispatcher_js_1.EventDispatcher {
         if (!enablePan || !panning) {
             return;
         }
+        // copy 就是让 后面的 等于 前面的 
         position.copy(cameraPosition.clone().add(new Vector2_js_1.Vector2(x - cx, y - cy)));
         this.emit(_changeEvent);
     }

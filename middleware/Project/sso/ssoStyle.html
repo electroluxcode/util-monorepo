@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sso 样式</title>
+    <style>
+        .container {
+            display: flex;
+            margin: 0 auto;
+            width: 98vw;
+            justify-content: center;
+            justify-self: center;
+            flex-direction: column;
+        }
+
+        .main_img img {
+            width: 40px;
+            height: 40px;
+            border-radius: 100px;
+            margin: 10px;
+        }
+
+        .main_img {
+            text-align: center;
+        }
+
+        .main_form {
+            background: rgba(0, 0, 0, 0.02);
+            border: 0.5px solid rgba(0, 0, 0, 0.1);
+            width: 250px;
+            margin: 0 auto;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px 10px 0px 10px;
+        }
+
+        .main_form_item {
+            font-size: 12px;
+            padding-top: 20px;
+        }
+
+        .main_form_header {
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 20px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .item_label {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .item_input {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 0px 12px;
+            padding: 5px 0px;
+        }
+
+        button {
+            margin: 10px 12px 20px 12px;
+            padding: 5px 0px;
+            border-radius: 5px;
+            z-index: 9;
+            cursor: pointer;
+            color: white;
+            background: rgb(49, 120, 187);
+            border: none;
+        }
+
+
+        .main_form_header img {
+            width: 50px;
+            height: 60px;
+            border-radius: 1000px;
+            margin: 5px;
+        }
+
+        .line {
+            height: 1px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        input {
+            /* width: 500px; */
+            padding: 4px 0px;
+            font-size: 12px;
+            color: #555;
+            border: 1px solid #aaa;
+            vertical-align: baseline;
+            /* border: 0; */
+            outline: 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="main_img"><img src="./img/default.png" alt=""></div>
+        <div class="main_form">
+            <div class="main_form_header">
+                <img src="./img/default.png" alt=""><br>
+                Sign in to GitHub<br />
+                to continue to gitee.com
+            </div>
+            <div class="line"></div>
+            <div class="main_form_item">
+                <div class="item_label">
+                    <div>Username or email address</div>
+                </div>
+                <div class="item_input">
+                    <input type="text">
+                </div>
+                <div class="item_label">
+                    <div>Password</div>
+
+                </div>
+                <div class="item_input">
+                    <input type="text">
+                </div>
+            </div>
+            <button>sign in</button>
+        </div>
+
+    </div>
+
+    <script>
+
+        document.querySelector("button")?.addEventListener("click",()=>{
+            console.log("点击了我")
+            window.postMessage("sso验证成功", "*");
+        })
+        let flag = false
+        setTimeout(() => {
+            
+        }, 2000);
+    </script>
+</body>
+
+</html>

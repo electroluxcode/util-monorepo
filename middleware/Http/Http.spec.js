@@ -30,7 +30,7 @@ describe('Http', () => {
                 // "Content-Type":"application/json",
             },
         }).catch((e)=>{
-            let flag = e.config.url=="http://localhost:8088/api/get34"
+            let flag = e.config.url=="http://localhost:8088/api/get34?id=5656588888"
             expect(flag).toBe(true);
         })
         // let flag = compare(transformInstance,expectData)

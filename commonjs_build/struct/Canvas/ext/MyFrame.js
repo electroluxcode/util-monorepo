@@ -158,6 +158,8 @@ class MyFrame {
     }
     /**
      * @des 重要:绘制 fraae
+     * @param ctx
+     * @param isSingle 如果事单独使用需要手动 translate
      */
     draw(ctx, isSingle = false) {
         this.updateShape();
@@ -166,14 +168,6 @@ class MyFrame {
             ctx.translate(400 / 2, 400 / 2);
         }
         const { img: { size }, vertives: fv, center, matrix, strokeStyle, fillStyle, } = this;
-        console.log("zptest-framedraw", {
-            img: { size },
-            vertives: fv,
-            center,
-            matrix,
-            strokeStyle,
-            fillStyle,
-        });
         /* 图案尺寸的一半 */
         const [halfWidth, halfheight] = [size.width / 2, size.height / 2];
         /* 绘图 */

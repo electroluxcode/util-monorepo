@@ -1,0 +1,51 @@
+import { Vector2 } from '../math/Vector2.js';
+import { Group } from './Group.js';
+import { Scene } from '../core/Scene.js';
+import { EventDispatcher } from '../core/EventDispatcher.js';
+import { Matrix3 } from '../math/Matrix3.js';
+export type Object2DType = {
+    position?: Vector2;
+    rotate?: number;
+    scale?: Vector2;
+    offset?: Vector2;
+    boundingBox?: BoundingBox;
+    visible?: boolean;
+    index?: number;
+    name?: string;
+    parent?: Scene | Group | undefined;
+    enableCamera?: boolean;
+    uuid?: string;
+    [key: string]: any;
+};
+type BoundingBox = {
+    min: Vector2;
+    max: Vector2;
+};
+declare class Object2D extends EventDispatcher {
+    [key: string]: any;
+    position: Vector2;
+    rotate: number;
+    scale: Vector2;
+    offset: Vector2;
+    boundingBox: BoundingBox;
+    visible: boolean;
+    index: number;
+    name: string;
+    parent: Scene | Group | undefined;
+    enableCamera: boolean;
+    uuid: string;
+    readonly isObject2D = true;
+    get matrix(): Matrix3;
+    get worldMatrix(): Matrix3;
+    get pvmMatrix(): Matrix3;
+    get worldScale(): Vector2;
+    transform(ctx: CanvasRenderingContext2D): void;
+    decomposeModelMatrix(m: Matrix3): void;
+    remove(): void;
+    getScene(): Scene | null;
+    draw(ctx: CanvasRenderingContext2D): void;
+    drawShape(ctx: CanvasRenderingContext2D): void;
+    crtPath(ctx: CanvasRenderingContext2D, projectionMatrix: Matrix3, isShow: boolean): void;
+    computeBoundingBox(): void;
+}
+export { Object2D };

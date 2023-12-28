@@ -14,7 +14,7 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "esModuleInterop": true, // important!
     "types": ["node"],
-    "declaration": true
+    // "declaration": true
   },
   "outDir": "dist",
   

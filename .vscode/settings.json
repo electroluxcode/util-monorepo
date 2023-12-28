@@ -1,3 +1,21 @@
 {
-    "liveServer.settings.port": 5501
+  "liveServer.settings.port": 5501,
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "$(capture).d.ts,$(capture).ts, $(capture).js",
+  },
+  "editor.formatOnSave": true, // 开启保存文件自动格式化代码
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.requireConfig": true // 需要Prettier的配置文件
 }

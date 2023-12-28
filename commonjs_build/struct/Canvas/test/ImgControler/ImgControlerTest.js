@@ -3,10 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Scene_js_1 = require("../../core/Scene.js");
 const Vector2_js_1 = require("../../math/Vector2.js");
 const Img2D_js_1 = require("../../objects/Img2D.js");
-const ImgControler_js_1 = require("../../controler/ImgControler.js");
+// import { ImgControler } from '../../controler/ImgControler.js'
 const OrbitControler_js_1 = require("../../controler/OrbitControler.js");
 const Group_js_1 = require("../../objects/Group.js");
 const ObjectUtils_js_1 = require("../../objects/ObjectUtils.js");
+const TransformControler_js_1 = require("../../controler/TransformControler.js");
 // step1:基本参数初始化
 let size = {
     width: 400,
@@ -17,7 +18,7 @@ canvas.width = size.width;
 canvas.height = size.height;
 const scene = new Scene_js_1.Scene();
 const orbitControler = new OrbitControler_js_1.OrbitControler(scene.camera);
-const imgControler = new ImgControler_js_1.ImgControler();
+const imgControler = new TransformControler_js_1.TransformControler();
 scene.add(imgControler);
 // 定义图片资源 和 资源容器.需要统一管理
 const images = [];

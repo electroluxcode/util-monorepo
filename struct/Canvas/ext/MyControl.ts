@@ -14,7 +14,7 @@ const _changeEvent = { type: 'change' }
 type TransformStage = {
     clipCenter: Vector2
     clipOpposite: Vector2
-    parentPvmInvert: Matrix3
+        parentPvmInvert: Matrix3
 }
 
 class ImgControler extends Object2D {

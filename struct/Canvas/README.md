@@ -227,7 +227,7 @@ requestAnimationFrame(()=>{ani(time+15)})
 
 
 
-## 1.8 OrbitControler | 相机控制
+## 1.8 OrbitControler | 相机控制(可以直接用)
 
 需要 `Scene`,`img2D`,`OrbitControler`
 
@@ -444,7 +444,7 @@ ImgControler的具体操作步骤如下：
 
 
 
-## 1.10 MyShape| scene | 自定义object
+## 1.10 MyShape| scene | 自定义图形跟随鼠标
 
 
 
@@ -487,7 +487,13 @@ const rotatedPoints = originalPoints.map(point => rotatePoint(point, rotationAng
 
 
 
-### 1.10.1 定义类型
+### 1.10.1 定义MyShape | 绘制点 | 根据mousePos 进行绘制
+
+主要做了这几件事
+
+- 定义旋转方法
+- 对点进行旋转 并且绘制路径
+- 重写这个类的 drawShape 方法
 
 ```ts
 
@@ -590,6 +596,8 @@ export { MyShape }
 
 ### 1.10.2  在 scene 中使用
 
+- scene.add 添加进去然后 draw就可以了
+
 ```ts
 
 import { Scene } from '../../core/Scene.js'
@@ -635,6 +643,71 @@ function ani(time = 0) {
 
 
 
+
+## 1.11 MyFrame | 自定义图形跟随某一个东西
+
+### 1.11.1 MyFrame
+
+有一下几个步骤
+
+- 定义 `updateShape` 方法 用来更新 图形的各个顶点的 array
+- 定义 `getMouseState` 用来计算 鼠标 和 上面顶点的 差值 ()   .注意 这里需要 设置 变换的 基点（opposite.set）。以后要用。最后说一下判定的规则，主要是通过`isPointInStroke` 和 对象距离的比较来确定 目前的 鼠标是 边边 还是中间什么的
+
+
+
+### 1.11.2 
+
+
+
+
+
+- 把所有image 添加进 scene中
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 1.12 MyTransFormer
+
+
+
+
+
+
+
+我们在变化图形的时候，需要监听两个东西
+
+
+
+
+
+
+
+
+
+
+
+### 1.11.1  初始化
+
+```ts
+new ImgTransformer({
+    mousePos: this.parentMousePos,
+    orign: this.origin,
+})
+```
 
 
 

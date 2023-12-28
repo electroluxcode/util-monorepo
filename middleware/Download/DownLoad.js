@@ -12,7 +12,6 @@ export function downloadFile(url, fileName, fileType) {
         link.click();
     });
 }
-
 //   export function downloadExcel(url:string,filetype="xlsx") {
 //     return instance({
 //       url: url,

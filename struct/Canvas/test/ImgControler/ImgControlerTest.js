@@ -1,10 +1,11 @@
 import { Scene } from '../../core/Scene.js';
 import { Vector2 } from '../../math/Vector2.js';
 import { Img2D } from '../../objects/Img2D.js';
-import { ImgControler } from '../../controler/ImgControler.js';
+// import { ImgControler } from '../../controler/ImgControler.js'
 import { OrbitControler } from '../../controler/OrbitControler.js';
 import { Group } from '../../objects/Group.js';
 import { ImagePromises } from '../../objects/ObjectUtils.js';
+import { TransformControler } from '../../controler/TransformControler.js';
 // step1:基本参数初始化
 let size = {
     width: 400,
@@ -15,7 +16,7 @@ canvas.width = size.width;
 canvas.height = size.height;
 const scene = new Scene();
 const orbitControler = new OrbitControler(scene.camera);
-const imgControler = new ImgControler();
+const imgControler = new TransformControler();
 scene.add(imgControler);
 // 定义图片资源 和 资源容器.需要统一管理
 const images = [];

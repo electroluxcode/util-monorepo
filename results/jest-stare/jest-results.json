@@ -26,7 +26,7 @@
     "unmatched": 0,
     "updated": 0
   },
-  "startTime": 1703570077199,
+  "startTime": 1703743233201,
   "success": false,
   "testResults": [
     {
@@ -37,10 +37,10 @@
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1703570080166,
-        "runtime": 1359,
+        "end": 1703743237637,
+        "runtime": 1381,
         "slow": false,
-        "start": 1703570078807
+        "start": 1703743236256
       },
       "skipped": false,
       "snapshot": {
@@ -58,7 +58,7 @@
           "ancestorTitles": [
             "Pool"
           ],
-          "duration": 23,
+          "duration": 20,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Pool Pool/event",
@@ -73,7 +73,7 @@
           "ancestorTitles": [
             "Pool"
           ],
-          "duration": 3,
+          "duration": 1,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Pool Pool/Concurrent",
@@ -88,7 +88,7 @@
           "ancestorTitles": [
             "Pool"
           ],
-          "duration": 7,
+          "duration": 2,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Pool Pool/Retry",
@@ -110,10 +110,10 @@
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1703570080286,
-        "runtime": 1472,
+        "end": 1703743237647,
+        "runtime": 1394,
         "slow": false,
-        "start": 1703570078814
+        "start": 1703743236253
       },
       "skipped": false,
       "snapshot": {
@@ -131,7 +131,7 @@
           "ancestorTitles": [
             "Strategy"
           ],
-          "duration": 18,
+          "duration": 13,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Strategy Strategy/error+event",
@@ -161,7 +161,7 @@
           "ancestorTitles": [
             "Strategy"
           ],
-          "duration": 1,
+          "duration": 0,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Strategy Strategy/userevent",
@@ -178,15 +178,101 @@
     {
       "leaks": false,
       "numFailingTests": 0,
+      "numPassingTests": 1,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "openHandles": [],
+      "perfStats": {
+        "end": 1703743237671,
+        "runtime": 1414,
+        "slow": false,
+        "start": 1703743236257
+      },
+      "skipped": false,
+      "snapshot": {
+        "added": 0,
+        "fileDeleted": false,
+        "matched": 0,
+        "unchecked": 0,
+        "uncheckedKeys": [],
+        "unmatched": 0,
+        "updated": 0
+      },
+      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Http\\Http.spec.js",
+      "testResults": [
+        {
+          "ancestorTitles": [
+            "Http"
+          ],
+          "duration": 38,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "Http Http/BaseConfig",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "Http/BaseConfig"
+        }
+      ],
+      "failureMessage": null
+    },
+    {
+      "leaks": false,
+      "numFailingTests": 0,
+      "numPassingTests": 1,
+      "numPendingTests": 0,
+      "numTodoTests": 0,
+      "openHandles": [],
+      "perfStats": {
+        "end": 1703743237638,
+        "runtime": 1383,
+        "slow": false,
+        "start": 1703743236255
+      },
+      "skipped": false,
+      "snapshot": {
+        "added": 0,
+        "fileDeleted": false,
+        "matched": 0,
+        "unchecked": 0,
+        "uncheckedKeys": [],
+        "unmatched": 0,
+        "updated": 0
+      },
+      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Strategy\\StrategyEnance.spec.js",
+      "testResults": [
+        {
+          "ancestorTitles": [
+            "StrategyEnance"
+          ],
+          "duration": 18,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "StrategyEnance StrategyEnance/event",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "StrategyEnance/event"
+        }
+      ],
+      "failureMessage": null
+    },
+    {
+      "leaks": false,
+      "numFailingTests": 0,
       "numPassingTests": 4,
       "numPendingTests": 0,
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1703570080294,
-        "runtime": 1475,
+        "end": 1703743237651,
+        "runtime": 1391,
         "slow": false,
-        "start": 1703570078819
+        "start": 1703743236260
       },
       "skipped": false,
       "snapshot": {
@@ -204,7 +290,7 @@
           "ancestorTitles": [
             "Handle"
           ],
-          "duration": 19,
+          "duration": 17,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Handle sort/mult",
@@ -271,53 +357,10 @@
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1703570080315,
-        "runtime": 1458,
+        "end": 1703743237665,
+        "runtime": 1409,
         "slow": false,
-        "start": 1703570078857
-      },
-      "skipped": false,
-      "snapshot": {
-        "added": 0,
-        "fileDeleted": false,
-        "matched": 0,
-        "unchecked": 0,
-        "uncheckedKeys": [],
-        "unmatched": 0,
-        "updated": 0
-      },
-      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Strategy\\StrategyEnance.spec.js",
-      "testResults": [
-        {
-          "ancestorTitles": [
-            "StrategyEnance"
-          ],
-          "duration": 23,
-          "failureDetails": [],
-          "failureMessages": [],
-          "fullName": "StrategyEnance StrategyEnance/event",
-          "invocations": 1,
-          "location": null,
-          "numPassingAsserts": 1,
-          "retryReasons": [],
-          "status": "passed",
-          "title": "StrategyEnance/event"
-        }
-      ],
-      "failureMessage": null
-    },
-    {
-      "leaks": false,
-      "numFailingTests": 0,
-      "numPassingTests": 1,
-      "numPendingTests": 0,
-      "numTodoTests": 0,
-      "openHandles": [],
-      "perfStats": {
-        "end": 1703570080319,
-        "runtime": 1463,
-        "slow": false,
-        "start": 1703570078856
+        "start": 1703743236256
       },
       "skipped": false,
       "snapshot": {
@@ -335,7 +378,7 @@
           "ancestorTitles": [
             "EventBus"
           ],
-          "duration": 29,
+          "duration": 22,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "EventBus EventBus/event",
@@ -352,58 +395,15 @@
     {
       "leaks": false,
       "numFailingTests": 0,
-      "numPassingTests": 1,
-      "numPendingTests": 0,
-      "numTodoTests": 0,
-      "openHandles": [],
-      "perfStats": {
-        "end": 1703570080350,
-        "runtime": 1517,
-        "slow": false,
-        "start": 1703570078833
-      },
-      "skipped": false,
-      "snapshot": {
-        "added": 0,
-        "fileDeleted": false,
-        "matched": 0,
-        "unchecked": 0,
-        "uncheckedKeys": [],
-        "unmatched": 0,
-        "updated": 0
-      },
-      "testFilePath": "E:\\myProject\\util-monorepo\\middleware\\Http\\Http.spec.js",
-      "testResults": [
-        {
-          "ancestorTitles": [
-            "Http"
-          ],
-          "duration": 56,
-          "failureDetails": [],
-          "failureMessages": [],
-          "fullName": "Http Http/BaseConfig",
-          "invocations": 1,
-          "location": null,
-          "numPassingAsserts": 1,
-          "retryReasons": [],
-          "status": "passed",
-          "title": "Http/BaseConfig"
-        }
-      ],
-      "failureMessage": null
-    },
-    {
-      "leaks": false,
-      "numFailingTests": 0,
       "numPassingTests": 2,
       "numPendingTests": 0,
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1703570080360,
-        "runtime": 1586,
+        "end": 1703743237859,
+        "runtime": 1605,
         "slow": false,
-        "start": 1703570078774
+        "start": 1703743236254
       },
       "skipped": false,
       "snapshot": {
@@ -421,7 +421,7 @@
           "ancestorTitles": [
             "Pipe"
           ],
-          "duration": 21,
+          "duration": 17,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Pipe Pipe/base",
@@ -436,7 +436,7 @@
           "ancestorTitles": [
             "Pipe"
           ],
-          "duration": 226,
+          "duration": 231,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Pipe Pipe/async",
@@ -458,10 +458,10 @@
       "numTodoTests": 0,
       "openHandles": [],
       "perfStats": {
-        "end": 1703570081316,
-        "runtime": 2500,
+        "end": 1703743238662,
+        "runtime": 2403,
         "slow": false,
-        "start": 1703570078816
+        "start": 1703743236259
       },
       "skipped": false,
       "snapshot": {
@@ -479,7 +479,7 @@
           "ancestorTitles": [
             "Chain"
           ],
-          "duration": 40,
+          "duration": 27,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Chain Chain/error",
@@ -494,7 +494,7 @@
           "ancestorTitles": [
             "Chain"
           ],
-          "duration": 1003,
+          "duration": 1013,
           "failureDetails": [],
           "failureMessages": [],
           "fullName": "Chain Chain/value/async",

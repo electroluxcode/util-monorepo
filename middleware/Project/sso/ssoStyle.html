@@ -14,6 +14,7 @@
             justify-content: center;
             justify-self: center;
             flex-direction: column;
+
         }
 
         .main_img img {
@@ -40,7 +41,7 @@
         }
 
         .main_form_item {
-            font-size: 12px;
+            font-size: 14px;
             padding-top: 20px;
         }
 
@@ -63,12 +64,12 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            margin: 0px 12px;
+            margin: 0px 14px;
             padding: 5px 0px;
         }
 
         button {
-            margin: 10px 12px 20px 12px;
+            margin: 20px 14px 20px 14px;
             padding: 5px 0px;
             border-radius: 5px;
             z-index: 9;
@@ -95,7 +96,7 @@
         input {
             /* width: 500px; */
             padding: 4px 0px;
-            font-size: 12px;
+            font-size: 14px;
             color: #555;
             border: 1px solid #aaa;
             vertical-align: baseline;
@@ -138,13 +139,13 @@
 
     <script>
 
-        document.querySelector("button")?.addEventListener("click",()=>{
+        document.querySelector("button")?.addEventListener("click", () => {
             console.log("点击了我")
             window.postMessage("sso验证成功", "*");
         })
         let flag = false
         setTimeout(() => {
-            
+
         }, 2000);
     </script>
 </body>

@@ -3,14 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ControlFrame = void 0;
 const Matrix3_js_1 = require("../math/Matrix3.js");
 const Vector2_js_1 = require("../math/Vector2.js");
-const Object2D_js_1 = require("../objects/Object2D.js");
+const Object2D_js_1 = require("../core/Object2D.js");
 const ObjectUtils_js_1 = require("../objects/ObjectUtils.js");
 const pi2 = Math.PI * 2;
 let _bool = false;
 //* 虚拟上下文对象 */
-const ctx = document
-    .createElement('canvas')
-    .getContext('2d');
+const ctx = document.createElement('canvas').getContext('2d');
 class ControlFrame {
     // 目标对象
     _obj = new Object2D_js_1.Object2D();
@@ -63,24 +61,7 @@ class ControlFrame {
         const { clipVertives: cv, localCenter, clipCenter, obj, level, obj: { boundingBox: { min: { x: x0, y: y0 }, max: { x: x1, y: y1 }, }, }, } = this;
         const xm = (x0 + x1) / 2;
         const ym = (y0 + y1) / 2;
-        this.localVertices = [
-            x0,
-            y0,
-            xm,
-            y0,
-            x1,
-            y0,
-            x1,
-            ym,
-            x1,
-            y1,
-            xm,
-            y1,
-            x0,
-            y1,
-            x0,
-            ym,
-        ];
+        this.localVertices = [x0, y0, xm, y0, x1, y0, x1, ym, x1, y1, xm, y1, x0, y1, x0, ym];
         const lv = this.localVertices;
         this.matrix = obj[level];
         for (let i = 0, len = lv.length; i < len; i += 2) {

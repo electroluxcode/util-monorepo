@@ -1,11 +1,9 @@
 import { Vector2 } from '../math/Vector2.js';
-import { TextStyle } from '../style/TextStyle.js';
-import { Object2D } from './Object2D.js';
+import { TextStyle } from './TextStyle.js';
+import { Object2D } from '../core/Object2D.js';
 import { crtPathByMatrix } from './ObjectUtils.js';
 /* 虚拟上下文对象 */
-const virtuallyCtx = document
-    .createElement('canvas')
-    .getContext('2d');
+const virtuallyCtx = document.createElement('canvas').getContext('2d');
 /* 文字对齐方式引起的偏移量 */
 const alignRatio = {
     start: 0,
@@ -59,7 +57,7 @@ class Text2D extends Object2D {
     }
     /* 计算边界盒子 */
     computeBoundingBox() {
-        console.log("zptest:crtPath:", this);
+        console.log('zptest:crtPath:', this);
         const { boundingBox: { min, max }, size, offset, style: { textAlign, textBaseline }, } = this;
         min.set(offset.x + size.x * alignRatio[textAlign], offset.y + size.y * baselineRatio[textBaseline]);
         max.addVectors(min, size);

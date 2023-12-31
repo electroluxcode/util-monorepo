@@ -1,23 +1,20 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Object2D = void 0;
-const Matrix3_js_1 = require("../math/Matrix3.js");
-const MathUtils_js_1 = require("../math/MathUtils.js");
-const Vector2_js_1 = require("../math/Vector2.js");
+import { Matrix3 } from '../math/Matrix3.js';
+import { generateUUID } from '../math/MathUtils.js';
+import { Vector2 } from '../math/Vector2.js';
 const pi2 = Math.PI * 2;
 class Object2D {
     // 位置
-    position = new Vector2_js_1.Vector2();
+    position = new Vector2();
     // 旋转
     rotate = 0;
     // 缩放
-    scale = new Vector2_js_1.Vector2(1, 1);
+    scale = new Vector2(1, 1);
     // 偏移
-    offset = new Vector2_js_1.Vector2();
+    offset = new Vector2();
     // 边界盒子
     boundingBox = {
-        min: new Vector2_js_1.Vector2(),
-        max: new Vector2_js_1.Vector2(),
+        min: new Vector2(),
+        max: new Vector2(),
     };
     // 可见性
     visible = true;
@@ -30,13 +27,13 @@ class Object2D {
     // 是否受相机影响-只适用于Scene的children元素
     enableCamera = true;
     // UUID
-    uuid = (0, MathUtils_js_1.generateUUID)();
+    uuid = generateUUID();
     // 类型
     isObject2D = true;
     /* 本地模型矩阵 */
     get matrix() {
         const { position, rotate, scale } = this;
-        return new Matrix3_js_1.Matrix3().scale(scale.x, scale.y).rotate(rotate).translate(position.x, position.y);
+        return new Matrix3().scale(scale.x, scale.y).rotate(rotate).translate(position.x, position.y);
     }
     /* 世界模型矩阵 */
     get worldMatrix() {
@@ -53,7 +50,7 @@ class Object2D {
         const scene = this.getScene();
         if (scene) {
             const { camera } = scene;
-            return new Matrix3_js_1.Matrix3().multiplyMatrices(camera.pvMatrix, this.worldMatrix);
+            return new Matrix3().multiplyMatrices(camera.pvMatrix, this.worldMatrix);
         }
         else {
             return this.worldMatrix;
@@ -82,8 +79,8 @@ class Object2D {
         // 位移量
         this.position.set(e[6], e[7]);
         // 缩放量
-        let sx = new Vector2_js_1.Vector2(e[0], e[1]).length();
-        const sy = new Vector2_js_1.Vector2(e[3], e[4]).length();
+        let sx = new Vector2(e[0], e[1]).length();
+        const sy = new Vector2(e[3], e[4]).length();
         const det = m.determinant();
         if (det < 0) {
             sx = -sx;
@@ -173,4 +170,4 @@ class Object2D {
         }
     }
 }
-exports.Object2D = Object2D;
+export { Object2D };

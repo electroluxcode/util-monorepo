@@ -2,13 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Text2D = void 0;
 const Vector2_js_1 = require("../math/Vector2.js");
-const TextStyle_js_1 = require("../style/TextStyle.js");
-const Object2D_js_1 = require("./Object2D.js");
+const TextStyle_js_1 = require("./TextStyle.js");
+const Object2D_js_1 = require("../core/Object2D.js");
 const ObjectUtils_js_1 = require("./ObjectUtils.js");
 /* 虚拟上下文对象 */
-const virtuallyCtx = document
-    .createElement('canvas')
-    .getContext('2d');
+const virtuallyCtx = document.createElement('canvas').getContext('2d');
 /* 文字对齐方式引起的偏移量 */
 const alignRatio = {
     start: 0,
@@ -62,7 +60,7 @@ class Text2D extends Object2D_js_1.Object2D {
     }
     /* 计算边界盒子 */
     computeBoundingBox() {
-        console.log("zptest:crtPath:", this);
+        console.log('zptest:crtPath:', this);
         const { boundingBox: { min, max }, size, offset, style: { textAlign, textBaseline }, } = this;
         min.set(offset.x + size.x * alignRatio[textAlign], offset.y + size.y * baselineRatio[textBaseline]);
         max.addVectors(min, size);

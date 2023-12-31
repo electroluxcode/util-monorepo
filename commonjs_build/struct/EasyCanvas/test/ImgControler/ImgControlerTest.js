@@ -5,15 +5,15 @@ const Vector2_js_1 = require("../../math/Vector2.js");
 const Img2D_js_1 = require("../../objects/Img2D.js");
 // import { ImgControler } from '../../controler/ImgControler.js'
 const OrbitControler_js_1 = require("../../controler/OrbitControler.js");
-const Group_js_1 = require("../../objects/Group.js");
+const Group_js_1 = require("../../core/Group.js");
 const ObjectUtils_js_1 = require("../../objects/ObjectUtils.js");
 const TransformControler_js_1 = require("../../controler/TransformControler.js");
 // step1:基本参数初始化
 let size = {
     width: 400,
-    height: 400
+    height: 400,
 };
-const canvas = document.querySelector("canvas");
+const canvas = document.querySelector('canvas');
 canvas.width = size.width;
 canvas.height = size.height;
 const scene = new Scene_js_1.Scene();
@@ -60,7 +60,7 @@ Promise.all((0, ObjectUtils_js_1.ImagePromises)(images)).then(() => {
         // 转化成裁剪坐标(就是中间的点 作为坐标原点)
         const mp = scene.clientToClip(clientX, clientY);
         // const mp = {x:0,y:0}
-        console.log("zptest:点击下去 scene.clienttoClip", mp);
+        console.log('zptest:点击下去 scene.clienttoClip', mp);
         switch (button) {
             // 鼠标左键
             case 0:
@@ -114,4 +114,4 @@ Promise.all((0, ObjectUtils_js_1.ImagePromises)(images)).then(() => {
     });
 });
 // step2:scene 重要：
-// 2.1  
+// 2.1

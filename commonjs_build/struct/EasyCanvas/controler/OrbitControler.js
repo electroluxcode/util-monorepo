@@ -2,11 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrbitControler = void 0;
 const Vector2_js_1 = require("../math/Vector2.js");
-const EventDispatcher_js_1 = require("../core/EventDispatcher.js");
 /* change 事件 */
 const _changeEvent = { type: 'change' };
 /* 相机轨道控制 */
-class OrbitControler extends EventDispatcher_js_1.EventDispatcher {
+class OrbitControler {
     // 相机
     camera;
     // 允许缩放
@@ -26,7 +25,6 @@ class OrbitControler extends EventDispatcher_js_1.EventDispatcher {
         panStart: new Vector2_js_1.Vector2(),
     };
     constructor(camera, option = {}) {
-        super();
         this.camera = camera;
         this.setOption(option);
     }
@@ -75,9 +73,50 @@ class OrbitControler extends EventDispatcher_js_1.EventDispatcher {
         if (!enablePan || !panning) {
             return;
         }
-        // copy 就是让 后面的 等于 前面的 
+        // copy 就是让 后面的 等于 前面的
         position.copy(cameraPosition.clone().add(new Vector2_js_1.Vector2(x - cx, y - cy)));
         this.emit(_changeEvent);
+    }
+    _listeners = {};
+    /* 监听事件 */
+    on(type, listener) {
+        const listeners = this._listeners;
+        if (listeners[type] === undefined) {
+            listeners[type] = [];
+        }
+        if (listeners[type].indexOf(listener) === -1) {
+            listeners[type].push(listener);
+        }
+    }
+    /* 判断目标对象的某个状态是否被某个监听器监听 */
+    hasEmit(type, listener) {
+        const listeners = this._listeners;
+        return listeners[type] !== undefined && listeners[type].indexOf(listener) !== -1;
+    }
+    /* 取消事件监听 */
+    removeEmit(type, listener) {
+        const listeners = this._listeners;
+        const listenerArray = listeners[type];
+        if (listenerArray !== undefined) {
+            const index = listenerArray.indexOf(listener);
+            if (index !== -1) {
+                listenerArray.splice(index, 1);
+            }
+        }
+    }
+    /* 触发事件 */
+    emit(event) {
+        const listeners = this._listeners;
+        const listenerArray = listeners[event.type];
+        if (listenerArray !== undefined) {
+            event.target = this;
+            // 复制一份侦听器集合，以防在迭代时删除侦听器。
+            const array = [...listenerArray];
+            for (let i = 0, l = array.length; i < l; i++) {
+                array[i].call(this, event);
+            }
+            event.target = null;
+        }
     }
 }
 exports.OrbitControler = OrbitControler;

@@ -3,10 +3,10 @@ import { Vector2 } from '../../math/Vector2.js';
 import { Img2D } from '../../objects/Img2D.js';
 // step1:基本参数初始化
 let size = {
-    width: 900,
-    height: 900
+    width: 300,
+    height: 300,
 };
-const canvas = document.querySelector("canvas");
+const canvas = document.querySelector('canvas');
 canvas.width = size.width;
 canvas.height = size.height;
 const ctx = canvas?.getContext('2d');
@@ -15,10 +15,10 @@ const ctx = canvas?.getContext('2d');
 // 基础图层(image 的基本操作)
 const scene = new Scene();
 const image = new Image();
-image.src = 'https://yxyy-pandora.oss-cn-beijing.aliyuncs.com/stamp-images/1.png';
+image.src = '../img.png';
 const pattern = new Img2D({ image });
 scene.add(pattern);
-image.addEventListener("load", () => {
+image.addEventListener('load', () => {
     ctx.save();
     const imgSize = new Vector2(image.width, image.height).multiplyScalar(0.6);
     pattern.setOption({
@@ -69,7 +69,9 @@ function ani(time = 0) {
     if (scene.isPointInObj(pattern, mouseClipPos, pattern.pvmoMatrix)) {
         pattern.rotate += 0.02;
     }
-    requestAnimationFrame(() => { ani(time + 15); });
+    requestAnimationFrame(() => {
+        ani(time + 15);
+    });
 }
 if (canvas) {
     scene.setOption({ canvas });

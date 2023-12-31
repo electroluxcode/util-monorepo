@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransformControler = void 0;
 const Vector2_js_1 = require("../math/Vector2.js");
-const Object2D_js_1 = require("../objects/Object2D.js");
+const Object2D_js_1 = require("../core/Object2D.js");
 const Matrix3_js_1 = require("../math/Matrix3.js");
 const MouseShape_js_1 = require("./MouseShape.js");
 const ControlFrame_js_1 = require("./ControlFrame.js");

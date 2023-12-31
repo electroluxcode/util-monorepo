@@ -1,14 +1,17 @@
-import { Matrix3 } from '../math/Matrix3.js';
-import { Vector2 } from '../math/Vector2.js';
-import { BasicStyle } from '../style/BasicStyle.js';
-import { Object2D } from './Object2D.js';
-import { crtPathByMatrix } from './ObjectUtils.js';
-class Img2D extends Object2D {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Img2D = void 0;
+const Matrix3_js_1 = require("../math/Matrix3.js");
+const Vector2_js_1 = require("../math/Vector2.js");
+const BasicStyle_js_1 = require("../style/BasicStyle.js");
+const Object2D_js_1 = require("./Object2D.js");
+const ObjectUtils_js_1 = require("./ObjectUtils.js");
+class Img2D extends Object2D_js_1.Object2D {
     image = new Image();
-    offset = new Vector2();
-    size = new Vector2(300, 150);
+    offset = new Vector2_js_1.Vector2();
+    size = new Vector2_js_1.Vector2(300, 150);
     view;
-    style = new BasicStyle();
+    style = new BasicStyle_js_1.BasicStyle();
     // 类型
     isImg = true;
     constructor(attr = {}) {
@@ -35,7 +38,7 @@ class Img2D extends Object2D {
     /* 世界模型矩阵*偏移矩阵 */
     get moMatrix() {
         const { offset: { x, y }, } = this;
-        return this.worldMatrix.multiply(new Matrix3().makeTranslation(x, y));
+        return this.worldMatrix.multiply(new Matrix3_js_1.Matrix3().makeTranslation(x, y));
     }
     // 计算边界盒子，很牛皮
     computeBoundingBox() {
@@ -46,7 +49,7 @@ class Img2D extends Object2D {
     /* 视图投影矩阵*世界模型矩阵*偏移矩阵  */
     get pvmoMatrix() {
         const { offset: { x, y }, } = this;
-        return this.pvmMatrix.multiply(new Matrix3().makeTranslation(x, y));
+        return this.pvmMatrix.multiply(new Matrix3_js_1.Matrix3().makeTranslation(x, y));
     }
     /* 绘图 */
     drawShape(ctx) {
@@ -61,10 +64,12 @@ class Img2D extends Object2D {
             ctx.drawImage(image, offset.x, offset.y, size.x, size.y);
         }
     }
-    /* 绘制图像边界 */
-    crtPath(ctx, matrix = this.pvmoMatrix) {
+    /* 绘制图像边界, */
+    crtPath(ctx, matrix = this.pvmoMatrix, isShow = false, style = { width: 5, color: "red" }) {
         const { size: { x: imgW, y: imgH }, } = this;
-        crtPathByMatrix(ctx, [0, 0, imgW, 0, imgW, imgH, 0, imgH], matrix, true);
+        // 第二个参数是宽高 和周围的边界
+        // 第三个参数是 默认是正方形,然后向着指定方向做位移
+        (0, ObjectUtils_js_1.crtPathByMatrix)(ctx, [0, 0, imgW, 0, imgW, imgH, 0, imgH], matrix, true, isShow, style);
     }
 }
-export { Img2D };
+exports.Img2D = Img2D;

@@ -1,9 +1,9 @@
 import { Vector2 } from '../math/Vector2.js';
 import { Object2D } from '../core/Object2D.js';
 import { Matrix3 } from '../math/Matrix3.js';
-import { MouseShape } from './MouseShape.js';
-import { ControlFrame, State } from './ControlFrame.js';
-import { Object2DTransformer } from './Object2DTransformer.js';
+import { MouseShape } from '../ext/MouseShape.js';
+import { ControlFrame, State } from '../ext/ControlFrame.js';
+import { Object2DTransformer } from '../ext/Object2DTransformer.js';
 
 type TranformData = {
   position: Vector2;
@@ -266,6 +266,8 @@ class TransformControler extends Object2D {
 
   /* 绘图 */
   draw(ctx: CanvasRenderingContext2D) {
+    // console.log('调用draw');
+
     const { obj } = this;
     if (!obj) {
       return;

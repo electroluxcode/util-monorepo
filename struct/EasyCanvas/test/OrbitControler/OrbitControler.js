@@ -1,12 +1,13 @@
 import { OrbitControler } from '../../controler/OrbitControler.js';
 import { Scene } from '../../core/Scene.js';
+import { Vector2 } from '../../math/Vector2.js';
 import { Img2D } from '../../objects/Img2D.js';
 // step1:基本参数初始化
 let size = {
     width: 900,
-    height: 300
+    height: 300,
 };
-const canvas = document.querySelector("canvas");
+const canvas = document.querySelector('canvas');
 canvas.width = size.width;
 canvas.height = size.height;
 const ctx = canvas?.getContext('2d');
@@ -16,13 +17,18 @@ const ctx = canvas?.getContext('2d');
 const scene = new Scene();
 const orbitControler = new OrbitControler(scene.camera);
 const image = new Image();
-image.src =
-    '../img.png';
+image.src = '../img.png';
 const pattern = new Img2D({ image });
-scene.add(pattern);
 // step3:图片加载后需要做的事
 scene.setOption({ canvas });
 image.onload = function () {
+    const imgSize = new Vector2(image.width, image.height).multiplyScalar(-0.5);
+    pattern.setOption({
+        size: imgSize.clone(),
+        offset: imgSize.clone().multiplyScalar(-0.5),
+    });
+    console.log('imgSize.clone().multiplyScalar(-0.5)', imgSize.clone().multiplyScalar(-0.5));
+    scene.add(pattern);
     /* 监听wheel和pointer 的渲染 */
     orbitControler.on('change', () => {
         scene.render();

@@ -4,9 +4,9 @@ exports.TransformControler = void 0;
 const Vector2_js_1 = require("../math/Vector2.js");
 const Object2D_js_1 = require("../core/Object2D.js");
 const Matrix3_js_1 = require("../math/Matrix3.js");
-const MouseShape_js_1 = require("./MouseShape.js");
-const ControlFrame_js_1 = require("./ControlFrame.js");
-const Object2DTransformer_js_1 = require("./Object2DTransformer.js");
+const MouseShape_js_1 = require("../ext/MouseShape.js");
+const ControlFrame_js_1 = require("../ext/ControlFrame.js");
+const Object2DTransformer_js_1 = require("../ext/Object2DTransformer.js");
 // change 事件
 const _changeEvent = { type: 'change' };
 class TransformControler extends Object2D_js_1.Object2D {
@@ -227,6 +227,7 @@ class TransformControler extends Object2D_js_1.Object2D {
     }
     /* 绘图 */
     draw(ctx) {
+        // console.log('调用draw');
         const { obj } = this;
         if (!obj) {
             return;

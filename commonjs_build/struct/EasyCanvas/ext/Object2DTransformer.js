@@ -99,7 +99,7 @@ class Object2DTransformer {
     }
     /* 正交移动 */
     move1(dragStart, dragEnd) {
-        // 作业
+        console.log('正交移动');
     }
 }
 exports.Object2DTransformer = Object2DTransformer;

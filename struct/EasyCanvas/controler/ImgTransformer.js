@@ -107,17 +107,14 @@ class ImgTransformer {
     /* 旋转 */
     rotate0() {
         const { img, rotate, orign, originToMouseStart, mousePos } = this;
-        img.rotate =
-            rotate + mousePos.clone().sub(orign).angle() - originToMouseStart.angle();
+        img.rotate = rotate + mousePos.clone().sub(orign).angle() - originToMouseStart.angle();
     }
     /* 等量旋转 */
     rotate1() {
-        const { img, rotate, orign, originToMouseStart, mousePos, uniformRotateAng, } = this;
+        const { img, rotate, orign, originToMouseStart, mousePos, uniformRotateAng } = this;
         const ang = mousePos.clone().sub(orign).angle() - originToMouseStart.angle();
         img.rotate =
-            rotate +
-                Math.floor((ang + uniformRotateAng / 2) / uniformRotateAng) *
-                    uniformRotateAng;
+            rotate + Math.floor((ang + uniformRotateAng / 2) / uniformRotateAng) * uniformRotateAng;
     }
     /* 位移 */
     // 自由位移
@@ -125,7 +122,6 @@ class ImgTransformer {
         const { img, position, mouseStart, mousePos } = this;
         img.position.copy(position.clone().add(mousePos.clone().sub(mouseStart)));
     }
-    // 重要:正交位移-作业
     move1() { }
 }
 export { ImgTransformer };

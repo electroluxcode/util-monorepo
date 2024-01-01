@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ImgControler = void 0;
 const Vector2_js_1 = require("../math/Vector2.js");
-const Object2D_js_1 = require("../objects/Object2D.js");
+const Object2D_js_1 = require("../core/Object2D.js");
 const Matrix3_js_1 = require("../math/Matrix3.js");
 const ImgTransformer_js_1 = require("./ImgTransformer.js");
 const MouseShape_js_1 = require("./MouseShape.js");
@@ -186,7 +186,7 @@ class ImgControler extends Object2D_js_1.Object2D {
             return;
         }
         this.emit(_changeEvent);
-        // return 
+        // return
         if (!this.mouseState) {
             this.img = img;
             if (!img) {

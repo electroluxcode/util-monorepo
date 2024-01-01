@@ -88,8 +88,7 @@ class Object2DTransformer {
         const { uniformRotateAng } = this;
         const ang = end2Orign.angle() - start2Orign.angle();
         this.relativeRotate =
-            Math.floor((ang + uniformRotateAng / 2) / uniformRotateAng) *
-                uniformRotateAng;
+            Math.floor((ang + uniformRotateAng / 2) / uniformRotateAng) * uniformRotateAng;
     }
     /* 自由移动 */
     move0(dragStart, dragEnd) {
@@ -97,7 +96,7 @@ class Object2DTransformer {
     }
     /* 正交移动 */
     move1(dragStart, dragEnd) {
-        // 作业
+        console.log('正交移动');
     }
 }
 export { Object2DTransformer };

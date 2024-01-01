@@ -1,5 +1,5 @@
 import { Vector2 } from '../math/Vector2.js';
-import { Object2D } from '../objects/Object2D.js';
+import { Object2D } from '../core/Object2D.js';
 import { Matrix3 } from '../math/Matrix3.js';
 import { ImgTransformer } from './ImgTransformer.js';
 import { MouseShape } from './MouseShape.js';
@@ -183,7 +183,7 @@ class ImgControler extends Object2D {
             return;
         }
         this.emit(_changeEvent);
-        // return 
+        // return
         if (!this.mouseState) {
             this.img = img;
             if (!img) {

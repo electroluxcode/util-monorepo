@@ -75,7 +75,6 @@ Promise.all(ImagePromises(images)).then(() => {
     /* 鼠标移动 */
     canvas.addEventListener('pointermove', (event) => {
         orbitControler.pointermove(event.clientX, event.clientY);
-        orbitControler.pointermove(event.clientX, event.clientY);
         const mp = scene.clientToClip(event.clientX, event.clientY);
         imgControler.pointermove(mp);
     });

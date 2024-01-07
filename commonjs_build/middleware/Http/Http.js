@@ -28,7 +28,7 @@ class HttpClass {
                 return config;
             },
             "BeforeResponse": (config) => {
-                return config.json();
+                return config;
             }
         };
     }
@@ -147,4 +147,5 @@ class HttpClass {
 }
 let Http = new HttpClass();
 exports.Http = Http;
+// type test1 = MyOmit<test,"id">
 exports.default = Http;

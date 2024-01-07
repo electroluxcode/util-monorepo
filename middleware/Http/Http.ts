@@ -27,7 +27,7 @@ class HttpClass {
                 return config
             },
             "BeforeResponse": (config) => {
-                return config.json()
+                return config
             }
         }
     }
@@ -45,10 +45,7 @@ class HttpClass {
      * @returns 
      */
     common({
-        method, mode, cache, headers, data, signal, url
-    ,...args}: Omit<BaseRequestType,"body"> & any) {
-
-      
+        method, mode, cache, headers, data, signal, url,...args}: Omit<BaseRequestType,"body"> & any) {
         let init: BaseRequestType
         let BaseRequestBefore = this.BaseConfig.BeforeRequest({
             method, mode, cache, headers, data, signal, url
@@ -166,6 +163,9 @@ let Http = new HttpClass()
 export {
     Http
 }
+
+
+// type test1 = MyOmit<test,"id">
 export default Http
 
 

@@ -187,6 +187,7 @@ class TransformControler extends Object2D {
     /* 相对变换 */
     relativeTransform(controlState) {
         const { transformer, start2Orign, dragStart, dragEnd, end2Orign, obj } = this;
+        // 重要:鼠标键盘事件-鼠标方法
         const key = controlState + Number(this.shiftKey);
         if (!obj || !transformer[key]) {
             return;
@@ -230,7 +231,7 @@ class TransformControler extends Object2D {
             return;
         }
         const { frame, mouseShape, mouseState, controlState, transformer } = this;
-        // 设置本地模型矩阵
+        // 设置本地模型矩阵(矩阵分解)
         controlState && obj.decomposeModelMatrix(transformer.matrix);
         /* 绘制外框 */
         frame.draw(ctx);

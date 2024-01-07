@@ -6,8 +6,10 @@ const TextStyle_js_1 = require("./TextStyle.js");
 const Object2D_js_1 = require("../core/Object2D.js");
 const ObjectUtils_js_1 = require("./ObjectUtils.js");
 /* 虚拟上下文对象 */
-const virtuallyCtx = document.createElement('canvas').getContext('2d');
-/* 文字对齐方式引起的偏移量 */
+const virtuallyCtx = document
+    .createElement("canvas")
+    .getContext("2d");
+/* 文字对齐方式引起的偏移量(ps算出来的) */
 const alignRatio = {
     start: 0,
     left: 0,
@@ -24,7 +26,7 @@ const baselineRatio = {
     ideographic: -1,
 };
 class Text2D extends Object2D_js_1.Object2D {
-    text = '';
+    text = "";
     maxWidth;
     style = new TextStyle_js_1.TextStyle();
     // 类型
@@ -36,7 +38,7 @@ class Text2D extends Object2D_js_1.Object2D {
     /* 属性设置 */
     setOption(attr) {
         for (let [key, val] of Object.entries(attr)) {
-            if (key === 'style') {
+            if (key === "style") {
                 this.style.setOption(val);
             }
             else {
@@ -60,7 +62,7 @@ class Text2D extends Object2D_js_1.Object2D {
     }
     /* 计算边界盒子 */
     computeBoundingBox() {
-        console.log('zptest:crtPath:', this);
+        console.log("zptest:crtPath:", this);
         const { boundingBox: { min, max }, size, offset, style: { textAlign, textBaseline }, } = this;
         min.set(offset.x + size.x * alignRatio[textAlign], offset.y + size.y * baselineRatio[textBaseline]);
         max.addVectors(min, size);

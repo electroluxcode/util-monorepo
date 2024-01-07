@@ -13,7 +13,7 @@ let size = {
     width: 400,
     height: 400,
 };
-const canvas = document.querySelector('canvas');
+const canvas = document.querySelector("canvas");
 canvas.width = size.width;
 canvas.height = size.height;
 const scene = new Scene_js_1.Scene();
@@ -51,16 +51,16 @@ Promise.all((0, ObjectUtils_js_1.ImagePromises)(images)).then(() => {
             position: new Vector2_js_1.Vector2(0, 160 * i - canvas.height / 2 + 50),
             size,
             offset: new Vector2_js_1.Vector2(-size.x / 2, 0),
-            name: 'img-' + i,
+            name: "img-" + i,
         });
     }));
     /* 鼠标按下*/
-    canvas.addEventListener('pointerdown', (event) => {
+    canvas.addEventListener("pointerdown", (event) => {
         const { button, clientX, clientY } = event;
         // 转化成裁剪坐标(就是中间的点 作为坐标原点)
         const mp = scene.clientToClip(clientX, clientY);
         // const mp = {x:0,y:0}
-        console.log('zptest:点击下去 scene.clienttoClip', mp);
+        console.log("zptest:点击下去 scene.clienttoClip", mp);
         switch (button) {
             // 鼠标左键
             case 0:
@@ -75,13 +75,13 @@ Promise.all((0, ObjectUtils_js_1.ImagePromises)(images)).then(() => {
         }
     });
     /* 鼠标移动 */
-    canvas.addEventListener('pointermove', (event) => {
+    canvas.addEventListener("pointermove", (event) => {
         orbitControler.pointermove(event.clientX, event.clientY);
         const mp = scene.clientToClip(event.clientX, event.clientY);
         imgControler.pointermove(mp);
     });
     /* 鼠标抬起 */
-    window.addEventListener('pointerup', (event) => {
+    window.addEventListener("pointerup", (event) => {
         if (event.button == 1) {
             orbitControler.pointerup();
         }
@@ -90,27 +90,27 @@ Promise.all((0, ObjectUtils_js_1.ImagePromises)(images)).then(() => {
         }
     });
     /* 滑动滚轮缩放 */
-    canvas.addEventListener('wheel', ({ deltaY }) => {
+    canvas.addEventListener("wheel", ({ deltaY }) => {
         orbitControler.doScale(deltaY);
     });
     /* 按需渲染 */
-    orbitControler.on('change', () => {
+    orbitControler.on("change", () => {
         scene.render();
     });
-    imgControler.on('change', () => {
+    imgControler.on("change", () => {
         scene.render();
     });
-    /* 渲染 */
-    scene.render();
     /* 键盘按下 */
-    window.addEventListener('keydown', ({ key, altKey, shiftKey }) => {
+    window.addEventListener("keydown", ({ key, altKey, shiftKey }) => {
         imgControler.keydown(key, altKey, shiftKey);
         // updateMouseCursor()
     });
     /* 键盘抬起 */
-    window.addEventListener('keyup', ({ altKey, shiftKey }) => {
+    window.addEventListener("keyup", ({ altKey, shiftKey }) => {
         imgControler.keyup(altKey, shiftKey);
     });
+    /* 渲染 */
+    scene.render();
 });
 // step2:scene 重要：
 // 2.1

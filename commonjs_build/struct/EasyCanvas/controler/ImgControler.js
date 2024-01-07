@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ImgControler = void 0;
+// @ts-nocheck
 const Vector2_js_1 = require("../math/Vector2.js");
 const Object2D_js_1 = require("../core/Object2D.js");
 const Matrix3_js_1 = require("../math/Matrix3.js");

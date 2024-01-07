@@ -67,6 +67,16 @@ class Img2D extends Object2D {
         // 第二个参数是宽高 和周围的边界
         // 第三个参数是 默认是正方形,然后向着指定方向做位移
         crtPathByMatrix(ctx, [0, 0, imgW, 0, imgW, imgH, 0, imgH], matrix, true, isShow, style);
+        // 第二种方式。因为这种方式没有计算移动到中间的坐标系，所以有问题
+        // this.computeBoundingBox()
+        // const {
+        // 	boundingBox: {
+        // 		min: { x: x0, y: y0 },
+        // 		max: { x: x1, y: y1 },
+        // 	},
+        // } = this
+        // // console.log("zptest:",this.boundingBox)
+        // crtPathByMatrix(ctx, [x0+200, y0+200, x1+200, y0+200, x1+200, y1+200, x0+200, y1+200], matrix)
     }
 }
 export { Img2D };

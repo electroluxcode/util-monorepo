@@ -7,25 +7,7 @@ class Handle {
         this.data = data;
         this.operations = [];
     }
-    private getProperty(obj: object, path: string) {
-        let temp:any = obj
-        path.split('.').forEach((element,curr) => {
-            temp[element] ?temp = temp[element] : undefined;
-        })
-        return temp
-    }
-    private setProperty(obj: object, path: string,value:any) {
-        let temp = obj;
-        let pathArr = path.split('.')
-        pathArr.forEach((element, curr) => {
-            if(curr==pathArr.length-1){
-                temp[element] = value;
-            }else{
-                temp[element] ?? (temp[element] = {})   ;
-                temp = temp[element]
-            } 
-        });
-    }
+  
     /**
      * @des feature1:数据筛选
      * @param key_function 

@@ -17,5 +17,5 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "prettier.requireConfig": true // 需要Prettier的配置文件
+  "prettier.requireConfig": false // 需要Prettier的配置文件
 }

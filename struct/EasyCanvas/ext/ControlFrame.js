@@ -13,7 +13,7 @@ class ControlFrame {
     localVertices = [];
     // 图案裁剪坐标系的边框的顶点集合
     clipVertives = [];
-    // 当前节点索引
+    // 当前节点索引 缩放的时候获取对点
     nodeIndex = 0;
     // 图形在本地坐标系中的中点
     localCenter = new Vector2();
@@ -50,6 +50,7 @@ class ControlFrame {
     getOpposite(type) {
         const { nodeIndex } = this;
         const vertices = this[type];
+        // 因为我们的点 是 0 0 | 1 0 | 2 0 |   然后向下 2 1 这样子，因此，ind 永远能够拿到对点的位置 
         const ind = (nodeIndex + 8) % 16;
         return new Vector2(vertices[ind], vertices[ind + 1]);
     }
@@ -58,6 +59,7 @@ class ControlFrame {
         const { clipVertives: cv, localCenter, clipCenter, obj, level, obj: { boundingBox: { min: { x: x0, y: y0 }, max: { x: x1, y: y1 }, }, }, } = this;
         const xm = (x0 + x1) / 2;
         const ym = (y0 + y1) / 2;
+        // 根据本地盒子的顶点集合，算出 本地 | 裁剪 坐标系的顶点
         this.localVertices = [x0, y0, xm, y0, x1, y0, x1, ym, x1, y1, xm, y1, x0, y1, x0, ym];
         const lv = this.localVertices;
         this.matrix = obj[level];
@@ -66,20 +68,20 @@ class ControlFrame {
             cv[i] = x;
             cv[i + 1] = y;
         }
+        // 本地矩阵 默认等于 裁剪矩阵
         localCenter.copy(new Vector2(lv[0], lv[1]).lerp(new Vector2(lv[8], lv[9]), 0.5));
         clipCenter.copy(new Vector2(cv[0], cv[1]).lerp(new Vector2(cv[8], cv[9]), 0.5));
     }
     /* 绘制边框 */
     draw(ctx) {
         this.updateVertives();
-        const { obj: { boundingBox: { min: { x: ox, y: oy }, max: { x: mx, y: my }, }, }, clipVertives: fv, clipCenter, matrix, strokeStyle, fillStyle, } = this;
+        const { obj: { boundingBox: { min: { x: leftX, y: leftY }, max: { x: rightX, y: rightY }, }, }, clipVertives: fv, clipCenter, matrix, strokeStyle, fillStyle, } = this;
         /* 图案尺寸的一半 */
-        const [halfWidth, halfheight] = [(mx - ox) / 2, (my - oy) / 2];
         /* 绘图 */
         ctx.save();
         ctx.strokeStyle = strokeStyle;
         ctx.fillStyle = fillStyle;
-        /* 矩形框 */
+        /* 矩形边界绘制 */
         ctx.beginPath();
         crtPath(ctx, [fv[0], fv[1], fv[4], fv[5], fv[8], fv[9], fv[12], fv[13]]);
         ctx.closePath();
@@ -91,25 +93,27 @@ class ControlFrame {
         const sy = new Vector2(e[3], e[4]).length();
         // 节点尺寸，消去缩放量
         const pointSize = new Vector2(8 / sx, 8 / sy);
-        const [w, h] = [pointSize.x / 2, pointSize.y / 2];
-        // 绘制节点
+        // 绘制节点 顶点,横着从左到右
+        const [halfWidth, halfheight] = [(rightX - leftX) / 2, (rightY - leftY) / 2];
         ctx.beginPath();
         for (let y = 0; y < 3; y++) {
             for (let x = 0; x < 3; x++) {
                 if (y === 1 && x === 1) {
                     continue;
                 }
-                const [bx, by] = [halfWidth * x, halfheight * y];
+                let moveX = halfWidth * x;
+                let moveY = halfheight * y;
                 crtPathByMatrix(ctx, [
-                    ox + bx - w,
-                    oy + by - h,
-                    ox + bx + w,
-                    oy + by - h,
-                    ox + bx + w,
-                    oy + by + h,
-                    ox + bx - w,
-                    oy + by + h,
-                ], matrix, true);
+                    leftX + moveX - pointSize.x / 2,
+                    leftY + moveY - pointSize.y / 2,
+                    leftX + moveX + pointSize.x / 2,
+                    leftY + moveY - pointSize.y / 2,
+                    leftX + moveX + pointSize.x / 2,
+                    leftY + moveY + pointSize.y / 2,
+                    leftX + moveX - pointSize.x / 2,
+                    leftY + moveY + pointSize.y / 2,
+                ], matrix, true, false, { width: 30, color: "red" });
+                // console.log(`${x}-${y}`,leftX ,leftY, halfWidth * x,halfheight * y , pointSize,)
             }
         }
         ctx.fill();

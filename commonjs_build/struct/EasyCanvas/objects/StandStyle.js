@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StandStyle = void 0;
+// 做动画的
 const BasicStyle_js_1 = require("./BasicStyle.js");
 class StandStyle extends BasicStyle_js_1.BasicStyle {
     strokeStyle;

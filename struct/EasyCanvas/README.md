@@ -496,9 +496,64 @@ Controler的具体操作步骤如下：
 
 
 
-### 1.9.7 基点位移难点
+### 1.9.7 难点
 
-- 例如 我们需要图形基于一个点进行旋转，我们是需要**变化基点**然后再进行旋转。不然会有奇怪的位移
+#### 1.9.7.1 缩放 | 位移
+
+这里用 
+
+- 位移
+
+  ```ts
+  this.relativePosition.subVectors(dragEnd, dragStart);
+  ```
+
+- 旋转
+
+  ```ts
+  this.relativeRotate = end2Orign.angle() - start2Orign.angle();
+  ```
+
+- 缩放
+
+  ```ts
+   getRelativeScale(start2Orign: Vector2, end2Orign: Vector2) {
+      const a = end2Orign.clone().rotate(-this.localRotate);
+      const b = start2Orign.clone().rotate(-this.localRotate);
+      return new Vector2(a.x / b.x, a.y / b.y);
+    }
+  ```
+
+  
+
+
+
+
+
+
+
+#### 1.9.7.3 基点位移
+
+- 例如 我们需要图形基于一个点进行旋转，我们是需要**变化基点**然后再进行旋转。不然会有奇怪的位移 总结是 m3 * m2 *m1
+
+  - 那么我们怎么进行变化基点，可以有以下几步
+
+    - m1 
+
+      ```ts
+       const m1 = new Matrix3().makeTranslation(-origin.x, -origin.y);
+      ```
+
+    - m2 + relative = m3
+
+      ```ts
+      const m2 = new Matrix3()
+            .scale(localScale.x * relativeScale.x, localScale.y * relativeScale.y)
+            .rotate(localRotate + relativeRotate)
+            .translate(localPosition.x + relativePosition.x, localPosition.y + relativePosition.y);
+      ```
+
+      
 
 
 

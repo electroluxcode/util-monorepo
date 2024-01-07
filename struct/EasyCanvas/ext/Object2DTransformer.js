@@ -17,12 +17,15 @@ class Object2DTransformer {
     /* 基点变换后的矩阵 */
     get matrix() {
         const { relativePosition, relativeRotate, relativeScale, origin, localPosition, localScale, localRotate, } = this;
-        const m2 = new Matrix3().makeTranslation(-origin.x, -origin.y);
-        const m3 = new Matrix3()
+        // m1 是 一开始移动到原点 的矩阵.用 -origin
+        // m2 是 基点位移过去了
+        // m3 是 (旋转+位移 )+相对变化量
+        const m1 = new Matrix3().makeTranslation(-origin.x, -origin.y);
+        const m2 = new Matrix3()
             .scale(localScale.x * relativeScale.x, localScale.y * relativeScale.y)
             .rotate(localRotate + relativeRotate)
             .translate(localPosition.x + relativePosition.x, localPosition.y + relativePosition.y);
-        return m3.clone().multiply(m2);
+        return m2.clone().multiply(m1);
     }
     /* 根据Object2D对象获取本地模型矩阵数据 */
     setLocalMatrixDataByObject2D(obj) {
@@ -96,7 +99,15 @@ class Object2DTransformer {
     }
     /* 正交移动 */
     move1(dragStart, dragEnd) {
-        console.log('正交移动');
+        let MoveX = dragEnd.x - dragStart.x;
+        let MoveY = dragEnd.y - dragStart.y;
+        if (Math.abs(MoveX) > Math.abs(MoveY)) {
+            dragEnd.y = dragStart.y;
+        }
+        else {
+            dragEnd.x = dragStart.x;
+        }
+        this.relativePosition.subVectors(dragEnd, dragStart);
     }
 }
 export { Object2DTransformer };

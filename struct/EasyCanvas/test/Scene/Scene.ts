@@ -80,6 +80,7 @@ function ani(time = 0) {
   if (scene.isPointInObj(pattern, mouseClipPos, pattern.pvmoMatrix)) {
     pattern.rotate += 0.02;
   }
+
   requestAnimationFrame(() => {
     ani(time + 15);
   });

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Vector2 } from '../math/Vector2.js';
 import { Object2D } from '../core/Object2D.js';
 import { Img2D } from '../objects/Img2D.js';

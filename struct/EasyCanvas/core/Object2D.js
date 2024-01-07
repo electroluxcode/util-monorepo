@@ -9,9 +9,9 @@ class Object2D {
     rotate = 0;
     // 缩放
     scale = new Vector2(1, 1);
-    // 偏移
+    // 偏移（本地矩阵）
     offset = new Vector2();
-    // 边界盒子
+    // 边界盒子（本地矩阵）
     boundingBox = {
         min: new Vector2(),
         max: new Vector2(),

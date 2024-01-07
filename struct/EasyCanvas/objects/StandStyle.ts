@@ -1,3 +1,4 @@
+// 做动画的
 import { BasicStyle, BasicStyleType } from './BasicStyle.js'
 
 /* 绘图顺序 */

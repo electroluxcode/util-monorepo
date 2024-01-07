@@ -1,3 +1,4 @@
+// 做动画的
 import { BasicStyle } from './BasicStyle.js';
 class StandStyle extends BasicStyle {
     strokeStyle;

@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Vector2_js_1 = require("../../math/Vector2.js");
-const Group_js_1 = require("../../objects/Group.js");
+const Group_js_1 = require("../../core/Group.js");
 const Img2D_js_1 = require("../../objects/Img2D.js");
 // step1:基本参数初始化
 let size = {
     width: 300,
-    height: 300
+    height: 300,
 };
-const canvas = document.querySelector("canvas");
+const canvas = document.querySelector('canvas');
 canvas.width = size.width;
 canvas.height = size.height;
 const ctx = canvas?.getContext('2d');
@@ -30,7 +30,7 @@ function ImagePromise(image) {
         };
     });
 }
-// step3:开始 渲染, 
+// step3:开始 渲染,
 // 重要：这里面主要有一个 add方法
 // group 里面 可以几种 draw
 function onMount() {

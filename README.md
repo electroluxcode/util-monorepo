@@ -1,26 +1,22 @@
 # util-monorepo
 
-
-
-## 1.技术选型
-
-### webpack or ts 
-
-按照我以前的开发习惯，npm包都是要打包成 webpack 进行工程化输出的.
-
-但是这个仓库不太一样。由于是工具库包，因此 webpack 打包 和 ts 直接输出的 js文件允许共存(简单输出的和复杂输出的允许共存)
+本包是 工具库包，包括个人封装的 UI库 和 工程化 等 工具
 
 
 
-## 2.开发规范
+## 1. 怎么运行
+
+本仓库是开发仓库，`npm install` 后，运行 `npm run dev` ，可以实时编译ejs和cjs的文件，内置库使用起来需要 `npm install @util-monorepo/ui` 然后进行引用即可
 
 
 
-### 文件组织格式
+## 2.仓库说明
 
-#### 开发主目录文件夹
+### 产物
 
 **注意这部分命名规范全部是小写**
+
+一般我们的输出有两种，一种是webpack，一种是webpack 打包 
 
 
 - ui：处理样式(自适应，自动滚动等)
@@ -35,17 +31,36 @@
 
 
 
-#### 子功能文件夹
-
-**注意这部分命名规范是大驼峰**
-
-例如说你想你想要新增一个 子功能，这是一个关于缓存数据的 hook。那么你可以 先判断 他是属于哪一个主文件夹。根据上面的信息，应该是 属于 `middleware` 类。
-
-因此我们在` middleware `新建一个 文件夹 `Cache`,里面写入 `Cache.ts` 然后写入你的逻辑就可以了。
 
 
+主要是 `libraryTarget` 的对比
 
-特别的 `type`文件夹是一个例外，这里面你不需要繁琐的新建文件夹，直接新建文件即可
+#### es6(浏览器)
+
+- libraryTarget:“window” | “global” | “this” 意思就是在 libraryTarget上面 注册一个 在 `webpack` 的 `output` 定义的 `library` 同名的 
+
+
+
+#### node
+
+- libraryTarget:“commonjs”，在export对象上定义library设置的变量
+- libraryTarget:“commonjs2”，直接用module.export导出export
+- libraryTarget:“amd”，在define方法上定义library设置的变量，不能用script直接引用，必须通过第三方模块RequireJS来时用
+
+
+
+#### umd原理
+
+webpackUniversalModuleDefinition 模块会对环境进行判断
+
+
+
+
+
+npm publish -access public
+
+
+build "pnpm -r --filter=./* run build"
 
 
 
@@ -53,7 +68,7 @@
 
 ### 发布
 
-如果想要成为发布者请联系仓库管理者，https://github.com/electroluxcode。否则请等大版本发布
+如果想要成为发布者请联系仓库管理者，https://github.com/electroluxcode。或者你自己fork一份过去自己发布也可
 
 #### 普通版本
 
@@ -99,34 +114,5 @@ node VersionUpdate.js && npm publish -access public
 
 
 
-## 3.产物
 
-主要是 `libraryTarget` 的对比
-
-### es6(浏览器)
-
-- libraryTarget:“window” | “global” | “this” 意思就是在 libraryTarget上面 注册一个 在 `webpack` 的 `output` 定义的 `library` 同名的 
-
-
-
-### node
-
-- libraryTarget:“commonjs”，在export对象上定义library设置的变量
-- libraryTarget:“commonjs2”，直接用module.export导出export
-- libraryTarget:“amd”，在define方法上定义library设置的变量，不能用script直接引用，必须通过第三方模块RequireJS来时用
-
-
-
-### umd原理
-
-webpackUniversalModuleDefinition 模块会对环境进行判断
-
-
-
-
-
-npm publish -access public
-
-
-build "pnpm -r --filter=./* run build"
 

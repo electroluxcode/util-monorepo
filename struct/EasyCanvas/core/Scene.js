@@ -1,13 +1,13 @@
-import { Camera } from './Camera.js';
-import { Group } from './Group.js';
-import { Object2D } from './Object2D.js';
-import { Vector2 } from '../math/Vector2.js';
-import { Matrix3 } from '../math/Matrix3.js';
+import { Camera } from "./Camera.js";
+import { Group } from "./Group.js";
+import { Object2D } from "./Object2D.js";
+import { Vector2 } from "../math/Vector2.js";
+import { Matrix3 } from "../math/Matrix3.js";
 class Scene extends Object2D {
     // canvas画布
-    _canvas = document.createElement('canvas');
+    _canvas = document.createElement("canvas");
     // canvas 上下文对象
-    ctx = this._canvas.getContext('2d');
+    ctx = this._canvas.getContext("2d");
     // 相机
     camera = new Camera();
     // 是否自动清理画布
@@ -29,7 +29,7 @@ class Scene extends Object2D {
             return;
         }
         this._canvas = value;
-        this.ctx = this.canvas.getContext('2d');
+        this.ctx = this.canvas.getContext("2d");
     }
     /**
      * @des 设置属性 和 add 图层后 把canvas 传递过去就可以了
@@ -56,9 +56,9 @@ class Scene extends Object2D {
             ctx.save();
             // 如果要使用相机，要么要 对相机 的 视图投影 矩阵做逆向变化。这部分很简单
             /** const {position: { x, y },zoom, } = this
-                      const scale = 1 / zoom
-                      ctx.translate(-x, -y)
-                      ctx.scale(scale, scale) */
+                const scale = 1 / zoom
+                ctx.translate(-x, -y)
+                ctx.scale(scale, scale) */
             obj.enableCamera && camera.transformInvert(ctx);
             // fix(bug):内部添加了beginpath.也就是说会绘制 这段代码的 path。这就导致了重叠。
             // obj.crtPath(ctx,obj.pvmoMatrix,true)
@@ -89,6 +89,7 @@ class Scene extends Object2D {
         const { ctx } = this;
         ctx.beginPath();
         obj.crtPath(ctx, matrix, false);
+        console.log("zptest:isPointInObj", { obj, mp, matrix });
         return ctx.isPointInPath(mp.x, mp.y);
     }
     add(...objs) {
@@ -99,14 +100,14 @@ class Scene extends Object2D {
             obj.parent && obj.remove();
             obj.parent = this;
             this.children.push(obj);
-            this.emit({ type: 'add', obj });
+            this.emit({ type: "add", obj });
         }
         this.sort();
         return this;
     }
     /* 根据名称获取元素 */
     getObjectByName(name) {
-        return this.getObjectByProperty('name', name);
+        return this.getObjectByProperty("name", name);
     }
     /* 根据某个属性的值获取子对象 */
     getObjectByProperty(name, value) {
@@ -175,7 +176,7 @@ class Scene extends Object2D {
             if (index !== -1) {
                 obj.parent = undefined;
                 this.children.splice(index, 1);
-                this.emit({ type: 'remove', obj });
+                this.emit({ type: "remove", obj });
             }
             else {
                 for (let child of children) {
@@ -191,7 +192,7 @@ class Scene extends Object2D {
     clear() {
         for (let obj of this.children) {
             obj.parent = undefined;
-            this.emit({ type: 'removed', obj });
+            this.emit({ type: "removed", obj });
         }
         this.children = [];
         return this;

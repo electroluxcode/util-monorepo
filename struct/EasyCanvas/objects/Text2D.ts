@@ -80,7 +80,6 @@ class Text2D extends Object2D {
 
 	/* 计算边界盒子 */
 	computeBoundingBox() {
-		console.log("zptest:crtPath:", this);
 		const {
 			boundingBox: { min, max },
 			size,
@@ -107,7 +106,8 @@ class Text2D extends Object2D {
 		//样式
 		style.apply(ctx);
 
-		// 绘图
+		// 绘图 StandStyle.ts 里面 定义了 method 主要是
+
 		for (let method of style.drawOrder) {
 			style[`${method}Style`] && ctx[`${method}Text`](text, x, y, maxWidth);
 		}

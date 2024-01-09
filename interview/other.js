@@ -1,4 +1,4 @@
- // 1.手写 setInterval
+// 1.手写 setInterval
 // function setInterval(fn:Function,timeOut:number){
 //     setTimeout(({timeOut,fn}) => {
 //         fn()
@@ -12,10 +12,6 @@
 // },2000)
 
 // 2.翻转局部链表
-
-
-
-
 
 // 3.给一个字符串，筛选出所有的数字
 // let input = "569odsakd45"
@@ -38,7 +34,7 @@
 //         if(count>0){
 //             fn(count)
 //         }
-        
+
 //     }, timeInterval,timeInterval);
 //     let pause = ()=>{
 //         console.log("暂停")
@@ -49,7 +45,7 @@
 //     let clear = ()=>{
 //         clearInterval(time)
 //     }
-    
+
 //     return {start,pause,clear}
 // }
 // CountHook(5000,1000,(param)=>{
@@ -58,57 +54,52 @@
 
 // 5. 转化字符串
 /**
- * 
+ *
  */
 
- function destructuringArray(array, destructor) {
-    let temp = Array.isArray(array)? [] : {};
-    for(let i in destructor){
-        if(Array.isArray(destructor[i])){
-            temp = {
-                ...temp,
-                ...destructuringArray(array[i],destructor[i])
-            }
-        }else{
-            temp[destructor[i]] = array[i]
-        }
-    }
-    return temp
+function destructuringArray(array, destructor) {
+	let temp = Array.isArray(array) ? [] : {};
+	for (let i in destructor) {
+		if (Array.isArray(destructor[i])) {
+			temp = {
+				...temp,
+				...destructuringArray(array[i], destructor[i]),
+			};
+		} else {
+			temp[destructor[i]] = array[i];
+		}
+	}
+	return temp;
 }
-console.log(destructuringArray([1, [2, 4], 3], ['a', ['b',"d"], 'c']));
+console.log(destructuringArray([1, [2, 4], 3], ["a", ["b", "d"], "c"]));
 
 // 6.手写promise
-class MyPromise{
-    status:"pending" | "fulling" | "reject" 
-    constructor(fn){
-        this.status = "pending"
+class MyPromise {
+	status: "pending" | "fulling" | "reject";
+	constructor(fn) {
+		this.status = "pending";
 
-        fn(this.resolve,this.reject)
-    }
-    resolve(){
-        this.status = "fulling"
-    }
-    reject(){
-        this.status = "reject"
-    }
+		fn(this.resolve, this.reject);
+	}
+	resolve() {
+		this.status = "fulling";
+	}
+	reject() {
+		this.status = "reject";
+	}
 }
-new Promise((resolve,reject)=>{resolve(5)})
+new Promise((resolve, reject) => {
+	resolve(5);
+});
 
-
-
-
-let arr = new Array()
-
-
-
+let arr = new Array();
 
 /**
  for (let [key, val] of Object.entries(attr)) {
         this[key] = val
     }
  *
- */ 
-
+ */
 
 // 1.手写 setInterval
 // function setInterval(fn:Function,timeOut:number){
@@ -125,10 +116,6 @@ let arr = new Array()
 
 // 2.翻转局部链表
 
-
-
-
-
 // 3.给一个字符串，筛选出所有的数字
 // let input = "569odsakd45"
 // let reg = /\d/g
@@ -150,7 +137,7 @@ let arr = new Array()
 //         if(count>0){
 //             fn(count)
 //         }
-        
+
 //     }, timeInterval,timeInterval);
 //     let pause = ()=>{
 //         console.log("暂停")
@@ -161,7 +148,7 @@ let arr = new Array()
 //     let clear = ()=>{
 //         clearInterval(time)
 //     }
-    
+
 //     return {start,pause,clear}
 // }
 // CountHook(5000,1000,(param)=>{
@@ -170,39 +157,40 @@ let arr = new Array()
 
 // 5. 转化字符串
 /**
- * 
+ *
  */
 
- function destructuringArray(array, destructor) {
-    let temp = Array.isArray(array)? [] : {};
-    for(let i in destructor){
-        if(Array.isArray(destructor[i])){
-            temp = {
-                ...temp,
-                ...destructuringArray(array[i],destructor[i])
-            }
-        }else{
-            temp[destructor[i]] = array[i]
-        }
-    }
-    return temp
+function destructuringArray(array, destructor) {
+	let temp = Array.isArray(array) ? [] : {};
+	for (let i in destructor) {
+		if (Array.isArray(destructor[i])) {
+			temp = {
+				...temp,
+				...destructuringArray(array[i], destructor[i]),
+			};
+		} else {
+			temp[destructor[i]] = array[i];
+		}
+	}
+	return temp;
 }
-console.log(destructuringArray([1, [2, 4], 3], ['a', ['b',"d"], 'c']));
+console.log(destructuringArray([1, [2, 4], 3], ["a", ["b", "d"], "c"]));
 
 // 6.手写promise
-class MyPromise{
-    status:"pending" | "fulling" | "reject" 
-    constructor(fn){
-        this.status = "pending"
+class MyPromise {
+	status: "pending" | "fulling" | "reject";
+	constructor(fn) {
+		this.status = "pending";
 
-        fn(this.resolve,this.reject)
-    }
-    resolve(){
-        this.status = "fulling"
-    }
-    reject(){
-        this.status = "reject"
-    }
+		fn(this.resolve, this.reject);
+	}
+	resolve() {
+		this.status = "fulling";
+	}
+	reject() {
+		this.status = "reject";
+	}
 }
-new Promise((resolve,reject)=>{resolve(5)})
-
+new Promise((resolve, reject) => {
+	resolve(5);
+});

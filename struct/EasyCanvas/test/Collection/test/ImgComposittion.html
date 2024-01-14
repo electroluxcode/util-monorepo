@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="test">
+        <!-- ddd89 -->
+    </div>
+    <p>我是测试</p>
+    <style>
+        body {
+            background: blue;
+        }
+
+        p {
+            /* position: absolute;
+            top: 100px;
+            font-size: 30px;
+            text-align: center;
+            color: rgb(255, 255, 255);
+            mix-blend-mode: difference;
+            font-weight: 900; */
+            /* isolation: isolate; */
+            z-index: 99;
+        }
+
+        .test {
+            position: absolute;
+            /* z-index: 999; */
+            /* opacity: 0.2; */
+            isolation: isolate;
+            width: 300px;
+            height: 300px;
+            background-repeat: no-repeat;
+            background-position: center;
+            /* 
+            知识点1：
+            object-fit: 这玩意对backgrond 不生效 ，只对image和 video生效*/
+            object-fit: contain;
+            /* 
+            知识点2：
+            假如有两个background。background 会分别和  color 进行 screen和 multiply的混合
+            前者的 image 会在后者image的上方
+            */
+            background-image: url("../img.png");
+            background-color: rgb(187, 188, 197);
+
+            /* 
+            知识点3：
+            实验过后的结论是background-blend-mode 基本控制不了
+            
+            */
+            /* hard-light: 强聚光灯  | soft-light 散光灯*/
+            /* multiply：正片叠底 | difference 差值 */
+            /* background-blend-mode: hard-light */
+            background-blend-mode: screen;
+            /* mix-blend-mode: screen; */
+        }
+    </style>
+</body>
+
+</html>

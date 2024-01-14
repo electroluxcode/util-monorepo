@@ -4,7 +4,7 @@ import { Object2D, Object2DType } from "../core/Object2D.js";
 import { crtPathByMatrix } from "./ObjectUtils.js";
 
 /* 构造参数的类型 */
-type TextType = Object2DType & {
+export type TextType = Object2DType & {
 	text?: string;
 	maxWidth?: number | undefined;
 	style?: TextStyleType;
@@ -92,6 +92,7 @@ class Text2D extends Object2D {
 			offset.y + size.y * baselineRatio[textBaseline]
 		);
 		max.addVectors(min, size);
+		// debugger;
 	}
 
 	/* 绘图 */

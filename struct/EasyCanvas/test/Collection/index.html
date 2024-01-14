@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 98vw;
+        height: 98vh;
+        display: grid;
+        grid-template-columns: 100px 1fr 1fr;
+        gap: 5px;
+        overflow: hidden;
+    }
+
+    .material {
+        /* background: red; */
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow: scroll;
+    }
+
+    .material_text {
+        position: fixed;
+        width: 100px;
+        background: white;
+    }
+
+    .img_container {
+
+        margin-top: 20px;
+
+    }
+
+    img {
+        width: 100%;
+        margin: 5px 0px;
+    }
+
+    ::-webkit-scrollbar {
+        /* 滚动条宽 */
+        width: 6px;
+        height: 4px;
+        background-color: #eee;
+    }
+
+    /* 样式 */
+    ::-webkit-scrollbar-thumb {
+        /* 滚动条 拖动条 */
+        background-color: rgba(0, 0, 0, .2);
+        border-radius: 6px;
+    }
+
+
+
+
+    ::-webkit-scrollbar {
+        /* 滚动条宽 */
+        width: 6px;
+        height: 4px;
+        background-color: #eee;
+    }
+
+    /* 样式 */
+    ::-webkit-scrollbar-thumb {
+        /* 滚动条 拖动条 */
+        background-color: rgba(0, 0, 0, .2);
+        border-radius: 6px;
+    }
+</style>
+
+<style>
+    .operation {
+        display: grid;
+        /* background: gray; */
+        place-items: center;
+    }
+</style>
+
+<style>
+    .display {
+        gap: 5px;
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .display_top {
+        background: red;
+    }
+
+    .display_bottom {
+        background: green;
+        height: 100%;
+        overflow: scroll;
+        width: 100%;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <div class="material">
+            <div class="material_text">
+                图案库
+            </div>
+            <div class="img_container">
+                <img src="../img.png" alt="" srcset="">
+                <img src="../img.png" alt="" srcset="">
+                <img src="../img.png" alt="" srcset=""><img src="../img.png" alt="" srcset=""><img src="../img.png"
+                    alt="" srcset=""><img src="../img.png" alt="" srcset=""><img src="../img.png" alt="" srcset=""><img
+                    src="../img.png" alt="" srcset=""><img src="../img.png" alt="" srcset=""><img src="../img.png"
+                    alt="" srcset=""><img src="../img.png" alt="" srcset="">
+            </div>
+        </div>
+        <div class="operation">
+
+        </div>
+        <div class="display">
+            <div class="display_top"></div>
+            <div class="display_bottom">
+
+                <div class="layer">5</div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="index.js">
+
+    </script>
+</body>
+
+</html>

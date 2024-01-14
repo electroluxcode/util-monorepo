@@ -1,13 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ImagePromises = exports.crtPath = exports.ImagePromise = exports.crtPathByMatrix = void 0;
+exports.ImagePromises = exports.crtPath = exports.ImagePromise = exports.crtPathByMatrix = exports.SelectObj = void 0;
 const Vector2_js_1 = require("../math/Vector2.js");
+function SelectObj(scene) {
+    return function (objGroup, mp) {
+        for (let obj of [...objGroup].reverse()) {
+            if (scene.isPointInObj(obj, mp, obj.pvmMatrix)) {
+                return obj;
+            }
+        }
+        return null;
+    };
+}
+exports.SelectObj = SelectObj;
 /**
  * @des 重要:绘制边界
  * 各个边界moveto lineto 后 closepath就好了,如果想要显示出来就需要 stroke
  */
 function crtPathByMatrix(ctx, vertices, matrix, closePath = true, isShow = false, style = {
-    width: 5, color: "color"
+    width: 5,
+    color: "color",
 }) {
     // 需要展示的时候的东西 需要 beginpath把数据闭合
     if (isShow) {

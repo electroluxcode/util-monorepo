@@ -20,7 +20,7 @@ const imgControler = new TransformControler();
 scene.add(imgControler);
 // 定义图片资源 和 资源容器.需要统一管理
 const images = [];
-for (let i = 1; i < 5; i++) {
+for (let i = 1; i < 2; i++) {
     const image = new Image();
     image.src = `../img.png`;
     images.push(image);
@@ -39,6 +39,22 @@ function selectObj(imgGroup, mp) {
     }
     return null;
 }
+setTimeout(() => {
+    console.log("zptest:", imgGroup);
+    // let select = imgGroup.children[1];
+    // imgControler.pointerdown(select, select.position);
+    imgGroup.add(...images.map((image, i) => {
+        const size = new Vector2(image.width, image.height).multiplyScalar(0.3);
+        return new Img2D({
+            image,
+            position: new Vector2(0, 320 * i - canvas.height / 2 + 150),
+            size,
+            offset: new Vector2(-size.x / 2, 0),
+            name: "img-" + i + 2,
+        });
+    }));
+    scene.render();
+}, 2000);
 scene.setOption({ canvas });
 Promise.all(ImagePromises(images)).then(() => {
     // group 传入 object2d 的数组

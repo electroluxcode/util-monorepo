@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    <!-- 合成原理
+    1. 图片 + 衣服 通过 destination-in 叠加 mask 形成 pattern-shadow-mask
+    
+    -->
+    <div class="ball">22</div>
+
+    <style>
+        .ball {
+            width: fit-content;
+            background: red;
+            animation:
+                ballMoveX 1s linear infinite alternate,
+                ballMoveY 1s cubic-bezier(.55, 0, .85, .36) infinite alternate;
+            animation-composition: add;
+            /*accumulate也行*/
+        }
+
+        @keyframes ballMoveX {
+            100% {
+                transform: translateX(300px)
+            }
+        }
+
+        @keyframes ballMoveY {
+            100% {
+                transform: translateY(300px)
+            }
+        }
+    </style>
+</body>
+
+</html>

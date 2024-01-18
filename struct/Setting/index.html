@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="myClick()">执行fn1函数</button>
+    <script>
+        function fn1() {
+            let a = new Array(100000).fill("45")  // 这里设置了一个很大的数组对象
+
+            let b = 3
+
+            function fn2() {
+                let c = [1, 2, 3]
+            }
+
+            fn2()
+
+            return a
+        }
+
+        let res = []
+
+        function myClick() {
+            res.push(fn1())
+            console.log("zptest:", res)
+        }
+    </script>
+
+</body>
+
+</html>

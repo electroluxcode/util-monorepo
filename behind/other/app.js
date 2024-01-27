@@ -27,12 +27,14 @@ app.use("/users", usersRouter);
 
 // 跨域
 app.all("*", function (req, res, next) {
-	res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5501"); //的允许所有域名的端口请求（跨域解决）
-	res.header(
+	res.setHeader("Access-Control-Allow-Origin", "*"); //的允许所有域名的端口请求（跨域解决）
+	res.setHeader(
 		"Access-Control-Allow-Headers",
-		"content-type,Token,X-Requested-With,Content-Type,My-Header"
+		"X-Custom-Header,Cache-Control"
 	);
-	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+	res.setHeader("Access-Control-Request-Headers", "X-Custom-Header");
+
+	res.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
 	res.setHeader("Access-Control-Max-Age", "3600");
 	res.setHeader("Access-Control-Allow-Credentials", "true");
 	// 不带凭据的请求响应通配符
@@ -82,37 +84,47 @@ schedule.scheduleJob("0 24 06 * * *", () => {
 	}, Math.random() * 10 * 60 * 1000);
 });
 
-Sign();
+// Sign();
 
 //get 接受参数测试
-app.get("/api/get", function (req, res) {
+app.all("/api/get", function (req, res) {
 	if (req.query) {
 		let data = JSON.parse(JSON.stringify(req.query));
 		console.log(data);
 	}
-	setTimeout(() => {
-		res.send({
-			code: 200,
-			msg:
-				Math.random() +
-				`
-      ddddddddddddddddd
-      `,
-		});
-	}, 1000);
+	// res.setHeader("Cache-Control", "max-age=2");
+	res.send({
+		code: 200,
+		// 		msg:
+		// 			Math.random() +
+		// 			`
+		//   ddddddddddddddddd
+		//   `,
+	});
+	// setTimeout(() => {
+	// 	res.send({
+	// 		code: 200,
+	// 		// 		msg:
+	// 		// 			Math.random() +
+	// 		// 			`
+	// 		//   ddddddddddddddddd
+	// 		//   `,
+	// 	});
+	// }, 1000);
 });
 
 //post 接收参数测试 application/json 的有效 {id:56}
 app.all("/api/post", function (req, res) {
 	// res.setHeader('Set-Cookie', 'servercookie=78787788')
 	// res.location('http://baidu.com')
-	res.redirect(200, "http://baidu.com");
-	res.setHeader(
-		"Set-Cookie",
-		"id=7sssd822;Path=/;Secure;SameSite=None;Domain=.baidu.com;"
-	);
+	// res.redirect(200, "http://baidu.com");
+	// res.setHeader(
+	// 	"Set-Cookie",
+	// 	"id=7sssd822;Path=/;Secure;SameSite=None;Domain=.baidu.com;"
+	// );
 	// return
 	// json 的才有效
+	// res.setHeader("Cache-Control", "max-age=6");
 	res.send({
 		code: 300,
 		msg: "post_success",

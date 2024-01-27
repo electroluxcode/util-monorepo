@@ -41,12 +41,14 @@
                     }
                     xhr.open(method, options.url + str, true);
                     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.setRequestHeader('Cache-Control', '5');
                     xhr.send(options.data);
                 }
                 if (method === 'POST') {
                     xhr.open(method, options.url, true);
                     // 经过测试，这个可以带。但是要求这个接口支持option的传参
                     xhr.setRequestHeader('Content-type', 'application/json');
+                    xhr.setRequestHeader('Cache-Control', 'max-age=5');
                     xhr.send(JSON.stringify(options.data));
                 }
             });

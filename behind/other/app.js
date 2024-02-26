@@ -6,6 +6,8 @@ var logger = require("morgan");
 const http = require("http");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var payRouter = require("./routes/pay");
+
 var SendMail = require("./config/email");
 const multer = require("multer");
 const schedule = require("node-schedule");
@@ -24,6 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/pay", payRouter);
 
 // 跨域
 app.all("*", function (req, res, next) {
@@ -40,7 +43,7 @@ app.all("*", function (req, res, next) {
 	// 不带凭据的请求响应通配符
 	res.setHeader("Access-Control-Expose-Headers", "*");
 	// res.setHeader("server-test", '454545');
-	console.log("经过");
+	console.log("--全局拦截--");
 	// res.setHeader("Set-Cookie", 'iddddddd=a3f;SameSite=None');
 
 	// HttpOnly; 前端无法操作
@@ -88,18 +91,22 @@ schedule.scheduleJob("0 24 06 * * *", () => {
 
 //get 接受参数测试
 app.all("/api/get", function (req, res) {
+	let query;
+	let body;
 	if (req.query) {
-		let data = JSON.parse(JSON.stringify(req.query));
-		console.log(data);
+		query = JSON.parse(JSON.stringify(req.query));
+		console.log("query:", query);
+	}
+	if (req.body) {
+		body = JSON.parse(JSON.stringify(req.body));
+		console.log("body:", body);
 	}
 	// res.setHeader("Cache-Control", "max-age=2");
 	res.send({
 		code: 200,
-		// 		msg:
-		// 			Math.random() +
-		// 			`
-		//   ddddddddddddddddd
-		//   `,
+
+		body,
+		query,
 	});
 	// setTimeout(() => {
 	// 	res.send({

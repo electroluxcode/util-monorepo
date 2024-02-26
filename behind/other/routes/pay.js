@@ -5,6 +5,7 @@ var router = express.Router();
 router.get("/", function (req, res, next) {
 	res.send({
 		code: 200,
+		msg: "pay 正常工作",
 	});
 });
 

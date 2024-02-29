@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-function defineStore(prop) {
+export function defineStore(prop) {
     const listeners = [];
     /**
      * 添加监听器
@@ -40,7 +38,9 @@ function defineStore(prop) {
                     });
                 }
                 // 通知订阅者
-                listeners.forEach((listener) => listener({ ...prop.state }, { ...prop.state }));
+                queueMicrotask(() => {
+                    listeners.forEach((listener) => listener({ ...prop.state }, { ...prop.state }));
+                });
                 return target.apply(thisArg, argumentsList);
             },
         };
@@ -52,34 +52,6 @@ function defineStore(prop) {
         for (let i in actionsKey) {
             proxy[i] = new Proxy(actionsKey[i], functionInvocationHandler);
         }
-        return { ...proxy, ...prop.state, ...prop.getters };
+        return { ...proxy, ...prop.state, ...prop.getters, subscribe };
     };
 }
-let b = defineStore({
-    id: 2,
-    state: {
-        name: "woni",
-        sex: "",
-    },
-    getters: {
-        // state
-        compute() {
-            return this.name + "--我是compute";
-        },
-    },
-    actions: {
-        stateChange(id) { },
-        anotherChange(name) {
-            this["name"] = name;
-        },
-    },
-    enhancer: {
-        middleware() {
-            console.log("你好，我是middleware");
-        },
-    },
-});
-let bcase = b();
-console.log(bcase.name);
-bcase.anotherChange("xiaoming");
-console.log(bcase.name);

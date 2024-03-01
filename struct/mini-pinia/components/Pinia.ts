@@ -1,5 +1,3 @@
-import combineReducers from "./combineReducers.js";
-
 // 传入的参数
 type defineStoreType<t extends { state: any }> = {
 	id: number;

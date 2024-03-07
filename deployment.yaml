@@ -1,0 +1,53 @@
+# 库本linux
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zptestapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zptestapp
+  # 定义了pod相关的所有信息
+  template:
+    metadata:
+      labels:
+        app: zptestapp
+    spec:
+      # 指定了pod中运行的所有容器
+      containers:
+        - name: zptestapp
+          image: registry.cn-beijing.aliyuncs.com/electrolux_docker_respository/zptest_ks
+          resources:
+            # 设置cpu和内存配额
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          # 容器需要对外暴露的端口
+          ports:
+            - containerPort: 80
+
+          # 如果要从外网访问应用 ，我们需要用 nodeport 的 方式
+          # k8s采用 loadBalancer Ingress实现负载均衡registry.cn-beijing.aliyuncs.com/electrolux_docker_respository/zptest_ks
+      # imagePullSecrets:
+      #   - name: regcred
+      # dnsPolicy: ClusterFirst
+      # restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  type: NodePort
+  # 转发的pod名字
+  selector:
+    app: zptestapp
+  ports:
+    - port: 80
+      targetPort: 80
+      # 可以省略这一行让k8s自动分配
+      nodePort: 30010
+
+---
+

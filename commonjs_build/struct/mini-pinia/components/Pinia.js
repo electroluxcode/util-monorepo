@@ -19,6 +19,9 @@ function defineStore(prop) {
             listeners.splice(index, 1);
         };
     }
+    /**
+     * @des 处理getter
+     */
     let gettersKey = { ...prop.getters };
     Object.keys(gettersKey).forEach((e) => {
         gettersKey[e] = gettersKey[e].bind({ ...prop.actions });

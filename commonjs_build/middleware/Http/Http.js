@@ -19,17 +19,17 @@ class HttpClass {
     BaseConfig;
     constructor() {
         this.BaseConfig = {
-            "Mode": "common",
-            "TimeOut": 10000,
-            "Retry": 1,
-            "MaxConcurrent": 1,
-            "NowConcurrentNumber": 0,
-            "BeforeRequest": (config) => {
+            Mode: "common",
+            TimeOut: 10000,
+            Retry: 1,
+            MaxConcurrent: 1,
+            NowConcurrentNumber: 0,
+            BeforeRequest: (config) => {
                 return config;
             },
-            "BeforeResponse": (config) => {
+            BeforeResponse: (config) => {
                 return config;
-            }
+            },
         };
     }
     /**
@@ -41,32 +41,41 @@ class HttpClass {
     }
     /**
      * @des step2:基本数据处理
-     * 对于 get post 分别进行处理 和 对url进行拼接
+     * 2.1 应用前置处理
+     * 2.2 对于 get post 分别进行处理 和 对url进行拼接
      * @param
      * @returns
      */
     common({ method, mode, cache, headers, data, signal, url, ...args }) {
+        // 2.1
         let init;
         let BaseRequestBefore = this.BaseConfig.BeforeRequest({
-            method, mode, cache, headers, data, signal, url
+            method,
+            mode,
+            cache,
+            headers,
+            data,
+            signal,
+            url,
         });
-        console.log("------------------", data, BaseRequestBefore);
         init = BaseRequestBefore;
         // 2.2 get post 不同请求
         if (init.method == "GET") {
-            if (init.data && Object.prototype.toString.call(init.data) !== "[object Object]") {
+            if (init.data &&
+                Object.prototype.toString.call(init.data) !== "[object Object]") {
                 console.error("传参需要json,注意");
             }
-            init.url = QsString(init.data) ? init.url + "?" + QsString(init.data) : init.url;
+            init.url = QsString(init.data)
+                ? init.url + "?" + QsString(init.data)
+                : init.url;
             Reflect.deleteProperty(init, "body");
         }
         else {
-            console.log("zptest:init.data:", init);
-            if (Object.prototype.toString.call(init.data) == '[object FormData]') {
+            // post中区分文件 和 普通data
+            if (Object.prototype.toString.call(init.data) == "[object FormData]") {
                 init.body = init.data;
             }
             else {
-                // post中区分文件 和 普通data
                 init.body = JSON.stringify(init.data);
             }
         }
@@ -82,10 +91,9 @@ class HttpClass {
     }
     async pauseIfNeeded() {
         // console.log(this.BaseConfig.NowConcurrentNumber,",this.BaseConfig.MaxConcurrent",this.BaseConfig.NowConcurrentNumber>=this.BaseConfig.MaxConcurrent)
-        while (this.BaseConfig.NowConcurrentNumber > this.BaseConfig.MaxConcurrent) { // 当暂停状态为 true 时，等待恢复
-            //   console.log("暂停中")
-            // console.log(this.BaseConfig.NowConcurrentNumber,this.BaseConfig.MaxConcurrent)
-            await new Promise(resolve => setTimeout(resolve, 1000));
+        while (this.BaseConfig.NowConcurrentNumber > this.BaseConfig.MaxConcurrent) {
+            // 当暂停状态为 true 时，等待恢复
+            await new Promise((resolve) => setTimeout(resolve, 1000));
         }
     }
     /**
@@ -95,10 +103,18 @@ class HttpClass {
      */
     request({ method, mode, cache, headers, data, signal, url, ...args }, { onclose, onmessage, onopen, onerror } = {}) {
         let that = this;
-        console.log("zptest:data", data, args);
         // 3.1 一般模式。初始化基本参数
-        let init = this.common({ method, mode, cache, headers, data, signal, url, ...args });
-        // 3.2 hook 初始化 
+        let init = this.common({
+            method,
+            mode,
+            cache,
+            headers,
+            data,
+            signal,
+            url,
+            ...args,
+        });
+        // 3.2 hook 初始化
         let res;
         let retryTimer = null;
         let curRequestController;
@@ -112,8 +128,10 @@ class HttpClass {
                 // 3.2.1 普通模式
                 if (that.BaseConfig.Mode == "common") {
                     try {
-                        while (that.BaseConfig.NowConcurrentNumber >= that.BaseConfig.MaxConcurrent) { // 当暂停状态为 true 时，等待恢复
-                            await new Promise(resolve => setTimeout(resolve, 1000));
+                        while (that.BaseConfig.NowConcurrentNumber >=
+                            that.BaseConfig.MaxConcurrent) {
+                            // 当暂停状态为 true 时，等待恢复
+                            await new Promise((resolve) => setTimeout(resolve, 1000));
                         }
                         that.BaseConfig.NowConcurrentNumber++;
                         let result = await fetch(init.url, init);
@@ -127,12 +145,10 @@ class HttpClass {
                         that.BaseConfig.NowConcurrentNumber--;
                         await that.pauseIfNeeded();
                         let output = await that.BaseConfig.BeforeResponse(result);
-                        // console.log(JSON.stringify(output))
                         resolve({ code: 200, config: init, data: output });
                     }
                     catch (e) {
                         console.log("error:", e);
-                        // console.error("未知报错,停止")
                         that.BaseConfig.NowConcurrentNumber--;
                         retry--;
                         main(retry);

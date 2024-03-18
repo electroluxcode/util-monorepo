@@ -13,10 +13,10 @@ async function SendMail(subject, to, text, res) {
     // console.error("天气：", res.lives[0].temperature)
     // 创建一个SMTP客户端配置
     var config = {
-        host: "smtp.qq.com",
-        port: 465,
+        host: "smtp.qq.com", //网易163邮箱 smtp.163.com
+        port: 465, //网易邮箱端口 25
         auth: {
-            user: "3451613934@qq.com",
+            user: "3451613934@qq.com", //邮箱账号
             pass: "exhpspuprkyecidd", //邮箱的授权码
         },
     };

@@ -1,0 +1,15 @@
+{
+  "name": "pv-html",
+  "version": "1.0.0",
+  "description": "",
+  "main": "vite.config.js",
+  "scripts": {
+    "dev": "vite"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@util-monorepo/middleware": "workspace:*"
+  }
+}

@@ -14,7 +14,7 @@ exports.baseConfig = {
     timeline: false,
     // 不显示左下角圆盘
     animation: false,
-    infoBox: false,
+    infoBox: false, // 是否显示点击要素之后显示的信息
     // 不显示home键
     homeButton: false,
     // 去掉原生 选中 entity 后的 绿框
@@ -38,7 +38,7 @@ exports.baseConfig = {
         url: 'https://t{s}.tianditu.gov.cn/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=' +
             licenseKeys.tianditu,
         subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
-        tilingScheme: new Cesium.WebMercatorTilingScheme(),
+        tilingScheme: new Cesium.WebMercatorTilingScheme(), // 与地图切片方案有关
         maximumLevel: 18, // 细节等级18
     }),
 };

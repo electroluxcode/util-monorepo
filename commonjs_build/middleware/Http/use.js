@@ -44,7 +44,7 @@ Http_js_1.Http.create({
 // --------------------2.get 测试 --------------------
 // get 中 加上 Content-Type 也会被视为是 复杂请求触发 option 跨域
 //  document.cookie ="id=7d822;Path=/;Secure;SameSite=None;Domain=baidu.com;"
-document.cookie = "id=7d82222;Path=/;Secure;SameSite=None";
+// document.cookie ="id=7d82222;Path=/;Secure;SameSite=None"
 // Http.request({
 //     url: "/api/post",
 //     data: {
@@ -73,7 +73,7 @@ fileDom.addEventListener("change", async (e) => {
     const data = new FormData();
     data.append("file", e.target.files[0]);
     data.append("myParam", JSON.stringify({
-        name: "xiaoming"
+        name: "xiaoming",
     }));
     console.log("我是上传得文件", data);
     Http_js_1.Http.request({
@@ -84,10 +84,12 @@ fileDom.addEventListener("change", async (e) => {
         // 这玩意不用加.因为在实际开发中，浏览器会自动帮你加上 boundary
         // "Content-Type": 'multipart/form-data'
         },
-    }).then((e) => {
+    })
+        .then((e) => {
         console.log("e:", e);
         return e;
-    }).then((e) => {
+    })
+        .then((e) => {
         console.log("最终结果:", e);
         debugger;
     });

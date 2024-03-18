@@ -33,10 +33,10 @@ app.all("*", function (req, res, next) {
 	res.setHeader("Access-Control-Allow-Origin", "*"); //的允许所有域名的端口请求（跨域解决）
 	res.setHeader(
 		"Access-Control-Allow-Headers",
-		"X-Custom-Header,Cache-Control"
+		"X-Custom-Header,Cache-Control,Pragma"
 	);
-	res.setHeader("Access-Control-Request-Headers", "X-Custom-Header");
-
+	// res.setHeader("Access-Control-Request-Headers", "id");
+	// res.setHeader("Access-Control-Request-Headers", "*");
 	res.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
 	res.setHeader("Access-Control-Max-Age", "3600");
 	res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -89,10 +89,12 @@ schedule.scheduleJob("0 24 06 * * *", () => {
 
 // Sign();
 
-//get 接受参数测试
+//get 接受参数测试 注意 如果是get 那么option也不行
 app.all("/api/get", function (req, res) {
 	let query;
 	let body;
+	let cookie;
+	cookie = req.headers.cookie;
 	if (req.query) {
 		query = JSON.parse(JSON.stringify(req.query));
 		console.log("query:", query);
@@ -101,27 +103,24 @@ app.all("/api/get", function (req, res) {
 		body = JSON.parse(JSON.stringify(req.body));
 		console.log("body:", body);
 	}
+	res.setHeader(
+		"Set-Cookie",
+		// id=7sssd822;Path=/;Secure;SameSite=None;Domain=.baidu.com;
+		"id=7sssd822;Path=/;Secure;SameSite=None;"
+	);
 	// res.setHeader("Cache-Control", "max-age=2");
-	res.send({
-		code: 200,
-
-		body,
-		query,
-	});
-	// setTimeout(() => {
-	// 	res.send({
-	// 		code: 200,
-	// 		// 		msg:
-	// 		// 			Math.random() +
-	// 		// 			`
-	// 		//   ddddddddddddddddd
-	// 		//   `,
-	// 	});
-	// }, 1000);
+	setTimeout(() => {
+		res.send({
+			code: 2000,
+			body,
+			query,
+			cookie,
+		});
+	}, 1000);
 });
 
 //post 接收参数测试 application/json 的有效 {id:56}
-app.all("/api/post", function (req, res) {
+app.post("/api/post", function (req, res) {
 	// res.setHeader('Set-Cookie', 'servercookie=78787788')
 	// res.location('http://baidu.com')
 	// res.redirect(200, "http://baidu.com");
@@ -132,11 +131,23 @@ app.all("/api/post", function (req, res) {
 	// return
 	// json 的才有效
 	// res.setHeader("Cache-Control", "max-age=6");
-	res.send({
-		code: 300,
-		msg: "post_success",
-		data: req.body,
-	});
+	let query;
+	let body;
+	if (req.query) {
+		query = JSON.parse(JSON.stringify(req.query));
+		console.log("query:", query);
+	}
+	if (req.body) {
+		body = JSON.parse(JSON.stringify(req.body));
+		console.log("body:", body);
+	}
+	setTimeout(() => {
+		res.send({
+			code: 200,
+			body,
+			query,
+		});
+	}, 1000);
 });
 app.get("/api/signin", function (req, res) {
 	Sign();
@@ -203,8 +214,8 @@ app.get("/api/email", function (req, res) {
 	// });
 });
 
-app.listen("8088", () => {
-	console.log("http:localhost:8088/api/get");
+app.listen("8098", () => {
+	console.log("http:localhost:8098/api/get");
 });
 
 // catch 404 and forward to error handler

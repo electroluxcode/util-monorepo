@@ -6,7 +6,7 @@ const axios = require("axios");
  */
 const JueJinSignIn = () => {
     let BaseConfig = {
-        url: `https://api.juejin.cn/growth_api/v1/check_in`,
+        url: `https://api.juejin.cn/growth_api/v1/check_in`, //签到接口
         headers: {
             Referer: "https://juejin.cn/",
             "Upgrade-Insecure-Requests": 1,

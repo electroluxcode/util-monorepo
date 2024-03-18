@@ -1,0 +1,21 @@
+{
+  "name": "@util-monorepo/struct",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "node VersionUpdate.js && npm publish -access public"
+  },
+  "homepage": "https://gitee.com/Electrolux/util-monorepo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/electroluxcode/util-monorepo"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@util-monorepo/middleware": "^0.0.5"
+  }
+}

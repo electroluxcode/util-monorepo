@@ -1,0 +1,75 @@
+body {
+	background: red;
+}
+.target {
+	width: fit-content;
+	position: relative;
+	/* left: 300px; */
+}
+
+/* step1:箭头的位置，相对于内容来说 | 初始化箭头 */
+.pop[dir="B"]::before {
+	content: "";
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	background-color: inherit;
+	clip-path: path(
+		"M 0 8 A 4 4 0 0 0 2.82842712474619 6.82842712474619 L 6.585786437626905 3.0710678118654755 A 2 2 0 0 1 9.414213562373096 3.0710678118654755 L 13.17157287525381 6.82842712474619 A 4 4 0 0 0 16 8 Z"
+	);
+	right: 8px;
+	top: 0;
+
+	left: 0;
+	top: 8px;
+	/* 上往下走 */
+	transform: translate(0%, -40%);
+}
+
+/* 箭头的位置，相对于内容来说 | 初始化箭头 */
+.pop[dir="B"]::before {
+	left: 6px;
+	top: 0;
+}
+
+/* step2:简单定义打开后的动画效果 | 和初始化的效果 */
+
+.pop {
+	--pad: 10px;
+	/* 初始--s 的缩放比率
+	--s: 0; */
+	position: absolute;
+	display: flex;
+	/* flex-direction: column; */
+	/* visibility: hidden; */
+	border: 0;
+
+	opacity: 0.5;
+	transition: opacity 0.05s, visibility 0.05s, transform 0s 0.1s;
+	transform: translate(var(--x), var(--y)) scale(var(--s));
+	z-index: 10;
+	border-radius: 4px;
+	background-color: #fff;
+	padding: 4px;
+}
+.pop:is([open]) {
+	transition: 0.2s;
+	--s: 1;
+	opacity: 1;
+	visibility: visible;
+}
+
+/* step3:pop组件整体的位移 | 运动起始和最终的位置  */
+.pop[dir="B"] {
+	transform-origin: left top;
+	/* transform-origin: right top; */
+
+	/* 上往下走 */
+	--x: 0%;
+	--y: 0%;
+	left: calc(var(--left) * 1px);
+	top: calc(var(--bottom) * 1px);
+}
+.pop[dir="B"]:is([open]) {
+	--y: var(--pad);
+}

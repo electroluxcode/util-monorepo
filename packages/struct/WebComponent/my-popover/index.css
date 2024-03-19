@@ -1,0 +1,22 @@
+:root {
+	--primary-color: royalblue;
+}
+.button {
+	position: relative;
+	display: flex;
+	padding: 4px 15px;
+	box-sizing: border-box;
+	height: 32px;
+	align-items: center;
+	justify-content: center;
+
+	border: 1px solid transparent;
+	font-size: 14px;
+	color: rgba(0, 0, 0, 0.88);
+	border-radius: 4px;
+}
+:host([type="primary"]) .button {
+	color: #fff;
+	border: 0;
+	background: var(--primary-color, #1e90ef);
+}

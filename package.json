@@ -11,9 +11,10 @@
     "reportTitle": "测试报告"
   },
   "scripts": {
+    "dev:html": "cd packages/ProjectValiate/pv-html && npm run dev",
     "test": "jest --reporters default jest-stare",
-    "start": "concurrently \"npm run dev:es \" \"npm run dev:cjs\"   ",
-    "dev": "concurrently \"npm run dev:es \" \"npm run dev:cjs\"   ",
+    "start": "concurrently \"npm run dev:es \" \"npm run dev:cjs\"    ",
+    "dev:compile": "concurrently \"npm run dev:es \" \"npm run dev:cjs\"   ",
     "dev:es": "tsc   --p ./tsconfig.esm.json --watch ",
     "dev:cjs": "tsc --p ./tsconfig.common.json --watch ",
     "build:typescript": "tsc --outDir ./dist  --project ./ --watch",

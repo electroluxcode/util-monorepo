@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="B.css">
+    <link rel="stylesheet" href="R.css">
+    <link rel="stylesheet" href="T.css">
+    <link rel="stylesheet" href="L.css">
+</head>
+
+
+<body>
+    <h1>popmock测试</h1>
+    <div class="target">
+        popover
+
+    </div>
+
+    <div id="pop" class="pop" dir="t" part="pop">
+        <div>
+            dsasd
+        </div>
+        <div>23</div>
+    </div>
+
+
+
+
+
+    <style>
+        .target {
+            width: fit-content;
+            position: relative;
+            /* left: 300px; */
+        }
+    </style>
+    <h1>我是最后</h1>
+    <script>
+        // 初始化基本变量
+
+        let pop = document.querySelector("#pop")
+        // 需要被触发的元素
+        let target = document.querySelector(".target")
+        let _documentClickEvent = []
+
+        let node = document.querySelector(".pop").innerHTML
+        let mounted
+
+        let dir
+        let isHover
+        let timer
+        let targetList
+        let open
+        let isHoverPoper
+
+
+        // ----   底层  -------
+        function setPosition() {
+            const { left, top, right, bottom, width } =
+                target.getBoundingClientRect();
+            // console.log("重新计算:",{ left, top, right, bottom, width })
+            pop.style.setProperty("--left", parseInt(left + window.pageXOffset));
+            pop.style.setProperty("--top", parseInt(top + window.pageYOffset));
+            pop.style.setProperty("--right", parseInt(right + window.pageXOffset));
+            pop.style.setProperty("--bottom", parseInt(bottom + window.pageYOffset));
+            pop.style.setProperty("--width", parseInt(width));
+        }
+
+        function init(target, option = {
+            dir: "",
+            trigger: "hover,focus",
+        }) {
+
+            if (!target) return;
+            if (!target.clientWidth) return;
+            pop.target = target;
+
+            if (option.dir.includes(",")) {
+                // 这样子赋值可以直接赋值给element里面的属性
+                pop.auto = option.dir;
+                // pop.dir = option.dir.split(",")[0];
+            }
+
+            // hover
+            if (option.trigger.includes("hover")) {
+
+                target.addEventListener("mouseenter", () => {
+                    if (open) return;
+                    // console.log("target mouseenter触发")
+                    isHover = true;
+                    timer && clearTimeout(timer);
+                    timer = setTimeout(() => {
+                        render()
+                        pop.target = target;
+                        open = true;
+                        pop.setAttribute("open", true)
+                        pop.setAttribute("show", true)
+                        setPosition()
+                    }, 200);
+                });
+
+                target.addEventListener("mouseleave", (ev) => {
+                    // 是否处于hover
+                    setTimeout(() => {
+                        // console.log("target mouseleave触发")
+                        if (isHover && !isHoverPoper) {
+                            isHover = false;
+                            open = false;
+                            pop.removeAttribute("open")
+                            pop.removeAttribute("show")
+                            setPosition()
+                        }
+                        timer && clearTimeout(timer);
+                    }, 100);
+                });
+
+                // pop专注于修改位置 和 设置变量
+                pop.addEventListener("mouseenter", () => {
+                    if (isHover) {
+                        isHoverPoper = true
+                        open = true
+                        setPosition()
+                    };
+
+                });
+                pop.addEventListener("mouseleave", (ev) => {
+                    if (isHoverPoper) {
+                        isHoverPoper = false
+                        open = false
+                        setPosition()
+                        pop.removeAttribute("open")
+                        pop.removeAttribute("show")
+                    };
+                });
+
+            }
+
+        }
+
+        // ----   调用  -------
+
+        // 触发的位置可以在 里面 也可以在顶层的上面
+        function targetAll() {
+            return [pop.previousElementSibling || pop.parentNode]
+        }
+
+
+
+        function render() {
+            if (mounted) {
+                pop.dispatchEvent(new Event('adopt'))
+                return
+            }
+            mounted = true
+            // targetList = targetAll()
+            targetList = [target]
+            targetList.forEach(target => {
+
+                if (!target.clientWidth) return;
+
+                if (pop.hasAttribute("contextmenu")) {
+                    target.addEventListener('contextmenu', ev => {
+                        ev.preventDefault();
+                        // pop.style.setProperty("--left",ev.pageX)
+                        // pop.style.setProperty("--top",ev.pageY)
+                        // document.body.append(this);
+                        pop.style.left = ev.pageX + 'px'
+                        pop.style.top = ev.pageY + 'px'
+
+                        // 二次点击
+                        open = true
+                        pop.style.visibility = ""
+                        pop.style.opacity = "1"
+                        if (_documentClickEvent.length) return;
+                        const click = (ev) => {
+                            const { left, top, right, bottom } = target.getBoundingClientRect()
+                            if (ev.x > right || ev.y > bottom || ev.x < left || ev.y < top) {
+                                console.log("out")
+                                open = false;
+                                isHover = false;
+                                pop.removeAttribute("open")
+                                pop.removeAttribute("show")
+
+                            } else {
+                                pop.style.visibility = "hidden"
+                                pop.style.opacity = "0"
+
+                            }
+
+                        };
+                        _documentClickEvent.push(click)
+                        document.addEventListener('click', click)
+                    })
+                } else {
+
+                    init(target, {
+                        dir: "",
+                        trigger: "hover,focus",
+                    })
+                }
+
+            });
+            document.body.append(pop);
+        }
+
+        render()
+        // document.body.addEventListener("adopt", () => {
+        //     console.log("出大")
+        // })
+        // document.body.dispatchEvent(new Event('adopt', {
+        //     bubbles: false,
+        //     cancelable: false ,
+        //     // shoadow专用:composed
+        // }))
+
+
+
+
+
+        // 最终渲染
+
+
+    </script>
+
+
+
+
+    <script>
+
+    </script>
+
+</body>
+
+</html>

@@ -151,5 +151,11 @@ export default defineConfig({
 
 #### 3.1.3 index.html/index.ts
 
+```html
+<script src="index.ts"></script>
+```
+
+
+
 
 

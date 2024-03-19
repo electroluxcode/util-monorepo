@@ -49,39 +49,34 @@ importers:
         specifier: ^5.1.6
         version: 5.1.6(@types/node@20.11.28)
 
-  ProjectValiate/pv-html:
-    dependencies:
-      '@util-monorepo/middleware':
-        specifier: ^0.0.5
-        version: 0.0.5
-
-  ProjectValiate/pv-vue: {}
-
-  package/ProjectValiate/pv-html:
+  packages/ProjectValiate/pv-html:
     dependencies:
       '@util-monorepo/middleware':
         specifier: workspace:*
         version: link:../../middleware
+      '@util-monorepo/struct':
+        specifier: workspace:^
+        version: link:../../struct
 
-  package/ProjectValiate/pv-vue: {}
+  packages/ProjectValiate/pv-vue: {}
 
-  package/middleware: {}
+  packages/middleware: {}
 
-  package/struct:
+  packages/struct:
     dependencies:
       '@util-monorepo/middleware':
         specifier: ^0.0.5
         version: 0.0.5
 
-  package/struct/Http:
+  packages/struct/Http:
     dependencies:
       net:
         specifier: ^1.0.2
         version: 1.0.2
 
-  package/type: {}
+  packages/type: {}
 
-  package/ui: {}
+  packages/ui: {}
 
 packages:
 

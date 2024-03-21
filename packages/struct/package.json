@@ -1,11 +1,15 @@
 {
   "name": "@util-monorepo/struct",
-  "version": "0.0.1",
+  "version": "1.0.4",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "node VersionUpdate.js && npm publish -access public"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "homepage": "https://gitee.com/Electrolux/util-monorepo",
   "repository": {
@@ -16,6 +20,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@util-monorepo/middleware": "^0.0.5"
+    "@util-monorepo/middleware": "^1.0.5"
   }
 }

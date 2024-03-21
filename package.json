@@ -1,6 +1,6 @@
 {
   "name": "util-monorepo",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "```shell\r npm install pnpm -g\r # 然后创造一个 新文件夹，在这个新文件夹中\r pnpm init\r ```",
   "main": "index.js",
   "repository": {

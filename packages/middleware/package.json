@@ -1,6 +1,6 @@
 {
 	"name": "@util-monorepo/middleware",
-	"version": "0.0.6",
+	"version": "1.0.4",
 	"description": "",
 	"type": "module",
 	"main": "index.js",

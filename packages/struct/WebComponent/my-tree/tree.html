@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="tree.css">
+  <!-- <link rel="stylesheet" href="../../asset/iconfont/iconfont.css"> -->
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+  <style>
+    .container {
+      width: 400px;
+      height: 400px;
+      overflow: scroll;
+    }
+
+    
+    .tree {
+      width: 100%;
+      overflow: hidden;
+
+    }
+   
+    .red{
+      color: red;
+    }
+   
+  </style>
+</head>
+
+
+<body>
+
+  <div class="container">
+    <div class="tree">
+    </div>
+
+  </div>
+  <script type="module">
+
+    import { tree } from "./tree.js"
+    const treeDatas = [
+      {
+        title: '标题-1',
+        expand: true,
+        key: "标题-1",
+        selected: true,
+      },
+      {
+        title: '标题-2',
+        key: "标题-2",
+        expand: true,
+        children: [
+          {
+            title: '标题-3',
+            key: "标题-3",
+            selected: true,
+            expand: false,
+          },
+          {
+            title: '标题-4',
+            key: "标题-4",
+            selected: false,
+            expand: false,
+            children: [
+              {
+                title: '标题-5',
+                key: "标题-5",
+                selected: false,
+                expand: false,
+                children: [
+              {
+                title: '标题-6',
+                key: "标题-6",
+                selected: false,
+                expand: false,
+              },
+
+            ]
+              },
+
+            ]
+          },
+
+        ]
+      },
+
+
+
+      {
+        title: '标题-7',
+        key: "标题-7",
+        expand: true,
+        children: [
+          {
+            title: '标题-8',
+            key: "标题-8",
+            selected: true,
+            expand: false,
+          },
+          
+
+        ]
+      }
+    ]
+
+
+    let temp = new tree({
+      element: document.querySelector('.tree'),
+      data: treeDatas,
+      multiple: false,
+      toggle: node => {
+        // console.log(node)
+      },
+      select: (node, nodes) => {
+        console.log("选中数据:", nodes)
+      }
+    })
+
+
+
+    // feature1 动态加载测试
+    setTimeout(() => {
+      // 默认的不需要传参 parent 因为会
+      temp.asyncData("标题-1", [{
+        title: '标题-9',
+        key: "标题-9",
+        selected: false,
+        expand: false,
+        children: [
+          {
+            title: '标题-10',
+            key: "标题-10",
+            selected: false,
+            expand: true,
+            parent: '标题-9'
+          }
+        ]
+      }, {
+        title: '标题-12',
+        key: "标题-12",
+        selected: false,
+        expand: true,
+        parent: "标题-10",
+        children: [
+          {
+            title: '标题-13',
+            key: "标题-13",
+            selected: false,
+            expand: true,
+          }
+        ]
+      }
+    ])
+    }, 2000);
+
+    // feature3 搜索树测试
+      // setTimeout(() => {
+      //   temp.searchData("标题-5")
+      // }, 1000);
+      // setTimeout(() => {
+      //   temp.searchData("标题-9")
+      // }, 1000);
+  </script>
+</body>
+
+</html>

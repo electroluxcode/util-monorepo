@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-nocheck
 import styles from "./base.css?inline" assert { type: "css" };
 // let life_case = new life();
 // life_case.register("run", theme);

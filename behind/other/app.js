@@ -116,7 +116,7 @@ app.all("/api/get", function (req, res) {
 			query,
 			cookie,
 		});
-	}, 1000);
+	}, 0);
 });
 
 //post 接收参数测试 application/json 的有效 {id:56}

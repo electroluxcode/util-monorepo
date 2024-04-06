@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script></script>
+</head>
+
+<body>
+    <img src="https://p6-passport.byteacctimg.com/img/user-avatar/ce558addd8752ce5884f64807e3b2739~60x60.awebp" alt=""
+        srcset="">
+    <img src="https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg" alt=""
+        srcset="">
+    <script type="module">
+        // performance 对象代表 会有很多个 单个的 metric(measure)数据
+        async function a() {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({})
+                }, 3000);
+            })
+        }
+        await a()
+        function print_PerformanceEntries() {
+            // 1.all performance entries
+            var p = performance.getEntries();
+            /**
+                1. getEntries 属性 array<object>
+                - 1.1.VisibilityStateEntry(可见性状态变化的计时）：离开的时候可以用
+                    - 1.1.1 entryType：visibility-state 可见性
+                    - 1.1.2.startTime：开始时间
+                    - 1.1.3 name: "visible" | "hidden" 目前是隐藏还是展示
+                    - 用法: 
+                        - 界面停留时间:离开的时候找到 VisibilityStateEntry 用visible和hidden的starttime状态相减 starttime加减
+                - 1.2.PerformanceNavigationTiming
+                    - 1.2.1  entryType：navigation 
+                    - 1.2.2  name: 返回文档的url window.locatction.href
+                    - 1.2.3  duration 他是 整个文档同步资源的加载时间 
+                        - https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming 里面的图十分清楚
+                            - 重定向->sw->cache->dns->tcp->request->early hints(103)(HTTP/2 Server Push 的升级版=预加载 103会自动缓存)->response
+                            - reponse-> eventload
+                    - 1.2.4  redirectCount 浏览上下文中上次非重定向导航以来的重定向次数
+                    - 用法: 离开的时候找到 VisibilityStateEntry 用 starttime加减
+                - 1.3.PerformanceLongAnimationFrameTiming(哪些注册主线程任务耗费了50ms或者更多时间)
+                    - 1.3.1 突然定位不到这个元素了
+                    - 1.3.2 
+                - 1.4.PerformanceResourceTiming(可以获取资源的加载时间)
+                    - 1.4.1 entryType：resource
+                    - 1.4.2 name :资源url
+                    - 1.4.3 duraction : 响应结束和startTime的差值
+                    - 1.4.4 initiatorType:css | embed | fetch | frame | image | script
+                    - 1.4.5 transferSize :获取资源的大小
+
+             * */
+
+            // 2.
+            console.log("p:", p)
+            for (var i = 0; i < p.length; i++) {
+                console.log("PerformanceEntry[" + i + "]", p[i]);
+                print_PerformanceEntry(p[i]);
+            }
+        }
+        function print_PerformanceEntry(perfEntry) {
+            var properties = ["name", "entryType", "startTime", "duration"];
+
+            for (var i = 0; i < properties.length; i++) {
+                var value = perfEntry[properties[i]];
+                console.log("... " + properties[i] + " = " + value);
+            }
+        }
+
+        print_PerformanceEntries()
+
+
+        const observer = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            console.log("---------entries---------:", entries)
+            const lastEntry = entries[entries.length - 1]; // Use the latest LCP candidate
+            console.log("-----LCP-------:", lastEntry.startTime);
+            console.log("-$$$$$$$lastEntry$$$$$$$---------", lastEntry);
+        });
+        observer.observe({ type: "largest-contentful-paint", buffered: true });
+
+
+        for (let i = 0; i < 5000; i++) {
+            let text = document.createElement("div")
+            text.innerHTML = "插入"
+            document.body.appendChild(text)
+        }
+    </script>
+
+    <div class="container">
+
+        <div class="top">top</div>
+        <div class="bottom">bottom</div>
+    </div>
+    <script>
+
+        const observer2 = new PerformanceObserver((list) => {
+            list.getEntries().forEach((entry) => {
+                const loadEventTime = entry.loadEventEnd - entry.loadEventStart;
+                if (loadEventTime > 0) {
+                    console.log(`${entry.name}gfdgdfgdsfgfdgdf: load event handler time: ${loadEventTime}ms`);
+                }
+            });
+        });
+
+        observer2.observe({ type: "navigation", buffered: true });
+    </script>
+</body>
+
+</html>

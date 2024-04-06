@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// @ts-ignore
+// @ts-nocheck
 const base_css_inline_1 = __importDefault(require("./base.css?inline"));
 // let life_case = new life();
 // life_case.register("run", theme);

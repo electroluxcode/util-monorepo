@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-nocheck
 import styles from "./base.css?inline" assert { type: "css" };
 
 export interface themeType {

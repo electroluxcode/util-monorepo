@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+            font-size: 12px;
+        }
+
+        .container {
+            height: 400px;
+            overflow: scroll;
+        }
+
+        .container_layer {
+            /* max-height: 400px; */
+            /* overflow: scroll; */
+            position: relative;
+            /* position: ; */
+        }
+
+        p {
+            position: absolute;
+            border: 1px solid black;
+            /* transform: scale(1.5); */
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="container_layer">
+
+            <p>0</p>
+            <p>1</p>
+            <p>2</p>
+            <p>3</p>
+            <p>4</p>
+            <p>5</p>
+            <p>6</p>
+            <p>7</p>
+            <p>8</p>
+            <p>9</p>
+            <p>10</p>
+            <p>11</p>
+            <p>12</p>
+            <p>13</p>
+            <p>14</p>
+            <p>15</p>
+            <p>16</p>
+            <p>17</p>
+            <p>18</p>
+            <p>19</p>
+            <p>20</p>
+
+            <p>21</p>
+
+            <p>22</p>
+            <p>23</p>
+            <p>24</p>
+            <p>25</p>
+            <p>26</p>
+            <p>27</p>
+            <p>28</p>
+            <p>29</p>
+
+        </div>
+
+
+    </div>
+    <!-- <script type="module">
+import { DataProxy } from "../Data/DataProxy.js"
+        console.log(DataProxy, "2566")
+        let data = [{ "id": 0 }, { "id": 1 }, { "id": 2 }, { "id": 3 }, { "id": 4 }, { "id": 5 }, { "id": 6 }, { "id": 7 }, { "id": 8 }, { "id": 9 }, { "id": 10 }, { "id": 11 }, { "id": 12 }, { "id": 13 }, { "id": 14 }, { "id": 15 }, { "id": 16 }, { "id": 17 }, { "id": 18 }, { "id": 19 }, { "id": 20 }, { "id": 21 }, { "id": 22 }, { "id": 23 }, { "id": 24 }, { "id": 25 }, { "id": 26 }, { "id": 27 }, { "id": 28 }, { "id": 29 }, { "id": 30 }, { "id": 31 }, { "id": 32 }, { "id": 33 }, { "id": 34 }, { "id": 35 }, { "id": 36 }, { "id": 37 }, { "id": 38 }, { "id": 39 }, { "id": 40 }, { "id": 41 }, { "id": 42 }, { "id": 43 }, { "id": 44 }, { "id": 45 }, { "id": 46 }, { "id": 47 }, { "id": 48 }, { "id": 49 }, { "id": 50 }, { "id": 51 }, { "id": 52 }, { "id": 53 }, { "id": 54 }, { "id": 55 }, { "id": 56 }, { "id": 57 }, { "id": 58 }, { "id": 59 }, { "id": 60 }, { "id": 61 }, { "id": 62 }, { "id": 63 }, { "id": 64 }, { "id": 65 }, { "id": 66 }, { "id": 67 }, { "id": 68 }, { "id": 69 }, { "id": 70 }, { "id": 71 }, { "id": 72 }, { "id": 73 }, { "id": 74 }, { "id": 75 }, { "id": 76 }, { "id": 77 }, { "id": 78 }, { "id": 79 }, { "id": 80 }, { "id": 81 }, { "id": 82 }, { "id": 83 }, { "id": 84 }, { "id": 85 }, { "id": 86 }, { "id": 87 }, { "id": 88 }, { "id": 89 }, { "id": 90 }, { "id": 91 }, { "id": 92 }, { "id": 93 }, { "id": 94 }, { "id": 95 }, { "id": 96 }, { "id": 97 }, { "id": 98 }, { "id": 99 }, { "id": 100 }, { "id": 101 }, { "id": 102 }, { "id": 103 }, { "id": 104 }, { "id": 105 }, { "id": 106 }, { "id": 107 }, { "id": 108 }, { "id": 109 }, { "id": 110 }, { "id": 111 }, { "id": 112 }, { "id": 113 }, { "id": 114 }, { "id": 115 }, { "id": 116 }, { "id": 117 }, { "id": 118 }, { "id": 119 }, { "id": 120 }, { "id": 121 }, { "id": 122 }, { "id": 123 }, { "id": 124 }, { "id": 125 }, { "id": 126 }, { "id": 127 }, { "id": 128 }, { "id": 129 }, { "id": 130 }, { "id": 131 }, { "id": 132 }, { "id": 133 }, { "id": 134 }, { "id": 135 }, { "id": 136 }, { "id": 137 }, { "id": 138 }, { "id": 139 }, { "id": 140 }, { "id": 141 }, { "id": 142 }, { "id": 143 }, { "id": 144 }, { "id": 145 }, { "id": 146 }, { "id": 147 }, { "id": 148 }, { "id": 149 }, { "id": 150 }, { "id": 151 }, { "id": 152 }, { "id": 153 }, { "id": 154 }, { "id": 155 }, { "id": 156 }, { "id": 157 }, { "id": 158 }, { "id": 159 }, { "id": 160 }, { "id": 161 }, { "id": 162 }, { "id": 163 }, { "id": 164 }, { "id": 165 }, { "id": 166 }, { "id": 167 }, { "id": 168 }, { "id": 169 }, { "id": 170 }, { "id": 171 }, { "id": 172 }, { "id": 173 }, { "id": 174 }, { "id": 175 }, { "id": 176 }, { "id": 177 }, { "id": 178 }, { "id": 179 }, { "id": 180 }, { "id": 181 }, { "id": 182 }, { "id": 183 }, { "id": 184 }, { "id": 185 }, { "id": 186 }, { "id": 187 }, { "id": 188 }, { "id": 189 }, { "id": 190 }, { "id": 191 }, { "id": 192 }, { "id": 193 }, { "id": 194 }, { "id": 195 }, { "id": 196 }, { "id": 197 }, { "id": 198 }, { "id": 199 }]
+
+        // step1：获取单个个列表高度
+        
+        let initElement = `
+        <p class="ceshi"> text</p>
+        `
+        document.querySelector(".container_layer").innerHTML = initElement
+        
+        // 单个元素高度
+        let SingleElementHeight = document.querySelector(".container_layer").children[0].getBoundingClientRect().height
+        let ViewElement = document.querySelector(".container_layer").parentNode
+        // 注意包含了滚动条 所以会高一点
+        // let ViewElementHeight = ViewElement.getBoundingClientRect().height
+        let ViewElementHeight = ViewElement.clientHeight
+        console.log("可视组件高度:", ViewElementHeight, ViewElement.getBoundingClientRect())
+        document.querySelector(".container_layer").children[0].remove()
+
+        // step2:计算能够看到的start_index 和 count
+        console.log(document.querySelector(".container_layer").scrollHeight)
+        // 尽量包括多一点东西
+        let ViewElementCount = Math.ceil(ViewElementHeight / SingleElementHeight)
+        let BeforeElementHeight = 0
+        let BeforeElementCount = 0
+        console.log("可以看到的项目", ViewElementCount)
+
+
+
+        // step3：建立代理
+        var TrueRenderData = {
+            init: {
+                status: "create",
+                data: {
+
+                }
+            }
+        }
+        // var ProxyRenderData=new Proxy(TrueRenderData,{
+        //     get:function(target,key){
+        //         if(key in target){
+        //             console.log("触发get",target,key)
+        //             return target[key]
+        //         }
+
+        //     },
+        //     set:function(target, key, value){
+        //         console.log("触发set",target, key, value)
+        //         target[key] = value
+        //         if(value.status=="update"){
+        //             ReRender(document.querySelector(".container_layer"),value,value.start)
+        //         }
+
+        //         return true;
+        //     }
+        // })
+
+
+        let ProxyRender = new DataProxy(TrueRenderData)
+        let ProxyRenderData = ProxyRender.ProxyGet()
+        ProxyRender.FnAdd(function () {
+            console.log("this:", this.init.data, this.init.start)
+            if (this.init.status == "update") {
+                ReRender(document.querySelector(".container_layer"), this.init.data, this.init.start)
+            }
+        })
+
+
+
+        function FirstRender(start, display, data) {
+            let temp = []
+            for (let i = start; i <= display; i++) {
+                temp.push({
+                    id: data[i].id
+                })
+                let text = document.createElement("p")
+                text.innerHTML = data[i].id
+                text.style.top = `${i * SingleElementHeight}px`
+                document.querySelector(".container_layer").appendChild(text)
+                if (i == display) {
+                    console.log("触发")
+                    ProxyRenderData.init = {
+                        data: temp,
+                        status: "create",
+                        start: 0
+                    }
+                }
+            }
+        }
+
+        FirstRender(0, ViewElementCount, data)
+
+        /**
+         *@des start 用来定位高度
+        */
+        function ReRender(ui, data, start) {
+            let length = ui.children.length;
+            // console.log("data:",data["data"][0].id)
+            for (let i = 0; i < length; i++) {
+                // console.log(data["data"][i])
+                let temp = data[i].id
+                ui.children[i].style.top = `${(i + start) * SingleElementHeight}px`
+                ui.children[i].innerHTML = temp;
+                // debugger;
+            }
+        }
+
+        // scroll 阻止不了  wheel 可以,但是wheel 不准确
+        ViewElement.addEventListener("scroll", (e) => {
+            // 尽量包括多一点东西
+            BeforeElementCount = Math.floor(ViewElement.scrollTop / SingleElementHeight)
+            // console.log("滚动高度",BeforeElementCount,ViewElementCount,data.slice(BeforeElementCount,BeforeElementCount+ViewElementCount))
+            // ProxyRenderData.init = data.slice(BeforeElementCount,BeforeElementCount+ViewElementCount)
+            // ReRender
+            // e.preventDefault()
+            ProxyRenderData.init = {
+                data: data.slice(BeforeElementCount, BeforeElementCount + ViewElementCount + 1),
+                status: "update",
+                start: BeforeElementCount
+            }
+        })
+
+
+
+
+
+
+        let InitRenderElement = 20
+        let AllRenderElementCount = 1000
+
+        // 初始化高度
+        let AllRenderHeight = (document.querySelector(".container_layer").children[0].getBoundingClientRect().height) * AllRenderElementCount
+        console.log(AllRenderHeight)
+        document.querySelector(".container_layer").style.height = `${AllRenderHeight}px`
+
+
+        document.querySelector(".container").addEventListener("scroll", (e) => {
+            // console.log("滚动高度",document.querySelector(".container").scrollTop)
+            // e.preventDefault()
+
+        })
+
+
+
+
+        document.querySelector(".container").addEventListener('wheel', (e) => {
+            // console.log("鼠标滚轮")
+            // e.preventDefault()
+        })
+
+
+    </script> -->
+    <script type="module" src="VisualList.js">
+
+
+
+    </script>
+</body>
+
+</html>

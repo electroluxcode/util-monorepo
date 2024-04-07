@@ -1,6 +1,13 @@
 import { data } from "./data.js";
-// 这里可以设置插入的元素  p h1 h2 等都可以
-let createElement = "p";
+// 这里可以设置插入的元素,第三层  p h1 h2 等都可以
+let thirdElement = "p";
+
+// 这里设置第二层
+let secondElement = ".inner";
+
+// 这里设置顶层
+let firstElement = ".container";
+
 class DataProxy {
 	Data;
 	ProxyFn;
@@ -23,10 +30,10 @@ class DataProxy {
 				if (key == "length") {
 				} else {
 					// console.log("触发set方法:", key, value, target);
-					let container = document.querySelector(".inner");
+					let container = document.querySelector(secondElement);
 					container!.innerHTML = "";
 					target.value.forEach((element) => {
-						let p = document.createElement(createElement);
+						let p = document.createElement(thirdElement);
 						p.innerHTML = element.id;
 						p.addEventListener("click", () => {
 							console.log("click-event:", element.id);
@@ -76,7 +83,7 @@ class VisualList {
 	eventMode(param: VisualListType) {
 		// 初始渲染一个
 		param.render([param.data[0]]);
-
+		param.ViewElement = document.querySelector(param.ViewElement);
 		queueMicrotask(() => {
 			let ChildrenElement = document.querySelector(param.ChildrenElement);
 			let shouldDisplayCount = Math.floor(
@@ -115,9 +122,9 @@ class VisualList {
 let test = new DataProxy([]);
 let case1 = test.ProxyGet();
 new VisualList({
-	ParentElement: document.querySelector(".container_layer"),
-	ChildrenElement: createElement,
-	ViewElement: document.querySelector(".container"),
+	ParentElement: secondElement,
+	ChildrenElement: thirdElement,
+	ViewElement: firstElement,
 	data,
 	mode: "event",
 	render: (data) => {

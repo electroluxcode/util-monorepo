@@ -28,6 +28,9 @@ class DataProxy {
 					target.value.forEach((element) => {
 						let p = document.createElement(createElement);
 						p.innerHTML = element.id;
+						p.addEventListener("click", () => {
+							console.log("click-event:", element.id);
+						});
 						container?.appendChild(p);
 						console.log(element);
 					});

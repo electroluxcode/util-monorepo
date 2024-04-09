@@ -1,76 +1,90 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.KeyApiDataSwitch = void 0;
-// step3:mock 请求
-const data = {
+exports.useDict = void 0;
+let data = {
+    msg: "操作成功",
+    code: 200,
     data: {
-        workType: [
-            {
-                id: 55,
-                dictType: 4,
-                dictName: '工种',
-                dictNameEn: 'workType',
-                valueName: '木工',
-                valueNameEn: 'Carpentry',
-                value: '00',
-                isEnable: '1',
-            },
-            {
-                id: 56,
-                dictType: 4,
-                dictName: '工种',
-                dictNameEn: 'workType',
-                valueName: '钢筋工',
-                valueNameEn: 'Reinforcing Steel Worker',
-                value: '01',
-                isEnable: '1',
-            },
-        ],
+        envEquipType: {
+            dictName: "环境设备细分",
+            multiValue: [
+                {
+                    id: "306",
+                    dictType: 26,
+                    projectId: "5d8b1afc-ceb5-4b07-9d04-1269984e7697",
+                    dictName: "环境设备细分",
+                    dictNameEn: "envEquipType",
+                    valueName: "7种测量环境牌",
+                    valueNameEn: "Seven in one",
+                    value: "00",
+                    isEnable: "1",
+                    canWrite: "1",
+                },
+                {
+                    id: "307",
+                    dictType: 26,
+                    projectId: "5d8b1afc-ceb5-4b07-9d04-1269984e7697",
+                    dictName: "2222",
+                    dictNameEn: "envEquipType",
+                    valueName: "7种测量环境牌",
+                    valueNameEn: "Seven in one",
+                    value: "00",
+                    isEnable: "1",
+                    canWrite: "1",
+                },
+            ],
+        },
     },
 };
-const mockData = () => {
+let dictManagementList = () => {
     return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(data);
-        }, 1000);
+        resolve(data);
     });
 };
-const apiData = await mockData();
-console.log(apiData);
-const DataDictTest = {
-    workType: apiData.data.workType,
+const useDict = async (cache = true) => {
+    let res;
+    // 加一层缓存
+    try {
+        if (cache) {
+            res = localStorage.getItem("useDict");
+        }
+        else {
+            res = await dictManagementList();
+        }
+        if (!res) {
+            res = await dictManagementList();
+            localStorage.setItem("useDict", JSON.stringify(res));
+        }
+        res = JSON.parse(res);
+    }
+    catch {
+        res = await dictManagementList();
+        localStorage.setItem("useDict", JSON.stringify(res));
+    }
+    // f1:返回的是指定key的array,类似apiSelect的二次封装hook能够用到
+    let getDictArrayByKey = (type) => {
+        return res.data[type].multiValue;
+    };
+    // f2:返回的是值和key的映射，使用方式类似于 xx["cntovalue"][] ,类似于table或者是modal的update的时候做转化可用
+    const getDictMagicNumberByKey = (type) => {
+        let workType = res.data[type].multiValue;
+        let workObj = {};
+        workObj["CnToValue"] = {};
+        workObj["ValueToCn"] = {};
+        for (let i in workType) {
+            workObj["CnToValue"][workType[i].valueName] = workType[i].value;
+            workObj["ValueToCn"][workType[i].value] = workType[i].valueName;
+        }
+        return JSON.parse(JSON.stringify(workObj));
+    };
+    // 这个少用
+    const getDictData = () => {
+        return res;
+    };
+    return {
+        getDictData,
+        getDictArrayByKey,
+        getDictMagicNumberByKey,
+    };
 };
-// step4 拼装数据
-function KeyApiDataSwitch(DataDictTest) {
-    const BaseKey = Object.keys(DataDictTest);
-    BaseKey.map((e) => {
-        const nowKey = {};
-        const arr = DataDictTest[e];
-        if (!arr) {
-            throw new Error('zptest:数据字典key与后端不统一,请检查:' + e);
-        }
-        DataDictTest[`${e}Enhance`] = {};
-        DataDictTest[`${e}Enhance`]["ValueToCn"] = {};
-        DataDictTest[`${e}Enhance`]["ValueToEnglish"] = {};
-        DataDictTest[`${e}Enhance`]["CnToValue"] = {};
-        DataDictTest[`${e}Enhance`]["CnToEnglish"] = {};
-        DataDictTest[`${e}Enhance`]["EnglishToValue"] = {};
-        DataDictTest[`${e}Enhance`]["EnglishToCn"] = {};
-        // 基本格式:workType:{00: 'Carpentry', 01: 'Reinforcing Steel Worker'}
-        for (let i = 0; i < arr.length; i++) {
-            nowKey[arr[i].value] = arr[i].valueNameEn;
-            DataDictTest[`${e}Enhance`]["ValueToCn"][arr[i].value] = arr[i].valueName;
-            DataDictTest[`${e}Enhance`]["ValueToEnglish"][arr[i].value] = arr[i].valueNameEn;
-            DataDictTest[`${e}Enhance`]["CnToValue"][arr[i].valueName] = arr[i].value;
-            DataDictTest[`${e}Enhance`]["CnToEnglish"][arr[i].valueName] = arr[i].dictNameEn;
-            DataDictTest[`${e}Enhance`]["EnglishToValue"][arr[i].valueNameEn] = arr[i].value;
-            DataDictTest[`${e}Enhance`]["EnglishToCn"][arr[i].valueNameEn] = arr[i].valueName;
-        }
-        DataDictTest[e] = nowKey;
-    });
-    return DataDictTest;
-}
-exports.KeyApiDataSwitch = KeyApiDataSwitch;
-// 泛型传入 api key的 联合类型可获得类型提示
-let result = KeyApiDataSwitch(DataDictTest);
-console.log('zptest:赋值完成:', result);
+exports.useDict = useDict;

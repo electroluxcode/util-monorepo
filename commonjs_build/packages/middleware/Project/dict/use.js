@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// react 
+const dict_js_1 = require("./dict.js");
+let baseDict = await (0, dict_js_1.useDict)();
+baseDict.getDictArrayByKey("envEquipType");
+baseDict.getDictMagicNumberByKey("envEquipType")["CnToValue"][""];
+// react
 /**
  *
  * @des
@@ -15,8 +19,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // type Reducer<S, A> = (prevState: S, action: A) => any;
 // const reducer = (x: number,y:string) => {};
 // const [state, dispatch] = useReducer(reducer, 23);
-function useReducer(reducer, initializerArg) { return; }
-;
+function useReducer(reducer, initializerArg) {
+    return;
+}
 // feature:用于推断类型
 const FnCase = (test) => { };
 // const [state2, dispatch2] = useObject(ObjectCase, "D");

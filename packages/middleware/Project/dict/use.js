@@ -1,4 +1,8 @@
-// react 
+import { useDict } from "./dict.js";
+let baseDict = await useDict();
+baseDict.getDictArrayByKey("envEquipType");
+baseDict.getDictMagicNumberByKey("envEquipType")["CnToValue"][""];
+// react
 /**
  *
  * @des
@@ -13,10 +17,10 @@
 // type Reducer<S, A> = (prevState: S, action: A) => any;
 // const reducer = (x: number,y:string) => {};
 // const [state, dispatch] = useReducer(reducer, 23);
-function useReducer(reducer, initializerArg) { return; }
-;
+function useReducer(reducer, initializerArg) {
+    return;
+}
 // feature:用于推断类型
 const FnCase = (test) => { };
 // const [state2, dispatch2] = useObject(ObjectCase, "D");
 const [state2, dispatch2] = useReducer(FnCase, "23");
-export {};

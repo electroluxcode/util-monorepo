@@ -11,10 +11,11 @@
 </head>
 
 <body>
-    <img src="https://p6-passport.byteacctimg.com/img/user-avatar/ce558addd8752ce5884f64807e3b2739~60x60.awebp" alt=""
+    <!-- <img src="https://p6-passport.byteacctimg.com/img/user-avatar/ce558addd8752ce5884f64807e3b2739~60x60.awebp" alt=""
         srcset="">
     <img src="https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg" alt=""
-        srcset="">
+        srcset=""> -->
+    <iframe src="https://jn.cn/user/3004311888208296/posts" frameborder="0"></iframe>
     <script type="module">
         // performance 对象代表 会有很多个 单个的 metric(measure)数据
         async function a() {
@@ -29,7 +30,7 @@
             // 1.all performance entries
             var p = performance.getEntries();
             /**
-                1. getEntries 属性 array<object>
+                1. getEntries 属性 array<object> 计量单位都是ms
                 - 1.1.VisibilityStateEntry(可见性状态变化的计时）：离开的时候可以用
                     - 1.1.1 entryType：visibility-state 可见性
                     - 1.1.2.startTime：开始时间
@@ -52,13 +53,16 @@
                     - 1.4.1 entryType：resource
                     - 1.4.2 name :资源url
                     - 1.4.3 duraction : 响应结束和startTime的差值
-                    - 1.4.4 initiatorType:css | embed | fetch | frame | image | script
+                    - 1.4.4 initiatorType:css | embed | fetch | frame | image | script | xmlhttprequest
                     - 1.4.5 transferSize :获取资源的大小
+                    - 1.4.6 注意的点
+                        - 1.4.6.1 两个 url 相同的 image 可能只会请求一次，只有url改变了才会改变
+                        - 1.4.6.2 iframe请求的子资源不会出现在里面，出现的只有iframe这一个文件
+                        - 1.4.6.3 (这条很奇怪,因为返回值如果是404或者确实的网络错误跟正确的是没有区别的)如果网络请求失败那么返回值只有 startTime, fetchStart, duration and responseEnd
+                        - 1.4.6.4 如果因为 混合内容、CORS 限制、CSP 策略等策略那么不会出现在这条线中
+                - 1.5     
+                * */
 
-             * */
-
-            // 2.
-            console.log("p:", p)
             for (var i = 0; i < p.length; i++) {
                 console.log("PerformanceEntry[" + i + "]", p[i]);
                 print_PerformanceEntry(p[i]);
@@ -69,7 +73,8 @@
 
             for (var i = 0; i < properties.length; i++) {
                 var value = perfEntry[properties[i]];
-                console.log("... " + properties[i] + " = " + value);
+                // 这几个确实很重要
+                // console.log("... " + properties[i] + " = " + value);
             }
         }
 
@@ -90,6 +95,15 @@
             let text = document.createElement("div")
             text.innerHTML = "插入"
             document.body.appendChild(text)
+        }
+
+        // performance.getEntriesByType
+
+        function network() {
+            let xhr = new XMLHttpRequest()
+            xhr.open("get", "ddddd", true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send({ id: 88 });
         }
     </script>
 

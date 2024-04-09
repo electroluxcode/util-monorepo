@@ -36,7 +36,8 @@ class StateMachine {
 		if (!this.data["inital"] || !newObj[this.data["inital"]]) {
 			throw Error("并没有定义inital或者并没有相对应的state");
 		}
-		this.dfsExe([newObj[this.data["inital"]]]);
+		// this.dfsExe([newObj[this.data["inital"]]]);
+		this.dfsExe(this.data.states);
 	}
 	async dfsExe(arr) {
 		if (this.isFinal) {
@@ -69,7 +70,6 @@ class StateMachine {
 			// 不满足 return 就退出
 			if (!isNext) {
 			}
-			console.log(this.length, this.dfsExeLength, arr[i]);
 			// 兜底，但是如果遇到type是final节点不会触发
 			this.dfsExeLength++;
 			if (this.length == this.dfsExeLength) {
@@ -80,15 +80,16 @@ class StateMachine {
 }
 let data = {
 	id: "",
-	inital: "pending",
+	inital: "pendingState",
 	nowState: "",
 	states: [
 		{
 			id: 1,
-			name: "pending",
+			name: "pendingState",
 			meta: ({ input, context }) => {},
 			guard: ({ input, context }) => {
-				return true;
+				console.log("pending的守卫");
+				return typeof input.id == "number";
 			},
 			children: [
 				// 同步异步也好像需要考虑
@@ -97,28 +98,72 @@ let data = {
 					guard: ({ meta, input }) => {
 						if (input.id > 100) {
 							console.log("大于100");
+							console.log("resolved的守卫");
 							return true;
 						}
 					},
 					fn: () => {
-						console.log("--resolve--");
+						console.log("大于100:", "--resolve--");
 					},
-					name: "resolved",
+					name: "resolvedState",
 					type: "final",
 					parentId: 1,
 				},
 				{
 					id: 3,
-					name: "rejected",
+					name: "rejectedState",
 					guard: async ({ meta, input }) => {
 						await sleep();
 						if (input.id < 100) {
-							console.log("小于100");
+							console.log("reject的守卫");
 							return true;
 						}
 					},
 					fn: () => {
-						console.log("--reject--");
+						console.log("小于100:", "--reject--");
+					},
+					type: "final",
+					parentId: 1,
+				},
+			],
+		},
+		{
+			id: 1,
+			name: "pendingSex",
+			meta: ({ input, context }) => {},
+			guard: ({ input, context }) => {
+				console.log("pendingSex的守卫");
+				return typeof input.id == "string";
+			},
+			children: [
+				// 同步异步也好像需要考虑
+				{
+					id: 2,
+					guard: ({ meta, input }) => {
+						if (input.id == "man") {
+							console.log("resolved的守卫");
+							return true;
+						}
+					},
+					fn: () => {
+						console.log("一个真正的man", "--resolve--");
+					},
+					name: "resolvedMan",
+					type: "final",
+					parentId: 1,
+				},
+				{
+					id: 3,
+					name: "rejectedMan",
+					guard: async ({ meta, input }) => {
+						await sleep();
+						if (input.id != "man") {
+							console.log("reject的守卫");
+							return true;
+						}
+					},
+					fn: () => {
+						console.log("不是一个真正的man", "--reject--");
 					},
 					type: "final",
 					parentId: 1,
@@ -132,8 +177,7 @@ let data = {
 	function: {},
 };
 let test = new StateMachine(data);
-test.setInput({ id: "5f5" });
+test.setInput({ id: "man" });
 test.exexcte();
-console.log(test);
 
 export {};

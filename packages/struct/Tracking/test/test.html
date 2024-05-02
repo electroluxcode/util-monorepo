@@ -7,124 +7,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <script></script>
 </head>
 
 <body>
-    <!-- <img src="https://p6-passport.byteacctimg.com/img/user-avatar/ce558addd8752ce5884f64807e3b2739~60x60.awebp" alt=""
-        srcset="">
-    <img src="https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/e08da34488b114bd4c665ba2fa520a31.svg" alt=""
-        srcset=""> -->
-    <iframe src="https://jn.cn/user/3004311888208296/posts" frameborder="0"></iframe>
     <script type="module">
-        // performance 对象代表 会有很多个 单个的 metric(measure)数据
-        async function a() {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve({})
-                }, 3000);
+
+        let arr = [];
+
+        document.addEventListener("abort", () => {
+            console.log("document:abort")
+        })
+        window.addEventListener("error", (e) => {
+            console.log("-error-:", e);
+            if (e instanceof ErrorEvent) {
+                // ErrorEvent
+                console.log("ErrorEvent:", e);
+                arr.push({
+                    lineno: e.lineno,
+                    message: e.message,
+                    type: "ErrorEvent",
+                    url: window.location.href,
+                });
+            }
+            else if (e instanceof Event) {
+                // Event 需要特殊处理，这里是加载资源报错
+                console.log("Event:", e);
+                // 当前dom节点
+                let target = e.target;
+                let tagName = target.tagName;
+                target.src;
+                if (tagName.toUpperCase() === "IMG" || tagName.toUpperCase() === "VIDEO" || tagName.toUpperCase() === "SCRIPT") {
+                    // 可以通过 target.dataset 设置重试次数
+                    arr.push({
+                        name: e.target?.src,
+                        element: tagName,
+                        type: "ErrorResource",
+                        url: window.location.href,
+                    });
+                    // target.src = "./error.svg";
+                }
+            }
+        }, true);
+        document.addEventListener("visibilitychange", (e) => {
+
+            console.log("change:", JSON.parse(JSON.stringify({ e, arr })));
+            arr = []
+        });
+
+        function a() {
+            new Promise((resoluve, reject) => {
+                reject(1)
             })
         }
-        await a()
-        function print_PerformanceEntries() {
-            // 1.all performance entries
-            var p = performance.getEntries();
-            /**
-                1. getEntries 属性 array<object> 计量单位都是ms
-                - 1.1.VisibilityStateEntry(可见性状态变化的计时）：离开的时候可以用
-                    - 1.1.1 entryType：visibility-state 可见性
-                    - 1.1.2.startTime：开始时间
-                    - 1.1.3 name: "visible" | "hidden" 目前是隐藏还是展示
-                    - 用法: 
-                        - 界面停留时间:离开的时候找到 VisibilityStateEntry 用visible和hidden的starttime状态相减 starttime加减
-                - 1.2.PerformanceNavigationTiming
-                    - 1.2.1  entryType：navigation 
-                    - 1.2.2  name: 返回文档的url window.locatction.href
-                    - 1.2.3  duration 他是 整个文档同步资源的加载时间 
-                        - https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming 里面的图十分清楚
-                            - 重定向->sw->cache->dns->tcp->request->early hints(103)(HTTP/2 Server Push 的升级版=预加载 103会自动缓存)->response
-                            - reponse-> eventload
-                    - 1.2.4  redirectCount 浏览上下文中上次非重定向导航以来的重定向次数
-                    - 用法: 离开的时候找到 VisibilityStateEntry 用 starttime加减
-                - 1.3.PerformanceLongAnimationFrameTiming(哪些注册主线程任务耗费了50ms或者更多时间)
-                    - 1.3.1 突然定位不到这个元素了
-                    - 1.3.2 
-                - 1.4.PerformanceResourceTiming(可以获取资源的加载时间)
-                    - 1.4.1 entryType：resource
-                    - 1.4.2 name :资源url
-                    - 1.4.3 duraction : 响应结束和startTime的差值
-                    - 1.4.4 initiatorType:css | embed | fetch | frame | image | script | xmlhttprequest
-                    - 1.4.5 transferSize :获取资源的大小
-                    - 1.4.6 注意的点
-                        - 1.4.6.1 两个 url 相同的 image 可能只会请求一次，只有url改变了才会改变
-                        - 1.4.6.2 iframe请求的子资源不会出现在里面，出现的只有iframe这一个文件
-                        - 1.4.6.3 (这条很奇怪,因为返回值如果是404或者确实的网络错误跟正确的是没有区别的)如果网络请求失败那么返回值只有 startTime, fetchStart, duration and responseEnd
-                        - 1.4.6.4 如果因为 混合内容、CORS 限制、CSP 策略等策略那么不会出现在这条线中
-                - 1.5     
-                * */
-
-            for (var i = 0; i < p.length; i++) {
-                console.log("PerformanceEntry[" + i + "]", p[i]);
-                print_PerformanceEntry(p[i]);
-            }
-        }
-        function print_PerformanceEntry(perfEntry) {
-            var properties = ["name", "entryType", "startTime", "duration"];
-
-            for (var i = 0; i < properties.length; i++) {
-                var value = perfEntry[properties[i]];
-                // 这几个确实很重要
-                // console.log("... " + properties[i] + " = " + value);
-            }
-        }
-
-        print_PerformanceEntries()
-
-
-        const observer = new PerformanceObserver((list) => {
-            const entries = list.getEntries();
-            console.log("---------entries---------:", entries)
-            const lastEntry = entries[entries.length - 1]; // Use the latest LCP candidate
-            console.log("-----LCP-------:", lastEntry.startTime);
-            console.log("-$$$$$$$lastEntry$$$$$$$---------", lastEntry);
+        // a()
+        window.addEventListener("unhandledrejection", (e) => {
+            // console.log("unhandledrejection:", e)
+            // let target = e.target, // 当前dom节点
+            //     tagName = target.tagName,
+            //     count = Number(target.dataset.count) || 0, // 以失败的次数，默认为0
+            //     max = 3; // 总失败次数，此时设定为3
+            // // 当前异常是由图片加载异常引起的
+            // if (tagName.toUpperCase() === 'IMG') {
+            //     if (count >= max) {
+            //         target.src = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD//AK3/ALYH+5hX6FV5N4Y/5GHwx/vyf+iJa9ZrysPhoYVShDZu/potDmwWFhhIzhT2bv6aLQ//Z';
+            //     } else {
+            //         target.dataset.count = count + 1;
+            //         target.src = '//xxx/default.jpg';
+            //     }
+            // }
         });
-        observer.observe({ type: "largest-contentful-paint", buffered: true });
-
-
-        for (let i = 0; i < 5000; i++) {
-            let text = document.createElement("div")
-            text.innerHTML = "插入"
-            document.body.appendChild(text)
-        }
-
-        // performance.getEntriesByType
-
-        function network() {
-            let xhr = new XMLHttpRequest()
-            xhr.open("get", "ddddd", true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.send({ id: 88 });
-        }
     </script>
+    <img src="./error2323.svg" alt="">
+    <video src="./dsasad"></video>
 
-    <div class="container">
+    <!-- <img src="https://smart-construction-app.oss-cn-beijing.aliyuncs.com/licenseImageUrl/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20240403145208.png"
+        alt=""> -->
+    <!-- <script src="index.js"></script> -->
+    <script crossorigin="" src="xx.js" type="text/javascript"></script>
 
-        <div class="top">top</div>
-        <div class="bottom">bottom</div>
-    </div>
-    <script>
-
-        const observer2 = new PerformanceObserver((list) => {
-            list.getEntries().forEach((entry) => {
-                const loadEventTime = entry.loadEventEnd - entry.loadEventStart;
-                if (loadEventTime > 0) {
-                    console.log(`${entry.name}gfdgdfgdsfgfdgdf: load event handler time: ${loadEventTime}ms`);
-                }
-            });
-        });
-
-        observer2.observe({ type: "navigation", buffered: true });
-    </script>
 </body>
 
 </html>

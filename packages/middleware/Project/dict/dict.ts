@@ -39,19 +39,34 @@ let dictManagementList = () => {
 	});
 };
 type dictType = "envEquipType" | "badWeather" | "constructionSite";
-export const useDict = async (cache: boolean = true) => {
-	let res;
 
+/**
+ *
+ * @param cache
+ * @param timeExpire 默认过期时间3小时
+ * @returns
+ */
+export const useDict = async (
+	cache: boolean = true,
+	timeExpire = 60 * 1000 * 60 * 3
+) => {
+	let res;
+	// 缓存过期时间比较
 	// 加一层缓存
 	try {
-		if (cache) {
+		let nowTime = new Date().getTime();
+		let cacheTime: any = localStorage.getItem("useDictTime");
+		localStorage.setItem("useDictTime", String(new Date().getTime()));
+		if (cacheTime) {
+			cacheTime = Number(cacheTime);
+		}
+		let isExpire = nowTime - cacheTime > timeExpire;
+		if (!isExpire) {
 			res = localStorage.getItem("useDict");
 		} else {
 			res = await dictManagementList();
-		}
-		if (!res) {
-			res = await dictManagementList();
 			localStorage.setItem("useDict", JSON.stringify(res));
+			localStorage.setItem("useDictTime", String(new Date().getTime()));
 		}
 		res = JSON.parse(res);
 	} catch {

@@ -18,7 +18,8 @@
     "dev:es": "tsc   --p ./tsconfig.esm.json --watch ",
     "dev:cjs": "tsc --p ./tsconfig.common.json --watch ",
     "build:typescript": "tsc --outDir ./dist  --project ./ --watch",
-    "build:webpack": "node ./config/webpack.build.js"
+    "build:webpack": "node ./config/webpack.build.js",
+    "build:track": "node ./config/track.prod.build.js"
   },
   "author": "",
   "license": "ISC",

@@ -7,12 +7,30 @@ const http = require("http");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var payRouter = require("./routes/pay");
+let https = require("https");
+let fs = require("fs");
 
 var SendMail = require("./config/email");
 const multer = require("multer");
 const schedule = require("node-schedule");
 var app = express();
 const bodyParser = require("body-parser");
+
+let credentials = {
+	key: fs.readFileSync("server.pem", "utf8"),
+	cert: fs.readFileSync("server.crt", "utf8"),
+};
+
+let httpServer = http.createServer(app);
+let httpsServer = https.createServer(credentials, app);
+
+httpServer.listen("8098", () => {
+	console.log("http://localhost:8098/");
+});
+
+httpsServer.listen("8099", () => {
+	console.log("https://localhost:8099/");
+});
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -214,9 +232,29 @@ app.get("/api/email", function (req, res) {
 	// });
 });
 
-app.listen("8098", () => {
-	console.log("http:localhost:8098/api/get");
+app.get("/api/ip", function (req, res) {
+	res.send({
+		code: 200,
+		msg: req.ip,
+	});
 });
+
+/**
+ * @method 获取客户端IP地址
+ * @param {string} req 传入请求HttpRequest
+ * 客户请求的IP地址存在于request对象当中
+ * express框架可以直接通过 req.ip 获取
+ */
+function getClientIp(req) {
+	return (
+		req.headers["x-forwarded-for"] ||
+		req.ip ||
+		req.connection.remoteAddress ||
+		req.socket.remoteAddress ||
+		req.connection.socket.remoteAddress ||
+		""
+	);
+}
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -233,5 +271,3 @@ app.use(function (err, req, res, next) {
 	res.status(err.status || 500);
 	res.render("error");
 });
-
-module.exports = app;

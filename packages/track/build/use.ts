@@ -1,6 +1,6 @@
 import { Tracking } from "./index.js";
 
-import { errorPlugin } from "./plugin/error.js";
+import { errorPlugin } from "@util-monorepo/track-plugins/error.js";
 
 let t = new Tracking({
 	plugins: {

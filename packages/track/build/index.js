@@ -1,4 +1,4 @@
-import { getUser } from "./plugin/util.js";
+import { getUser } from "./util.js";
 function QsString(ob) {
     let res = "?";
     for (let i in ob) {

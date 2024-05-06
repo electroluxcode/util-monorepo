@@ -8,7 +8,7 @@
 var webpack = require("webpack");
 
 // 输入文件相对路径
-let EntryPath = "./packages/struct/Tracking/project/use.ts";
+let EntryPath = "./packages/track/core/use.ts";
 // 输出文件路径
 let OutputPath = "./dist";
 

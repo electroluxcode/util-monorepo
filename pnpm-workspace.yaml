@@ -1,2 +1,4 @@
 packages:
-  - packages/**/*
+  - packages/track/**/*
+  - packages/ProjectValiate/**/*
+  - packages/*

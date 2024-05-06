@@ -1,5 +1,5 @@
 {
-  "name": "@util-monorepo/struct",
+  "name": "@util-monorepo/track-core",
   "version": "1.0.4",
   "description": "",
   "main": "index.js",
@@ -19,5 +19,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "type": "module",
+  "dependencies": {
+    "@util-monorepo/track-plugins": "workspace:*"
+  }
 }

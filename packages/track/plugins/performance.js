@@ -39,6 +39,7 @@ export class performancePlugin {
                     url: window.location.href,
                     startTime: entry?.startTime,
                     type: "lcp",
+                    extraInfo: {},
                 });
                 const lcpResourceEntry = performance
                     .getEntriesByType("resource")
@@ -53,6 +54,7 @@ export class performancePlugin {
                         duration: fp,
                         type: "lcp",
                         url: window.location.href,
+                        extraInfo: {},
                     },
                     // 加载延迟
                     {
@@ -62,6 +64,7 @@ export class performancePlugin {
                         duration: Math.max(fp, lcpResourceEntry?.requestStart) - fp,
                         type: "lcp",
                         url: window.location.href,
+                        extraInfo: {},
                     },
                     // 加载时间
                     {
@@ -72,6 +75,7 @@ export class performancePlugin {
                             Math.max(fp, lcpResourceEntry?.requestStart),
                         type: "lcp",
                         url: window.location.href,
+                        extraInfo: {},
                     },
                     // 加载时间
                     {
@@ -81,6 +85,7 @@ export class performancePlugin {
                         duration: null,
                         type: "lcp",
                         url: window.location.href,
+                        extraInfo: {},
                     },
                 ];
             }

@@ -91,3 +91,67 @@ HTTP Archive的2022 Web Almanac ， 72%72% 的移动页面将图像作为 LCP �
 
 
 
+
+
+## 11.2 优化方向
+
+
+
+
+
+### 11.2.1 谷歌
+
+
+
+
+
+#### 11.2.1.1 devtool | performance monitor | 数据 + dom 粗略分析
+
+直接可以看到的，没啥好说的
+
+- cpu
+- heap size 
+- dom node ：dom节点 
+  - 虚拟滚动
+  - canvas
+- js event listener：时间监听
+  - 事件委托
+- layout
+
+
+
+
+
+#### 11.2.1.2 devtool | memory | 数据分析
+
+我们可以关注到各个变量(object,闭包)的具体情况
+
+- closure
+- detached dom tree（dom节点没有被回收）
+
+
+
+我们可以看到shallow size 和 和 retained size，前者是目前的总内存（不包括引用），后者是释放内存所能带来的内存空间（包括引用）。Distance 是 与root的距离。距离越大，处理和加载这个对象的时间就越长
+
+
+
+
+
+#### 11.2.1.3  devtool | performance
+
+
+
+跟上面的 11.2.1.1 的 有点像，这个是更加详细的时间序列图
+
+
+
+
+
+
+
+## 11.3  工程化
+
+
+
+### 11.3.1 定位源码
+

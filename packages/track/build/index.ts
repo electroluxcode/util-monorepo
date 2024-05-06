@@ -1,4 +1,4 @@
-import { getUser } from "./plugin/util.js";
+import { getUser } from "./util.js";
 
 interface BaseType {
 	trackSend?: any;

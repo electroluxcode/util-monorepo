@@ -1,6 +1,6 @@
 {
-  "name": "@util-monorepo/struct",
-  "version": "1.0.4",
+  "name": "@util-monorepo/track",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,6 +18,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {}
+  "license": "ISC"
 }

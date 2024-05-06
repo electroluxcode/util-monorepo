@@ -11,8 +11,47 @@
 <body>
 
     <script type="module">
-        import a from "https://sdks.shopifycdn.com/js-buy-sdk/v2/latest/index.umd.js"
-        console.log(a)
+
+        let bases = "{id:6}"
+        // 字符串转字节
+
+        // let temp1 = s2b(bases)
+        // console.log(new Uint8Array(temp1))
+        // byte转字符串
+        function b2s(bytes) {
+            let str = []
+            for (let i in bytes) {
+                str.push(String.fromCharCode(bytes[i]))
+            }
+            return str.join("")
+        }
+        function s2b(str) {
+            let bytes = []
+            for (let i in str) {
+                bytes.push(str.charCodeAt(i) & 0xFF)
+            }
+            return bytes
+        }
+
+        let basedata = new Uint8Array(new ArrayBuffer(30000 / 8))
+        let setData = (key, value) => {
+            let index = Math.floor(key / 8)
+            const dex = key % 8
+            const byte = value.charCodeAt(0) & 0xFF
+            console.log(byte)
+            basedata[index] = byte ^ (2 ** dex)
+        }
+        setData(5, "2")
+
+
+        // 获取 序号状态
+        function getStatus(id) {
+            const index = Math.floor(id / 8)
+            const dex = id % 8
+            const byte = basedata[index]
+            return (byte & (2 ** dex))
+        }
+        getStatus(5)
     </script>
 </body>
 

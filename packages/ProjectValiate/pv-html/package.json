@@ -12,7 +12,7 @@
   "dependencies": {
     "@util-monorepo/middleware": "workspace:*",
     "@util-monorepo/struct": "workspace:^",
-    "@util-monorepo/track-core": "^0.0.2",
-    "@util-monorepo/track-plugins": "^0.0.2"
+    "@util-monorepo/track-core": "workspace:^",
+    "@util-monorepo/track-plugins": "workspace:^"
   }
 }

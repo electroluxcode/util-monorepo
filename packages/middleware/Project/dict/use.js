@@ -1,7 +1,3 @@
-import { useDict } from "./dict.js";
-let baseDict = await useDict();
-baseDict.getDictArrayByKey("envEquipType");
-baseDict.getDictMagicNumberByKey("envEquipType")["CnToValue"][""];
 // react
 /**
  *
@@ -24,3 +20,4 @@ function useReducer(reducer, initializerArg) {
 const FnCase = (test) => { };
 // const [state2, dispatch2] = useObject(ObjectCase, "D");
 const [state2, dispatch2] = useReducer(FnCase, "23");
+export {};

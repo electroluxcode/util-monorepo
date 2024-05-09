@@ -1,9 +1,5 @@
 import { useDict } from "./dict.js";
 
-let baseDict = await useDict();
-baseDict.getDictArrayByKey("envEquipType");
-baseDict.getDictMagicNumberByKey("envEquipType")["CnToValue"][""];
-
 // function useReducer<R extends Reducer<any, any>, I>(
 
 // TypeScript 将正确推断 state 和 dispatch 的类型

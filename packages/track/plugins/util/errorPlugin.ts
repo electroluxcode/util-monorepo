@@ -5,18 +5,18 @@
  * @param object.trackConfig object object 插件的配置
  */
 interface returnItemType extends returnItemBaseType {
-	// 行数
-	lineno?: any;
-	// 报错信息
-	message?: any;
 	type: "ErrorEvent" | "ErrorResource";
 	url: any;
-	// timeStamp 时间原点开始(聚焦开始)到创建事件的毫秒数
-	duration?: any;
-	// 元素 "xxx.jpg" 元素
-	element?: any;
-	// 性能指标url "xxx.jpg" 元素
-	resourceUrl?: any;
+
+	extraInfo: {
+		// 行数
+		lineno?: any;
+		// 报错信息
+		message?: any;
+		// timeStamp 时间原点开始(聚焦开始)到创建事件的毫秒数
+		timeStamp?: any;
+		element?: any;
+	};
 	children?: returnItemType[];
 }
 export class errorPlugin {
@@ -57,8 +57,8 @@ export class errorPlugin {
 						arr.push({
 							type: "ErrorResource",
 							url: window.location.href,
+							name: (e.target as any)?.src,
 							extraInfo: {
-								name: (e.target as any)?.src,
 								element: tagName,
 								timeStamp: e.timeStamp,
 							},

@@ -1,10 +1,14 @@
 declare type returnItemBaseType = {
 	// 当前界面url
 	url: string;
-	type: "ErrorEvent" | "ErrorResource" | "lcp";
+	// 类型
+	type: "ErrorEvent" | "ErrorResource" | "lcp" | "userEvent";
+	// 类型下的名称
+	name?: string;
+
 	extraInfo: any;
 	children?: returnItemBaseType[];
-	name?: string;
+
 	user?: {
 		ua: any;
 		user: any;

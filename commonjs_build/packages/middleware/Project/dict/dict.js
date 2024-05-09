@@ -9,28 +9,14 @@ let data = {
             dictName: "环境设备细分",
             multiValue: [
                 {
-                    id: "306",
-                    dictType: 26,
-                    projectId: "5d8b1afc-ceb5-4b07-9d04-1269984e7697",
-                    dictName: "环境设备细分",
-                    dictNameEn: "envEquipType",
-                    valueName: "7种测量环境牌",
-                    valueNameEn: "Seven in one",
+                    valueName: "设备0",
+                    valueNameEn: "device 0 ",
                     value: "00",
-                    isEnable: "1",
-                    canWrite: "1",
                 },
                 {
-                    id: "307",
-                    dictType: 26,
-                    projectId: "5d8b1afc-ceb5-4b07-9d04-1269984e7697",
-                    dictName: "2222",
-                    dictNameEn: "envEquipType",
-                    valueName: "7种测量环境牌",
-                    valueNameEn: "Seven in one",
-                    value: "00",
-                    isEnable: "1",
-                    canWrite: "1",
+                    valueName: "设备1",
+                    valueNameEn: "device 1 ",
+                    value: "01",
                 },
             ],
         },
@@ -42,30 +28,53 @@ let dictManagementList = () => {
     });
 };
 /**
+ * @des 返回是否需要缓存,true就走缓存
+ * @time 指定过期时间
+ * @key 指定过期key
+ */
+function needCache({ time = 5 * 1000, key }) {
+    let cacheTime;
+    let nowTime = new Date().getTime();
+    try {
+        cacheTime = localStorage.getItem(key);
+        // 没有
+        if (!cacheTime) {
+            localStorage.setItem(key, String(new Date().getTime()));
+            return false;
+        }
+        cacheTime = Number(cacheTime);
+        let isExpire = nowTime - cacheTime > time;
+        if (isExpire) {
+            localStorage.setItem(key, String(new Date().getTime()));
+            console.warn("key-isExpire过期:", isExpire);
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    catch {
+        return true;
+    }
+}
+/**
  *
  * @param cache
  * @param timeExpire 默认过期时间3小时
  * @returns
  */
-const useDict = async (cache = true, timeExpire = 60 * 1000 * 60 * 3) => {
+const useDict = async (timeExpire = 1000 * 3) => {
     let res;
     // 缓存过期时间比较
     // 加一层缓存
     try {
-        let nowTime = new Date().getTime();
-        let cacheTime = localStorage.getItem("useDictTime");
-        localStorage.setItem("useDictTime", String(new Date().getTime()));
-        if (cacheTime) {
-            cacheTime = Number(cacheTime);
-        }
-        let isExpire = nowTime - cacheTime > timeExpire;
-        if (!isExpire) {
+        if (needCache({ time: timeExpire, key: "useDictTime" })) {
+            console.warn("缓存命中");
             res = localStorage.getItem("useDict");
         }
         else {
             res = await dictManagementList();
             localStorage.setItem("useDict", JSON.stringify(res));
-            localStorage.setItem("useDictTime", String(new Date().getTime()));
         }
         res = JSON.parse(res);
     }
@@ -75,6 +84,7 @@ const useDict = async (cache = true, timeExpire = 60 * 1000 * 60 * 3) => {
     }
     // f1:返回的是指定key的array,类似apiSelect的二次封装hook能够用到
     let getDictArrayByKey = (type) => {
+        console.log("type:", type);
         return res.data[type].multiValue;
     };
     // f2:返回的是值和key的映射，使用方式类似于 xx["cntovalue"][] ,类似于table或者是modal的update的时候做转化可用
@@ -83,9 +93,13 @@ const useDict = async (cache = true, timeExpire = 60 * 1000 * 60 * 3) => {
         let workObj = {};
         workObj["CnToValue"] = {};
         workObj["ValueToCn"] = {};
+        workObj["EnToValue"] = {};
+        workObj["ValueToEn"] = {};
         for (let i in workType) {
             workObj["CnToValue"][workType[i].valueName] = workType[i].value;
             workObj["ValueToCn"][workType[i].value] = workType[i].valueName;
+            workObj["EnToValue"][workType[i].valueNameEn] = workType[i].value;
+            workObj["ValueToEn"][workType[i].value] = workType[i].valueNameEn;
         }
         return JSON.parse(JSON.stringify(workObj));
     };

@@ -1,9 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const dict_js_1 = require("./dict.js");
-let baseDict = await (0, dict_js_1.useDict)();
-baseDict.getDictArrayByKey("envEquipType");
-baseDict.getDictMagicNumberByKey("envEquipType")["CnToValue"][""];
 // react
 /**
  *

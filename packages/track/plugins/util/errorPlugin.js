@@ -34,8 +34,8 @@ export class errorPlugin {
                     arr.push({
                         type: "ErrorResource",
                         url: window.location.href,
+                        name: e.target?.src,
                         extraInfo: {
-                            name: e.target?.src,
                             element: tagName,
                             timeStamp: e.timeStamp,
                         },

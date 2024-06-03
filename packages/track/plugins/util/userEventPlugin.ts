@@ -1,17 +1,24 @@
 ///<reference path = "base.d.ts" />
 interface returnItemType extends returnItemBaseType {
 	type: "userEvent";
-	// 请求 url
+	// 当前界面的url
 	url: any;
 	extraInfo: {
+		type?: "xhr" | "fetch" | "click" | "router";
+
 		// 请求方式
 		method?: string;
-		type?: "xhr" | "fetch";
+		// 尝试请求的url
+		url?: string;
 		startTime?: any;
 		reqData?: any;
 		status?: any;
 		// 接口请求总时长
 		elapsedTime?: any;
+
+		id?: string;
+		class?: string;
+		tag?: string;
 	};
 	children?: returnItemType[];
 }
@@ -45,6 +52,9 @@ class userEventPlugin {
 		this.util();
 		this.xhrCollect;
 	}
+	/**
+	 * @des 1.收集xhr事件
+	 */
 	xhrCollect() {
 		let that = this;
 		if (!("XMLHttpRequest" in window)) {
@@ -62,15 +72,12 @@ class userEventPlugin {
 				url: window.location.href,
 				extraInfo: {},
 			};
-
-			message[urlKey]["extraInfo"]["type"] = "xhr";
-
-			message[urlKey]["extraInfo"]["startTime"] = new Date().getTime();
-
-			message[urlKey]["extraInfo"]["method"] =
-				typeof args[0] === "string" ? args[0].toUpperCase() : args[0];
-
-			message[urlKey]["extraInfo"]["url"] = urlKey;
+			message[urlKey]["extraInfo"] = {
+				type: "xhr",
+				startTime: new Date().getTime(),
+				method: typeof args[0] === "string" ? args[0].toUpperCase() : args[0],
+				url: urlKey,
+			};
 
 			originalXhrProto.apply(this, args);
 		};
@@ -103,6 +110,97 @@ class userEventPlugin {
 			originalSend.apply(this, args);
 		};
 	}
+	/**
+	 * @des 2.收集fetch事件
+	 */
+	fetchCollect() {
+		let that = this;
+		if (!("fetch" in window)) {
+			return;
+		}
+		const originFetch = fetch;
+		// @ts-ignore
+		fetch = function (url, config) {
+			const sTime = new Date().getTime();
+			const method = (config && config.method) || "GET";
+			let handlerData: returnItemType = {
+				type: "userEvent",
+				url: window.location.href,
+				extraInfo: {},
+			};
+
+			return originFetch.apply(window, [url, config]).then(
+				(res) => {
+					// res.clone克隆，防止被标记已消费
+					const tempRes = res.clone();
+					const eTime = new Date().getTime();
+					handlerData["extraInfo"] = {
+						elapsedTime: eTime - sTime,
+						status: tempRes.status,
+						method,
+						reqData: config && config.body,
+						url,
+					};
+					// 暂时不考虑.json,这个东西容易出错
+					tempRes.text().then((data) => {
+						// 上报fetch接口数据
+					});
+					// 上报fetch接口数据
+					console.log("report-data:", handlerData);
+					return res;
+				},
+				(err) => {
+					const eTime = new Date().getTime();
+					handlerData["extraInfo"] = {
+						elapsedTime: eTime - sTime,
+						status: 400,
+						method,
+						reqData: config && config.body,
+						url,
+					};
+					that.collectData.add(handlerData);
+					console.log("最终上报的数据:", that.collectData.get());
+					// 上报fetch接口数据
+					console.log("report-data:", handlerData);
+					throw err;
+				}
+			);
+		};
+	}
+
+	/**
+	 * @des 3.收集click事件
+	 */
+	clickCollect() {
+		document.addEventListener(
+			"click",
+			({ target }) => {
+				// @ts-ignore
+				const tagName = target?.tagName.toLowerCase();
+				if (tagName === "body") {
+					return null;
+				}
+				// let classNames = target.classList.value;
+				// classNames = classNames !== "" ? ` class="${classNames}"` : "";
+				// const id = target.id ? ` id="${target.id}"` : "";
+				// const innerText = target.innerText;
+				// // 获取包含id、class、innerTextde字符串的标签
+				// let dom = `<${tagName}${id}${
+				// 	classNames !== "" ? classNames : ""
+				// }>${innerText}</${tagName}>`;
+				// // 上报
+				// reportData({
+				// 	type: "Click",
+				// 	dom,
+				// });
+			},
+			true
+		);
+	}
+
+	/**
+	 * @des 收集路由事件
+	 */
 
 	util() {
 		let arr: returnItemType[] = [];
@@ -121,46 +219,59 @@ class userEventPlugin {
 }
 
 let test = new userEventPlugin();
-test.xhrCollect();
+// test.xhrCollect();
 
-async function ajax(options) {
-	return new Promise((resolve, reject) => {
-		const xhr = new XMLHttpRequest();
-		const method = options.method.toUpperCase();
-		xhr.onreadystatechange = () => {
-			// xhr.readyState == 4 请求已完成，且响应已就绪
-			if (xhr.readyState !== 4 || xhr.status === 0) return;
-			const responseData = JSON.parse(xhr.response);
-			// 当 readyState 等于 4 且status为 200 时，表示响应已就绪：
-			if (xhr.status >= 200 && xhr.status < 300) {
-				resolve(responseData);
-			} else {
-				reject(`request failed with status code ${xhr.status}`);
-			}
-		};
-		if (method === "GET") {
-			let str = "?";
-			let param = options.data;
-			for (let i in param) {
-				str += str == "?" ? `${i}=${param[i]}` : `&${i}=${param[i]}`;
-			}
-			xhr.open(method, options.url + str, true);
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			xhr.send(options.data);
-		}
-		if (method === "POST") {
-			xhr.open(method, options.url, true);
-			// 经过测试，这个可以带。但是要求这个接口支持option的传参
-			xhr.setRequestHeader("Content-type", "application/json");
-			xhr.send(JSON.stringify(options.data));
-		}
+// async function ajax(options) {
+// 	return new Promise((resolve, reject) => {
+// 		const xhr = new XMLHttpRequest();
+// 		const method = options.method.toUpperCase();
+// 		xhr.onreadystatechange = () => {
+// 			// xhr.readyState == 4 请求已完成，且响应已就绪
+// 			if (xhr.readyState !== 4 || xhr.status === 0) return;
+// 			const responseData = JSON.parse(xhr.response);
+// 			// 当 readyState 等于 4 且status为 200 时，表示响应已就绪：
+// 			if (xhr.status >= 200 && xhr.status < 300) {
+// 				resolve(responseData);
+// 			} else {
+// 				reject(`request failed with status code ${xhr.status}`);
+// 			}
+// 		};
+// 		if (method === "GET") {
+// 			let str = "?";
+// 			let param = options.data;
+// 			for (let i in param) {
+// 				str += str == "?" ? `${i}=${param[i]}` : `&${i}=${param[i]}`;
+// 			}
+// 			xhr.open(method, options.url + str, true);
+// 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+// 			xhr.send(options.data);
+// 		}
+// 		if (method === "POST") {
+// 			xhr.open(method, options.url, true);
+// 			// 经过测试，这个可以带。但是要求这个接口支持option的传参
+// 			xhr.setRequestHeader("Content-type", "application/json");
+// 			xhr.send(JSON.stringify(options.data));
+// 		}
+// 	});
+// }
+// let option = {
+// 	method: "GET",
+// 	url: "http://127.0.0.1:8088/api/get",
+// 	data: { id: 5 },
+// };
+// ajax(option).then((e) => {
+// 	console.log(e);
+// });
+
+test.fetchCollect();
+
+fetch("http://127.0.0.1:8088/api/get", {
+	body: "{ id: 5 }",
+	method: "POST",
+})
+	.then((e) => {
+		return e.json();
+	})
+	.then((e) => {
+		console.log("ddddd:", e);
 	});
-}
-let option = {
-	method: "GET",
-	url: "http://127.0.0.1:8088/api/get",
-	data: { id: 5 },
-};
-ajax(option).then((e) => {
-	console.log(e);
-});

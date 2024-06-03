@@ -10,15 +10,15 @@ var webpack = require("webpack");
 // 输入文件相对路径
 let EntryPath = "./packages/track/core/use.ts";
 // 输出文件路径
-let OutputPath = "./dist";
+let OutputPath = "./dist/track";
 
 let PackageName = "track";
 
 var path = require("path");
 let baseConfig = [
 	{
-		// mode: "production",
-		mode: "development",
+		// mode: "production", development
+		mode: "production",
 		entry: {
 			[PackageName]: EntryPath,
 		},

@@ -58,11 +58,11 @@ importers:
         specifier: workspace:^
         version: link:../../struct
       '@util-monorepo/track-core':
-        specifier: ^0.0.2
-        version: 0.0.2
+        specifier: workspace:^
+        version: link:../../track/build
       '@util-monorepo/track-plugins':
-        specifier: ^0.0.2
-        version: 0.0.2
+        specifier: workspace:^
+        version: link:../../track/plugins
 
   packages/ProjectValiate/pv-vue: {}
 
@@ -83,6 +83,9 @@ importers:
       '@util-monorepo/track-plugins':
         specifier: workspace:*
         version: link:../plugins
+      '@util-monorepo/track-utils':
+        specifier: workspace:*
+        version: link:../utils
 
   packages/track/core:
     dependencies:
@@ -648,12 +651,6 @@ packages:
 
   '@types/yargs@17.0.32':
     resolution: {integrity: sha512-xQ67Yc/laOG5uMfX/093MRlGGCIBzZMarVa+gfNKJxWAIgykYpVGkBdbqEzGDDfCrVUj6Hiff4mTZ5BA6TmAog==}
-
-  '@util-monorepo/track-core@0.0.2':
-    resolution: {integrity: sha512-aZVV7UxYQKdOssxpY2FNAf2HyHlY3C1XNIDf/FBkN8SRSBUHE1073I/iBbEBrQjekJaHDMjM2cil1UxHe5Rg/w==}
-
-  '@util-monorepo/track-plugins@0.0.2':
-    resolution: {integrity: sha512-AS7Ws16CUX88RkI3bBPQPG9Fzo2YUN5dBm+NBqiQq/hcsnrBGqIIedP4qvmTFhNs9YLJDOat7ysCSXWd73Y6DA==}
 
   '@vitejs/plugin-vue@5.0.4':
     resolution: {integrity: sha512-WS3hevEszI6CEVEx28F8RjTX97k3KsrcY6kvTg7+Whm5y3oYvcqzVeGCU3hxSAn4uY2CLCkeokkGKpoctccilQ==}
@@ -2762,12 +2759,6 @@ snapshots:
   '@types/yargs@17.0.32':
     dependencies:
       '@types/yargs-parser': 21.0.3
-
-  '@util-monorepo/track-core@0.0.2':
-    dependencies:
-      '@util-monorepo/track-plugins': link:packages/track/plugins
-
-  '@util-monorepo/track-plugins@0.0.2': {}
 
   '@vitejs/plugin-vue@5.0.4(vite@5.1.6(@types/node@20.11.28)(terser@5.29.2))(vue@3.4.21(typescript@5.4.2))':
     dependencies:

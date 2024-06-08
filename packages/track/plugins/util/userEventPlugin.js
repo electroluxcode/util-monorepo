@@ -16,7 +16,7 @@ class LruArrayCache {
         this.cache.push(value);
     }
 }
-class userEventPlugin {
+export class userEventPlugin {
     trackConfigData;
     collectData;
     constructor(obj = { trackSend: () => { }, trackConfig: {} }) {

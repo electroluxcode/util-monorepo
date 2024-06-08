@@ -51,7 +51,7 @@ app.all("*", function (req, res, next) {
 	res.setHeader("Access-Control-Allow-Origin", "*"); //的允许所有域名的端口请求（跨域解决）
 	res.setHeader(
 		"Access-Control-Allow-Headers",
-		"X-Custom-Header,Cache-Control,Pragma"
+		"X-Custom-Header,Cache-Control,Pragma,X-ZP"
 	);
 	// res.setHeader("Access-Control-Request-Headers", "id");
 	// res.setHeader("Access-Control-Request-Headers", "*");
@@ -108,7 +108,7 @@ schedule.scheduleJob("0 24 06 * * *", () => {
 // Sign();
 
 //get 接受参数测试 注意 如果是get 那么option也不行
-app.all("/api/get", function (req, res) {
+app.all("/api/get", function (req, res, next) {
 	let query;
 	let body;
 	let cookie;
@@ -127,14 +127,19 @@ app.all("/api/get", function (req, res) {
 		"id=7sssd822;Path=/;Secure;SameSite=None;"
 	);
 	// res.setHeader("Cache-Control", "max-age=2");
-	setTimeout(() => {
+	setTimeout(() => {}, 0);
+	if (Math.random() < 0.3) {
 		res.send({
 			code: 2000,
 			body,
 			query,
 			cookie,
 		});
-	}, 0);
+	} else {
+		var err = new Error("Not Found");
+		err.status = 404;
+		next(err);
+	}
 });
 
 //post 接收参数测试 application/json 的有效 {id:56}

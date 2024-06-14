@@ -26,9 +26,14 @@ export default class Fetch {
         Object.assign(this.state, s);
         this.subscribe(this);
     }
+    // 通知插件进行订阅 | 本质上不要求返回值
     runPluginHandler(event, ...rest) {
-        // @ts-ignore
-        const r = this.pluginImpls.map((i) => i[event]?.(...rest)).filter(Boolean);
+        const r = this.pluginImpls
+            .map((i) => {
+            // @ts-ignore
+            return i[event]?.(...rest);
+        })
+            .filter(Boolean);
         return Object.assign({}, ...r);
     }
     async runAsync(...params) {
@@ -58,9 +63,9 @@ export default class Fetch {
             const res = await servicePromise;
             if (currentCount !== this.count) {
                 // prevent run.then when request is canceled
+                // 返回最后请求的东西
                 return new Promise(() => { });
             }
-            // const formattedResult = this.options.formatResultRef.current ? this.options.formatResultRef.current(res) : res;
             this.setState({ data: res, error: undefined, loading: false });
             this.options.onSuccess?.(res, params);
             this.runPluginHandler("onSuccess", res, params);
@@ -85,6 +90,7 @@ export default class Fetch {
             throw error;
         }
     }
+    // 通过run 来进行代理
     run(...params) {
         this.runAsync(...params).catch((error) => {
             if (!this.options.onError) {

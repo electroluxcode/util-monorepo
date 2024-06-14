@@ -1,5 +1,10 @@
-import { EventBusCase } from "../utils/EventBus";
-// support refreshDeps & ready
+import { EventBusCase } from "../utils/eventBus.js";
+/**
+ * @des init param && monitor change
+ * @param fetchInstance
+ * @param param1
+ * @returns
+ */
 const useAutoRunPlugin = (fetchInstance, { manual, ready = true, defaultParams = [], refreshDeps = [], refreshDepsAction, }) => {
     let hasAutoRun = false;
     EventBusCase.on("ready", (readyVal) => {

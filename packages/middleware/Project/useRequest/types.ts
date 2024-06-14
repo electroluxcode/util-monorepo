@@ -1,5 +1,6 @@
 import Fetch from "./Fetch";
 
+// 这里 TParams 通过 传参 传递到 run 的约束
 export type Service<TData, TParams extends any[]> = (
 	...args: TParams
 ) => Promise<TData>;
@@ -43,7 +44,7 @@ export interface UseRequestOptions<TData, TParams extends any[]> {
 	// formatResult?: (res: any) => TData;
 	onFinally?: (params: TParams, data?: TData, e?: Error) => void;
 
-	subscribe?: (params: any) => void;
+	subscribe?: (useRequestInstance: Fetch<TData, TParams>) => void;
 
 	defaultParams?: TParams;
 

@@ -1,7 +1,12 @@
 import type { UseRequestPlugin } from "../types";
-import { EventBusCase } from "../utils/EventBus";
+import { EventBusCase } from "../utils/eventBus.js";
 
-// support refreshDeps & ready
+/**
+ * @des init param && monitor change
+ * @param fetchInstance
+ * @param param1
+ * @returns
+ */
 const useAutoRunPlugin: UseRequestPlugin<any, any[]> = (
 	fetchInstance,
 	{

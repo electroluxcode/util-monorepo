@@ -1,27 +1,48 @@
 import Fetch from "./Fetch.js";
-const service = () => {
-    return new Promise((resolve) => {
+import useRetryPlugin from "./plugins/useRetryPlugin.js";
+import useAutoRunPlugin from "./plugins/useAutoRunPlugin.js";
+const service = (test) => {
+    return new Promise((resolve, reject) => {
         setTimeout(() => {
-            resolve({ id: 4 });
-        }, 1000);
+            if (Math.random() > 0.9) {
+                resolve(test);
+            }
+            else {
+                reject(test);
+            }
+            // resolve(test);
+        }, test);
     });
-};
-let fetchOptions = {
-    manual: false,
 };
 let initState = {
     loading: true,
 };
 const useRequest = (service, options = {}, plugins = []) => {
+    // fetchOptions:user config
     const { manual = false, ...rest } = options;
-    let initState = plugins.map((p) => p?.onInit?.(fetchOptions)).filter(Boolean);
-    console.log(initState, "ddddddddd");
+    let fetchOptions = {
+        manual: false,
+        ...rest,
+    };
+    let resPlugins = [
+        useRetryPlugin,
+        useAutoRunPlugin,
+        ...plugins,
+    ];
+    let initState = resPlugins
+        .map((p) => p?.onInit?.(fetchOptions))
+        .filter(Boolean);
+    const DefaultSubFn = (e) => {
+        console.log("defaultSubscribe:", JSON.parse(JSON.stringify(e)));
+    };
     const fetchInstance = new Fetch(service, fetchOptions, 
     // constructor | cancel | mutate | runAsync(初始化来一次loading )
-    options.subscribe ??
-        function (e) {
-            console.log("订阅:", JSON.parse(JSON.stringify(e)));
-        }, Object.assign({}, ...initState));
+    options.subscribe ?? DefaultSubFn, Object.assign({}, ...initState));
+    fetchInstance.options = fetchOptions;
+    // run all plugins hooks | casely
+    fetchInstance.pluginImpls = resPlugins.map((p) => {
+        return p(fetchInstance, fetchOptions);
+    });
     if (!manual) {
         const params = fetchInstance.state.params || options.defaultParams || [];
         // @ts-ignore
@@ -37,13 +58,39 @@ const useRequest = (service, options = {}, plugins = []) => {
         runAsync: fetchInstance.runAsync.bind(fetchInstance),
     };
 };
+import { easyFetch } from "./easyFetch.js";
+let params = {
+    params: {
+        id: 5,
+    },
+    url: "/use333rs/Electroluxcode",
+    method: "get",
+};
+let fetchHook = new easyFetch({
+    responseOptions: {
+        type: "json",
+    },
+    baseURL: "https://api.github.com",
+});
+const userGet = () => {
+    return fetchHook.request(params);
+};
 let { loading, run } = useRequest(service, {
     manual: true,
     subscribe: (e) => {
-        console.log("ddd", e);
+        // if()
+        // console.log("subscribe:", e);
+    },
+    onSuccess(data) {
+        console.log("success:", data);
     },
     retryCount: 2,
+    retryInterval: 1000,
 });
 setTimeout(() => {
-    run();
+    // 永远拿到的是后面发送的值，例如下面的例子 run 3秒后发射
+    run(3000);
+    // userGet().then((e) => {
+    // 	console.log("测试", e);
+    // });
 }, 100);

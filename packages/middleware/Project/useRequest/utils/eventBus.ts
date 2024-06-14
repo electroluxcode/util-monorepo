@@ -25,6 +25,8 @@ class EventBus<Events extends string> {
 	}
 }
 
-let EventBusCase = new EventBus<"ready" | "refreshDeps">();
+type lifeCycle = "onBefore" | "onSuccess" | "onFinish";
+type eventType = "ready" | "refreshDeps";
+let EventBusCase = new EventBus<eventType | lifeCycle>();
 
 export { EventBusCase };

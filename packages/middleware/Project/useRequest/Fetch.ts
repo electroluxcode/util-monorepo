@@ -36,9 +36,14 @@ export default class Fetch<TData, TParams extends any[]> {
 		this.subscribe(this);
 	}
 
+	// 通知插件进行订阅 | 本质上不要求返回值
 	runPluginHandler(event: keyof PluginReturn<TData, TParams>, ...rest: any[]) {
-		// @ts-ignore
-		const r = this.pluginImpls.map((i) => i[event]?.(...rest)).filter(Boolean);
+		const r = this.pluginImpls
+			.map((i) => {
+				// @ts-ignore
+				return i[event]?.(...rest);
+			})
+			.filter(Boolean);
 		return Object.assign({}, ...r);
 	}
 
@@ -83,13 +88,11 @@ export default class Fetch<TData, TParams extends any[]> {
 			}
 
 			const res = await servicePromise;
-
 			if (currentCount !== this.count) {
 				// prevent run.then when request is canceled
+				// 返回最后请求的东西
 				return new Promise(() => {});
 			}
-
-			// const formattedResult = this.options.formatResultRef.current ? this.options.formatResultRef.current(res) : res;
 
 			this.setState({ data: res, error: undefined, loading: false });
 
@@ -101,7 +104,6 @@ export default class Fetch<TData, TParams extends any[]> {
 			if (currentCount === this.count) {
 				this.runPluginHandler("onFinally", params, res, undefined);
 			}
-
 			return res;
 		} catch (error) {
 			if (currentCount !== this.count) {
@@ -124,6 +126,7 @@ export default class Fetch<TData, TParams extends any[]> {
 		}
 	}
 
+	// 通过run 来进行代理
 	run(...params: TParams) {
 		this.runAsync(...params).catch((error) => {
 			if (!this.options.onError) {

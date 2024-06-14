@@ -5,14 +5,10 @@ const useRetryPlugin: UseRequestPlugin<any, any[]> = (
 	{ retryInterval, retryCount }
 ) => {
 	let timerRef = null;
-	let countRef = null;
+	let countRef = 0;
 
 	let triggerByRetry = null;
-	console.log("进入插件", {
-		fetchInstance,
-		retryCount,
-		retryInterval,
-	});
+
 	if (!retryCount) {
 		return {};
 	}
@@ -43,6 +39,7 @@ const useRetryPlugin: UseRequestPlugin<any, any[]> = (
 			} else {
 				countRef = 0;
 			}
+			console.log("重试");
 		},
 		onCancel: () => {
 			countRef = 0;

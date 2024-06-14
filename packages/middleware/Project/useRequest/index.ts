@@ -1,15 +1,19 @@
 import Fetch from "./Fetch.js";
-
-const service = () => {
-	return new Promise((resolve) => {
+import useRetryPlugin from "./plugins/useRetryPlugin.js";
+import useAutoRunPlugin from "./plugins/useAutoRunPlugin.js";
+const service = (test) => {
+	return new Promise((resolve, reject) => {
 		setTimeout(() => {
-			resolve({ id: 4 });
-		}, 1000);
+			if (Math.random() > 0.9) {
+				resolve(test);
+			} else {
+				reject(test);
+			}
+			// resolve(test);
+		}, test);
 	});
 };
-let fetchOptions = {
-	manual: false,
-};
+
 let initState = {
 	loading: true,
 };
@@ -26,6 +30,8 @@ let initState = {
 总结一下,假如直接run那么会调用三次,
 初始化的时候 | run  |最后结束的时候也要手动调用一次 setState
 
+设计思想是用 run 作为一个代理，run里面写入生命周期等增强方法
+
  */
 import type {
 	Service,
@@ -39,25 +45,44 @@ const useRequest = <TData, TParams extends any[]>(
 	options: UseRequestOptions<TData, TParams> = {},
 	plugins: UseRequestPlugin<TData, TParams>[] = []
 ) => {
+	// fetchOptions:user config
 	const { manual = false, ...rest } = options;
+	let fetchOptions = {
+		manual: false,
+		...rest,
+	};
+	let resPlugins = [
+		useRetryPlugin,
+		useAutoRunPlugin,
+		...plugins,
+	] as UseRequestPlugin<TData, TParams>[];
 
-	let initState = plugins.map((p) => p?.onInit?.(fetchOptions)).filter(Boolean);
-	console.log(initState, "ddddddddd");
+	let initState = resPlugins
+		.map((p) => p?.onInit?.(fetchOptions))
+		.filter(Boolean);
+
+	const DefaultSubFn = (e) => {
+		console.log("defaultSubscribe:", JSON.parse(JSON.stringify(e)));
+	};
 	const fetchInstance = new Fetch(
 		service,
 		fetchOptions,
 		// constructor | cancel | mutate | runAsync(初始化来一次loading )
-		options.subscribe ??
-			function (e) {
-				console.log("订阅:", JSON.parse(JSON.stringify(e)));
-			},
+		options.subscribe ?? DefaultSubFn,
 		Object.assign({}, ...initState)
 	);
+	fetchInstance.options = fetchOptions;
+	// run all plugins hooks | casely
+	fetchInstance.pluginImpls = resPlugins.map((p) => {
+		return p(fetchInstance, fetchOptions);
+	});
+
 	if (!manual) {
 		const params = fetchInstance.state.params || options.defaultParams || [];
 		// @ts-ignore
 		fetchInstance.run(...params);
 	}
+
 	return {
 		...fetchInstance.state,
 		cancel: fetchInstance.cancel.bind(fetchInstance),
@@ -68,14 +93,43 @@ const useRequest = <TData, TParams extends any[]>(
 		runAsync: fetchInstance.runAsync.bind(fetchInstance),
 	} as UseRequestResult<TData, TParams>;
 };
+
+import { easyFetch } from "./easyFetch.js";
+
+let params: CreateAxiosOptions = {
+	params: {
+		id: 5,
+	},
+	url: "/use333rs/Electroluxcode",
+	method: "get",
+};
+let fetchHook = new easyFetch({
+	responseOptions: {
+		type: "json",
+	},
+	baseURL: "https://api.github.com",
+});
+const userGet = () => {
+	return fetchHook.request(params);
+};
+
 let { loading, run } = useRequest(service, {
 	manual: true,
 	subscribe: (e) => {
-		console.log("ddd", e);
+		// if()
+		// console.log("subscribe:", e);
+	},
+	onSuccess(data) {
+		console.log("success:", data);
 	},
 	retryCount: 2,
+	retryInterval: 1000,
 });
-
 setTimeout(() => {
-	run();
+	// 永远拿到的是后面发送的值，例如下面的例子 run 3秒后发射
+	run(3000);
+
+	// userGet().then((e) => {
+	// 	console.log("测试", e);
+	// });
 }, 100);
